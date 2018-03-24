@@ -1,5 +1,6 @@
 package jateklogika;
 
+//The possible building levels of tiles
 enum BuildingLevel{
 	None(1,1),
 	Village(2,4),
