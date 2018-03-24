@@ -1,4 +1,4 @@
-package jateklogika;
+package gameLogic;
 
 //An exception from the internal game logic
 public class GameLogicException extends Exception {

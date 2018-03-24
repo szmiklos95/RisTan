@@ -1,4 +1,4 @@
-package jateklogika;
+package gameLogic;
 
 //A point in the coordinate system
 public class Point{

@@ -1,4 +1,4 @@
-package jateklogika;
+package gameLogic;
 
 //The possible building levels of tiles
 enum BuildingLevel{
