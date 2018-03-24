@@ -1,10 +1,12 @@
 package gameLogic;
 
+import config.Config;
+
 //The possible building levels of tiles
 enum BuildingLevel{
-	None(1,1),
-	Village(2,4),
-	Town(3,6);
+	None(Config.BuildingLevel.None.resourceNum,Config.BuildingLevel.None.score),
+	Village(Config.BuildingLevel.Village.resourceNum,Config.BuildingLevel.Village.score),
+	Town(Config.BuildingLevel.Town.resourceNum,Config.BuildingLevel.Town.score);
 	
 	private final int resourceNum;
 	private final int score;
