@@ -38,6 +38,10 @@ public class Player {
 		return score;
 	}
 	
+	void addScore(int score) {
+		this.score+=score;
+	}
+	
 	public boolean hasResource(Resource resource,int amount) {
 		return resources.get(resource)>=amount;
 	}
