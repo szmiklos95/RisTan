@@ -2,6 +2,11 @@ package config;
 
 //Configuration options for the game
 public abstract class Config {
+	//Board config
+	public static class Board{
+		public static final int size=3;
+	}
+	
 	//BuildingLevel config
 	public static class BuildingLevel{
 		public static class None{

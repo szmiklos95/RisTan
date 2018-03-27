@@ -17,4 +17,18 @@ public class Point{
 	public int getJ() {
 		return j;
 	}
+	
+	public boolean equals(Object other) {
+		if(other==null) {
+			return false;
+		}
+		if(other==this) {
+			return true;
+		}
+		if(!(other instanceof Point)) {
+			return false;
+		}
+		Point that=(Point)other;
+		return (that.i==i)&&(that.j==j);
+	}
 }

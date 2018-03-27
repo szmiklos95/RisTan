@@ -7,9 +7,26 @@ class Tile {
 	private Player owner;
 	
 	Tile(Resource resource) {
+		init(resource);
+	}
+	
+	Tile(String generator){
+		int ordinal=Integer.parseInt(generator);
+		init(Resource.values()[ordinal]);
+	}
+	
+	private void init(Resource resource) {
 		this.resource=resource;
 		buildingLevel=BuildingLevel.None;
 		owner=null;
+	}
+	
+	Player getOwner() {
+		return owner;
+	}
+	
+	String getGeneratorString() {
+		return ""+resource.ordinal();
 	}
 	
 	void harvest() {
