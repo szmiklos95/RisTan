@@ -6,10 +6,12 @@ class Tile {
 	private BuildingLevel buildingLevel;
 	private Player owner;
 	
+	//creates tile with the given resource
 	Tile(Resource resource) {
 		init(resource);
 	}
 	
+	//creates tile from the generator string
 	Tile(String generator){
 		int ordinal=Integer.parseInt(generator);
 		init(Resource.values()[ordinal]);
@@ -25,6 +27,7 @@ class Tile {
 		return owner;
 	}
 	
+	//returns a string from which the same tile can be generated
 	String getGeneratorString() {
 		return ""+resource.ordinal();
 	}

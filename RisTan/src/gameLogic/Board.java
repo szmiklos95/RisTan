@@ -66,7 +66,7 @@ public class Board {
 		}
 	}
 	
-	//returns a generator string from which the board can be generated
+	//returns a generator string from which the same board can be generated
 	public String getGeneratorString() {
 		StringBuilder stringBuilder=new StringBuilder();
 		int size=Config.Board.size;
