@@ -1,7 +1,6 @@
 package gameLogic;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -9,7 +8,7 @@ import config.Config;
 
 //The game board
 public class Board {
-	private List<Slot> slots;
+	private Map<Point,Tile> tiles;
 	private Map<Resource,Double> res_prob;
 	private Random rand;
 	
@@ -19,7 +18,7 @@ public class Board {
 	}
 	
 	public void generate() {
-		slots=new ArrayList<Slot>();
+		tiles=new HashMap<Point,Tile>();
 		int size=Config.Board.size;
 		for(int i=-size;i<=size;++i) {
 			for(int j=-size;j<=size;++j) {
@@ -29,8 +28,7 @@ public class Board {
 						tile=getNewTile();
 					}while(tile==null);
 					Point point=new Point(i,j);
-					Slot slot=new Slot(point,tile);
-					slots.add(slot);
+					tiles.put(point,tile);
 				}
 			}
 		}
@@ -49,7 +47,7 @@ public class Board {
 	}
 	
 	public void generate(String generatorString) {
-		slots=new ArrayList<Slot>();
+		tiles=new HashMap<Point,Tile>();
 		String[] str=generatorString.split(" ");
 		int index=0;
 		int size=Config.Board.size;
@@ -58,8 +56,7 @@ public class Board {
 				if(Math.abs(i-j)<=size) {
 					Tile tile=new Tile(str[index]);
 					Point point=new Point(i,j);
-					Slot slot=new Slot(point,tile);
-					slots.add(slot);
+					tiles.put(point,tile);
 					++index;
 				}
 			}
@@ -72,7 +69,7 @@ public class Board {
 		for(int i=-size;i<=size;++i) {
 			for(int j=-size;j<=size;++j) {
 				if(Math.abs(i-j)<=size) {
-					Tile tile=getTileAt(new Point(i,j));
+					Tile tile=tiles.get(new Point(i,j));
 					stringBuilder.append(tile.getGeneratorString()+" ");
 				}
 			}
@@ -80,22 +77,12 @@ public class Board {
 		return stringBuilder.toString();
 	}
 	
-	private Tile getTileAt(Point point) {
-		for(int i=0;i<slots.size();++i) {
-			Slot slot=slots.get(i);
-			if(slot.getPoint().equals(point)) {
-				return slot.getTile();
-			}
-		}
-		return null;
-	}
-	
 	public void harvest(Player player) {
 		int size=Config.Board.size;
 		for(int i=-size;i<=size;++i) {
 			for(int j=-size;j<=size;++j) {
 				if(Math.abs(i-j)<=size) {
-					Tile tile=getTileAt(new Point(i,j));
+					Tile tile=tiles.get(new Point(i,j));
 					if(tile.getOwner().getID()==player.getID()) {
 						tile.harvest();
 					}

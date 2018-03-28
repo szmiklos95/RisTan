@@ -1,5 +1,7 @@
 package gameLogic;
 
+import java.util.Objects;
+
 //A point in the coordinate system
 public class Point{
 	private int i;
@@ -18,6 +20,7 @@ public class Point{
 		return j;
 	}
 	
+	@Override
 	public boolean equals(Object other) {
 		if(other==null) {
 			return false;
@@ -31,4 +34,9 @@ public class Point{
 		Point that=(Point)other;
 		return (that.i==i)&&(that.j==j);
 	}
+	
+	@Override
+	public int hashCode() {
+        return Objects.hash(i,j);
+    }
 }
