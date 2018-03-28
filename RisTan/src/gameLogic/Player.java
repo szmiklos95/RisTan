@@ -18,7 +18,15 @@ public class Player {
 	private int score;
 	
 	public Player(String name) {
-		ID=getNextID();
+		init(name,getNextID());
+	}
+	
+	public Player(String name,int ID) {
+		init(name,ID);
+	}
+	
+	private void init(String name,int ID) {
+		this.ID=ID;
 		this.name=name;
 		this.resources=new HashMap<Resource,Integer>();
 		Resource[] resources=Resource.values();
@@ -27,8 +35,6 @@ public class Player {
 		}
 		score=0;
 	}
-	
-	//TODO Player(String name,int ID)
 	
 	public int getID() {
 		return ID;
