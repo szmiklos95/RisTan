@@ -3,7 +3,11 @@
  * and open the template in the editor.
  */
 
-package szoftechtutor;
+package main;
+
+import graphics.GUI;
+import graphics.GControl;
+import graphics.MainMenu;
 
 /**
  *
@@ -16,8 +20,10 @@ public class Main {
 	 *            the command line arguments
 	 */
 	public static void main(String[] args) {
-		Control c = new Control();
-		GUI g = new GUI(c);
-		c.setGUI(g);
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                MainMenu.createAndShowGUI();
+            }
+        });
 	}
 }
