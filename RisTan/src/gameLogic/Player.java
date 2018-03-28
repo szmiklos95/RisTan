@@ -4,29 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 //A player of the game
-public class Player {
-	private static int nextID=0;
-	private static int getNextID() {
-		int ret=nextID;
-		nextID++;
-		return ret;
-	}
-	
-	private int ID;
+public class Player extends ObjectWithID{
 	private String name;
 	private Map<Resource,Integer> resources;
 	private int score;
 	
 	public Player(String name) {
-		init(name,getNextID());
+		init(name);
 	}
 	
 	public Player(String name,int ID) {
-		init(name,ID);
+		super(ID);
+		init(name);
 	}
 	
-	private void init(String name,int ID) {
-		this.ID=ID;
+	private void init(String name) {
 		this.name=name;
 		this.resources=new HashMap<Resource,Integer>();
 		Resource[] resources=Resource.values();
@@ -37,7 +29,7 @@ public class Player {
 	}
 	
 	public int getID() {
-		return ID;
+		return super.getID();
 	}
 	
 	public String getName() {
