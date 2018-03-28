@@ -40,6 +40,7 @@ class Tile {
 		this.buildingLevel=buildingLevel;
 	}
 	
+	//the tile gets occupied by the given player, it also modifies the scores accordingly
 	void occupy(Player newOwner) {
 		int score=buildingLevel.getScore();
 		if(owner!=null) {

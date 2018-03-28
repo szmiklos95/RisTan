@@ -4,6 +4,7 @@ package config;
 public abstract class Config {
 	//Board config
 	public static class Board{
+		//The number of tile layers around the central tile
 		public static final int size=3;
 	}
 	

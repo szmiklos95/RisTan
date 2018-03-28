@@ -17,6 +17,7 @@ public class Board {
 		rand=new Random();
 	}
 	
+	//generates the tile based on the res_prob resource probabilities
 	public void generate() {
 		tiles=new HashMap<Point,Tile>();
 		int size=Config.Board.size;
@@ -34,6 +35,7 @@ public class Board {
 		}
 	}
 	
+	//creates a new tile
 	private Tile getNewTile() {
 		double rnd=rand.nextDouble();
 		Resource[] resources=Resource.values();
@@ -46,6 +48,7 @@ public class Board {
 		return null;
 	}
 	
+	//generates a board from a generator string
 	public void generate(String generatorString) {
 		tiles=new HashMap<Point,Tile>();
 		String[] str=generatorString.split(" ");
@@ -63,6 +66,7 @@ public class Board {
 		}
 	}
 	
+	//returns a generator string from which the board can be generated
 	public String getGeneratorString() {
 		StringBuilder stringBuilder=new StringBuilder();
 		int size=Config.Board.size;
@@ -77,6 +81,7 @@ public class Board {
 		return stringBuilder.toString();
 	}
 	
+	//the given player gets the resources from his/her tiles
 	public void harvest(Player player) {
 		int size=Config.Board.size;
 		for(int i=-size;i<=size;++i) {
