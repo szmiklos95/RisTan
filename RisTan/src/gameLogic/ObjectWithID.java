@@ -1,5 +1,6 @@
 package gameLogic;
 
+//an object which has an automatically incrementing ID
 abstract class ObjectWithID {
 	private static int nextID=0;
 	private static int getNextID() {
