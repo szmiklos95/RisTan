@@ -31,6 +31,16 @@ public abstract class Config {
 				return ret;
 			}
 		}
+		public static class OccupyEnemyTile{
+			public static final int time=2;
+			public static final Map<Resource,Integer> cost=createCost();
+			private static Map<Resource,Integer> createCost(){
+				HashMap<Resource,Integer> ret=new HashMap<Resource,Integer>();
+				ret.put(Resource.Wood,1);
+				return ret;
+			}
+			public static final double probability=0.5;
+		}
 		public static class OccupyFreeTile{
 			public static final int time=2;
 			public static final Map<Resource,Integer> cost=new HashMap<Resource,Integer>();
