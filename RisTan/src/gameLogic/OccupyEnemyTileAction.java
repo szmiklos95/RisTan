@@ -16,6 +16,9 @@ public class OccupyEnemyTileAction extends ProbabilisticTileAction{
 		if((tile.getOwner()==null)||(tile.getOwner()==gameState.getActivePlayer())) {
 			throw new TileIsNotEnemyException();
 		}
+		if(tile.getBuildingLevel()!=BuildingLevel.None) {
+			throw new TileIsNotEmptyException();
+		}
 	}
 	
 	@Override

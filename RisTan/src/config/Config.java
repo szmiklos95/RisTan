@@ -36,6 +36,17 @@ public abstract class Config {
 			public static final Map<Resource,Integer> cost=createCost();
 			private static Map<Resource,Integer> createCost(){
 				HashMap<Resource,Integer> ret=new HashMap<Resource,Integer>();
+				ret.put(Resource.Wheat,1);
+				return ret;
+			}
+			public static final double probability=0.5;
+		}
+		public static class OccupyEnemyTileL2{
+			public static final int time=2;
+			public static final Map<Resource,Integer> cost=createCost();
+			private static Map<Resource,Integer> createCost(){
+				HashMap<Resource,Integer> ret=new HashMap<Resource,Integer>();
+				ret.put(Resource.Wheat,2);
 				ret.put(Resource.Wood,1);
 				return ret;
 			}
