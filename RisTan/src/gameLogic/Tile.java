@@ -39,6 +39,10 @@ class Tile {
 		}
 	}
 	
+	BuildingLevel getBuildingLevel() {
+		return buildingLevel;
+	}
+	
 	void setBuildingLevel(BuildingLevel buildingLevel) {
 		if(owner!=null) {
 			owner.addScore(-this.buildingLevel.getScore());
