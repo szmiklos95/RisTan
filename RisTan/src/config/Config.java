@@ -103,6 +103,9 @@ public abstract class Config {
 			public static final int time=2;
 			public static final Map<Resource,Integer> cost=new HashMap<Resource,Integer>();
 		}
+		public static class OfferTradeAction{
+			public static final int time=1;
+		}
 	}
 	
 	//Board config

@@ -35,4 +35,8 @@ public class GameState {
 	public Player getActivePlayer() {
 		return playerOrder.getActive();
 	}
+	
+	public Market getMarket() {
+		return market;
+	}
 }
