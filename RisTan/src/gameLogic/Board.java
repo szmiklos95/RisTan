@@ -94,4 +94,9 @@ public class Board {
 			}
 		}
 	}
+	
+	//gets the tile at the given position
+	public Tile getTileAt(Point point) {
+		return tiles.get(point);
+	}
 }

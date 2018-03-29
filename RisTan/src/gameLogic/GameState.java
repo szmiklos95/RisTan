@@ -28,6 +28,10 @@ public class GameState {
 		return over;
 	}
 	
+	public Board getBoard() {
+		return board;
+	}
+	
 	public Player getActivePlayer() {
 		return playerOrder.getActive();
 	}
