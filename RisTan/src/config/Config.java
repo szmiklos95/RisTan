@@ -6,6 +6,7 @@ import java.util.HashMap;
 import gameLogic.Resource;
 
 //Configuration options for the game
+//Collection of magic constants
 public abstract class Config {
 	//Actions config
 	public static class Action{
@@ -127,13 +128,13 @@ public abstract class Config {
 		}
 		
 		public static class Village{
-			public static final int resourceNum=1;
-			public static final int score=1;
+			public static final int resourceNum=2;
+			public static final int score=4;
 		}
 		
 		public static class Town{
-			public static final int resourceNum=1;
-			public static final int score=1;
+			public static final int resourceNum=3;
+			public static final int score=6;
 		}
 	}
 }
