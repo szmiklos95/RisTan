@@ -52,6 +52,30 @@ public abstract class Config {
 			}
 			public static final double probability=0.75;
 		}
+		public static class OccupyEnemyTown{
+			public static final int time=4;
+			public static final Map<Resource,Integer> cost=createCost();
+			private static Map<Resource,Integer> createCost(){
+				HashMap<Resource,Integer> ret=new HashMap<Resource,Integer>();
+				ret.put(Resource.Stone,1);
+				ret.put(Resource.Wheat,3);
+				ret.put(Resource.Wood,3);
+				return ret;
+			}
+			public static final double probability=0.5;
+		}
+		public static class OccupyEnemyTownL2{
+			public static final int time=4;
+			public static final Map<Resource,Integer> cost=createCost();
+			private static Map<Resource,Integer> createCost(){
+				HashMap<Resource,Integer> ret=new HashMap<Resource,Integer>();
+				ret.put(Resource.Stone,1);
+				ret.put(Resource.Wheat,4);
+				ret.put(Resource.Wood,4);
+				return ret;
+			}
+			public static final double probability=0.75;
+		}
 		public static class OccupyEnemyVillage{
 			public static final int time=3;
 			public static final Map<Resource,Integer> cost=createCost();
