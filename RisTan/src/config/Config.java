@@ -9,6 +9,17 @@ import gameLogic.Resource;
 public abstract class Config {
 	//Actions config
 	public static class Action{
+		public static class BuildTown{
+			public static final int time=3;
+			public static final Map<Resource,Integer> cost=createCost();
+			private static Map<Resource,Integer> createCost(){
+				HashMap<Resource,Integer> ret=new HashMap<Resource,Integer>();
+				ret.put(Resource.Stone,2);
+				ret.put(Resource.Wheat,1);
+				ret.put(Resource.Wood,1);
+				return ret;
+			}
+		}
 		public static class BuildVillage{
 			public static final int time=2;
 			public static final Map<Resource,Integer> cost=createCost();
