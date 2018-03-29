@@ -1,9 +1,12 @@
 package gameLogic;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 //A point in the coordinate system
-public class Point{
+public class Point implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	private int i;
 	private int j;
 	
