@@ -18,4 +18,8 @@ public class GameState {
 		playerOrder=null;
 		market=new Market();
 	}
+	
+	public void ExecuteAction(Action action)throws GameLogicException{
+		action.execute(this);
+	}
 }
