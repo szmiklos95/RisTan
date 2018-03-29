@@ -2,7 +2,7 @@ package gameLogic;
 
 import java.util.Map;
 
-public class OccupyFreeTileAction extends TileAction {
+public abstract class OccupyFreeTileAction extends TileAction {
 	private static final long serialVersionUID = 1L;
 	
 	OccupyFreeTileAction(int playerID,int time,Point point,Map<Resource,Integer> cost){

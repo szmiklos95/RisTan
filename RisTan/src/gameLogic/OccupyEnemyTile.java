@@ -2,7 +2,7 @@ package gameLogic;
 
 import config.Config;
 
-public class OccupyEnemyTile extends OccupyEnemyTileAction {
+public class OccupyEnemyTile extends OccupyEnemyEmptyTileAction {
 	private static final long serialVersionUID = 1L;
 	
 	OccupyEnemyTile(int playerID,Point point){
