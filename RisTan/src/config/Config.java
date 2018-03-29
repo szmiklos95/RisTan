@@ -7,6 +7,14 @@ import gameLogic.Resource;
 
 //Configuration options for the game
 public abstract class Config {
+	//Actions config
+	public static class Action{
+		public static class OccupyFreeTile{
+			public static final int time=2;
+			public static final Map<Resource,Integer> cost=new HashMap<Resource,Integer>();
+		}
+	}
+	
 	//Board config
 	public static class Board{
 		//The number of tile layers around the central tile

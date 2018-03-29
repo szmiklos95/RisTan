@@ -15,6 +15,10 @@ public abstract class TileAction extends InGameAction {
 		this.cost=cost;
 	}
 	
+	Point getPoint() {
+		return point;
+	}
+	
 	@Override
 	void check(GameState gameState)throws GameLogicException{
 		super.check(gameState);
