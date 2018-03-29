@@ -20,6 +20,15 @@ public class GameState {
 	}
 	
 	public void ExecuteAction(Action action)throws GameLogicException{
+		action.check(this);
 		action.execute(this);
+	}
+	
+	public boolean isOver() {
+		return over;
+	}
+	
+	public Player getActivePlayer() {
+		return playerOrder.getActive();
 	}
 }
