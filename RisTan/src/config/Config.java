@@ -1,11 +1,25 @@
 package config;
 
+import java.util.Map;
+import java.util.HashMap;
+
+import gameLogic.Resource;
+
 //Configuration options for the game
 public abstract class Config {
 	//Board config
 	public static class Board{
 		//The number of tile layers around the central tile
 		public static final int size=3;
+		//resource probabilities
+		public static final Map<Resource,Double> res_prob=createRes_prob();
+		private static Map<Resource,Double> createRes_prob(){
+			HashMap<Resource,Double> ret=new HashMap<Resource,Double>();
+			ret.put(Resource.Stone,((double)1)/3);
+			ret.put(Resource.Wheat,((double)1)/3);
+			ret.put(Resource.Wood,((double)1)/3);
+			return ret;
+		}
 	}
 	
 	//BuildingLevel config
