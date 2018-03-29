@@ -40,6 +40,10 @@ class Tile {
 	}
 	
 	void setBuildingLevel(BuildingLevel buildingLevel) {
+		if(owner!=null) {
+			owner.addScore(-this.buildingLevel.getScore());
+			owner.addScore(buildingLevel.getScore());
+		}
 		this.buildingLevel=buildingLevel;
 	}
 	
