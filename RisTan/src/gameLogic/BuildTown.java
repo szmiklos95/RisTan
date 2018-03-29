@@ -6,7 +6,10 @@ public class BuildTown extends TileAction {
 	private static final long serialVersionUID = 1L;
 	
 	BuildTown(int playerID,Point point){
-		super(playerID,Config.Action.BuildTown.time,point,Config.Action.BuildTown.cost);
+		super(playerID,
+				Config.Action.BuildTown.time,
+				point,
+				Config.Action.BuildTown.cost);
 	}
 	
 	@Override
