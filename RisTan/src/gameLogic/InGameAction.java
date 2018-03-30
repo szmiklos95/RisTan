@@ -6,21 +6,19 @@ public abstract class InGameAction extends Action{
 	
 	private int playerID;
 	private int time;
-	private boolean automatic;
 	
 	
 	InGameAction(int playerID){
-		init(playerID,0,true);
+		init(playerID,0);
 	}
 	
 	InGameAction(int playerID,int time){
-		init(playerID,time,false);
+		init(playerID,time);
 	}
 	
-	private void init(int playerID,int time,boolean automatic) {
+	private void init(int playerID,int time) {
 		this.playerID=playerID;
 		this.time=time;
-		this.automatic=automatic;
 	}
 	
 	@Override
