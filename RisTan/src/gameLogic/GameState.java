@@ -36,6 +36,16 @@ public class GameState {
 		return playerOrder.getActive();
 	}
 	
+	Player getPlayerByID(int ID) {
+		for(int i=0;i<players.size();++i) {
+			Player player=players.get(i);
+			if(player.getID()==ID) {
+				return player;
+			}
+		}
+		return null;
+	}
+	
 	public Market getMarket() {
 		return market;
 	}

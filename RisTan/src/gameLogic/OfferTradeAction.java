@@ -3,6 +3,8 @@ package gameLogic;
 import config.Config;
 
 public class OfferTradeAction extends InGameAction {
+	private static final long serialVersionUID = 1L;
+	
 	private int offerID;
 	private Resource give;
 	private int give_amount;

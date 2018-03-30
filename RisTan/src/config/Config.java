@@ -10,6 +10,9 @@ import gameLogic.Resource;
 public abstract class Config {
 	//Actions config
 	public static class Action{
+		public static class AcceptTradeAction{
+			public static final int time=1;
+		}
 		public static class BuildTown{
 			public static final int time=3;
 			public static final Map<Resource,Integer> cost=createCost();
