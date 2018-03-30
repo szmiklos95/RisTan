@@ -111,7 +111,7 @@ public abstract class Config {
 		}
 		public static class TradeWithGameAction{
 			public static final int time=1;
-			//chenge ratio: for every given ratio_D, the player gets ratio_N
+			//change ratio: for every given ratio_D, the player gets ratio_N
 			public static final int ratio_N=1;
 			public static final int ratio_D=3;
 		}
