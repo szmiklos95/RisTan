@@ -2,7 +2,7 @@ package gameLogic;
 
 import config.Config;
 
-public class AcceptTradeAction extends InGameAction {
+public class AcceptTradeAction extends TradeAction {
 	private static final long serialVersionUID = 1L;
 	
 	private int offerID;
