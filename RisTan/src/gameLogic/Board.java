@@ -1,6 +1,8 @@
 package gameLogic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -19,18 +21,14 @@ public class Board {
 	//generates the tile based on the res_prob resource probabilities
 	public void generate(Map<Resource,Double> res_prob) {
 		tiles=new HashMap<Point,Tile>();
-		int size=Config.Board.size;
-		for(int i=-size;i<=size;++i) {
-			for(int j=-size;j<=size;++j) {
-				if(Math.abs(i-j)<=size) {
-					Tile tile;
-					do {
-						tile=getNewTile(res_prob);
-					}while(tile==null);
-					Point point=new Point(i,j);
-					tiles.put(point,tile);
-				}
-			}
+		List<Point> points=getTileCoordinates();
+		for(int i=0;i<points.size();++i) {
+			Point point=points.get(i);
+			Tile tile;
+			do{
+				tile=getNewTile(res_prob);
+			}while(tile==null);
+			tiles.put(point,tile);
 		}
 	}
 	
@@ -51,46 +49,34 @@ public class Board {
 	public void generate(String generatorString) {
 		tiles=new HashMap<Point,Tile>();
 		String[] str=generatorString.split(" ");
-		int index=0;
-		int size=Config.Board.size;
-		for(int i=-size;i<=size;++i) {
-			for(int j=-size;j<=size;++j) {
-				if(Math.abs(i-j)<=size) {
-					Tile tile=new Tile(str[index]);
-					Point point=new Point(i,j);
-					tiles.put(point,tile);
-					++index;
-				}
-			}
+		List<Point> points=getTileCoordinates();
+		for(int i=0;i<points.size();++i) {
+			Point point=points.get(i);
+			Tile tile=new Tile(str[i]);
+			tiles.put(point,tile);
 		}
 	}
 	
 	//returns a generator string from which the same board can be generated
 	public String getGeneratorString() {
 		StringBuilder stringBuilder=new StringBuilder();
-		int size=Config.Board.size;
-		for(int i=-size;i<=size;++i) {
-			for(int j=-size;j<=size;++j) {
-				if(Math.abs(i-j)<=size) {
-					Tile tile=tiles.get(new Point(i,j));
-					stringBuilder.append(tile.getGeneratorString()+" ");
-				}
-			}
+		List<Point> points=getTileCoordinates();
+		for(int i=0;i<points.size();++i) {
+			Point point=points.get(i);
+			Tile tile=tiles.get(point);
+			stringBuilder.append(tile.getGeneratorString()+" ");
 		}
 		return stringBuilder.toString();
 	}
 	
 	//the given player gets the resources from his/her tiles
 	public void harvest(Player player) {
-		int size=Config.Board.size;
-		for(int i=-size;i<=size;++i) {
-			for(int j=-size;j<=size;++j) {
-				if(Math.abs(i-j)<=size) {
-					Tile tile=tiles.get(new Point(i,j));
-					if(tile.getOwner().getID()==player.getID()) {
-						tile.harvest();
-					}
-				}
+		List<Point> points=getTileCoordinates();
+		for(int i=0;i<points.size();++i) {
+			Point point=points.get(i);
+			Tile tile=tiles.get(point);
+			if(tile.getOwner().getID()==player.getID()) {
+				tile.harvest();
 			}
 		}
 	}
@@ -98,5 +84,31 @@ public class Board {
 	//gets the tile at the given position
 	public Tile getTileAt(Point point) {
 		return tiles.get(point);
+	}
+	
+	private List<Point> getTileCoordinates(){
+		List<Point> ret=new ArrayList<Point>();
+		int size=Config.Board.size;
+		for(int i=-size;i<=size;++i) {
+			for(int j=-size;j<=size;++j) {
+				if(Math.abs(i-j)<=size) {
+					ret.add(new Point(i,j));
+				}
+			}
+		}
+		return ret;
+	}
+	
+	List<Point> getFreeTileCoordinates(){
+		List<Point> ret=new ArrayList<Point>();
+		List<Point> points=getTileCoordinates();
+		for(int i=0;i<points.size();++i) {
+			Point point=points.get(i);
+			Tile tile=tiles.get(point);
+			if(tile.getOwner()==null) {
+				ret.add(point);
+			}
+		}
+		return ret;
 	}
 }

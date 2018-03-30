@@ -16,7 +16,7 @@ abstract class Turn {
 		this.tradeEnabled=tradeEnabled;
 	}
 	
-	abstract void reset(GameState gameState);
+	abstract void reset();
 	
 	int getRemainingTime() {
 		return remainingTime;
@@ -31,6 +31,10 @@ abstract class Turn {
 	
 	List<Action> getAutomaticActions(){
 		return automaticActions;
+	}
+	
+	List<Event> getObligatoryEvents(){
+		return obligatoryEvents;
 	}
 	
 	void checkObligatoryEvents(Action action) {
