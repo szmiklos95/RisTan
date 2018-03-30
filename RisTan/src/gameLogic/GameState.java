@@ -9,6 +9,7 @@ public class GameState {
 	private Board board;
 	private List<Player> players;
 	private PlayerOrder playerOrder;
+	private TurnOrder turnOrder;
 	private Market market;
 	
 	public GameState() {
@@ -16,6 +17,7 @@ public class GameState {
 		board=new Board();
 		players=new ArrayList<Player>();
 		playerOrder=null;
+		turnOrder=null;
 		market=new Market();
 	}
 	
@@ -44,6 +46,10 @@ public class GameState {
 			}
 		}
 		return null;
+	}
+	
+	Turn getTurn() {
+		return turnOrder.getActive();
 	}
 	
 	public Market getMarket() {

@@ -31,11 +31,13 @@ public abstract class InGameAction extends Action{
 		if(gameState.getActivePlayer().getID()!=playerID) {
 			throw new PlayerOutOfTurnException();
 		}
-		//TODO time ellenõriz
+		if(gameState.getTurn().getRemainingTime()<time) {
+			throw new NotEnoughTimeException();
+		}
 	}
 	
 	@Override
 	void execute(GameState gameState)throws GameLogicException{
-		//TODO time levon
+		gameState.getTurn().takeTime(time);
 	}
 }

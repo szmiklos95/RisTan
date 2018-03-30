@@ -1,6 +1,8 @@
 package gameLogic;
 
 public class HarvestResourcesAction extends InGameAction {
+	private static final long serialVersionUID = 1L;
+	
 	public HarvestResourcesAction(int playerID) {
 		super(playerID);
 	}
