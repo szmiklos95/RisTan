@@ -28,6 +28,9 @@ public abstract class TileAction extends InGameAction {
 		if(!gameState.getActivePlayer().hasResource(cost)) {
 			throw new InsufficientResourceException();
 		}
+		if(!gameState.getTurn().isTileActionPossible(this)) {
+			throw new InvalidTileActionException();
+		}
 	}
 	
 	@Override

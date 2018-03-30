@@ -52,4 +52,6 @@ abstract class Turn {
 	boolean isTradeEnabled() {
 		return tradeEnabled;
 	}
+	
+	abstract boolean isTileActionPossible(TileAction action);
 }

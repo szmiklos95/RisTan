@@ -27,4 +27,9 @@ class StartTileChoiceTurn extends Turn {
 		}
 		return ret;
 	}
+	
+	@Override
+	boolean isTileActionPossible(TileAction action) {
+		return action instanceof OccupyFreeTileFree;
+	}
 }
