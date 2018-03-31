@@ -35,6 +35,10 @@ public class GameState {
 		return board;
 	}
 	
+	List<Player> getPlayers(){
+		return players;
+	}
+	
 	public Player getActivePlayer() {
 		return playerOrder.getActive();
 	}
