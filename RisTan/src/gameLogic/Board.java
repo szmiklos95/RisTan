@@ -91,7 +91,7 @@ public class Board {
 		int size=Config.Board.size;
 		for(int i=-size;i<=size;++i) {
 			for(int j=-size;j<=size;++j) {
-				if(Math.abs(i-j)<=size) {
+				if(Math.abs(i+j)<=size) {
 					ret.add(new Point(i,j));
 				}
 			}
@@ -107,6 +107,63 @@ public class Board {
 			Tile tile=tiles.get(point);
 			if(tile.getOwner()==null) {
 				ret.add(point);
+			}
+		}
+		return ret;
+	}
+	
+	private List<Point> getNeighbourTileCoordinates(Point point){
+		List<Point> ret=new ArrayList<Point>();
+		int i=point.getI();
+		int j=point.getJ();
+		int size=Config.Board.size;
+		if((i+1<=size)&&(i+j+1<=size)) {
+			ret.add(new Point(i+1,j));
+		}
+		if((i-1>=size)&&(i+j-1>=size)) {
+			ret.add(new Point(i-1,j));
+		}
+		if((j+1<=size)&&(i+j+1<=size)) {
+			ret.add(new Point(i,j+1));
+		}
+		if((j-1>=size)&&(i+j-i<=size)) {
+			ret.add(new Point(i,j-1));
+		}
+		if((i-1>=size)&&(j+1<=size)) {
+			ret.add(new Point(i-1,j+1));
+		}
+		if((i+1<=size)&&(j-1>=size)) {
+			ret.add(new Point(i+1,j-1));
+		}
+		return ret;
+	}
+	
+	/*List<Point> getPlayerTileCoordinates(int playerID){
+		List<Point> ret=new ArrayList<Point>();
+		List<Point> points=getTileCoordinates();
+		for(int i=0;i<points.size();++i) {
+			Point point=points.get(i);
+			Tile tile=tiles.get(point);
+			if(tile.getOwner().getID()==playerID) {
+				ret.add(point);
+			}
+		}
+		return ret;
+	}*/
+	
+	List<Point> getFreeNeighbourTileCoordinates(int playerID){
+		List<Point> ret=new ArrayList<Point>();
+		List<Point> points=getFreeTileCoordinates();
+		for(int i=0;i<points.size();++i) {
+			Point point=points.get(i);
+			List<Point> neighbours=getNeighbourTileCoordinates(point);
+			for(int j=0;j<neighbours.size();++j) {
+				Point neighbour=neighbours.get(j);
+				Tile tile=tiles.get(neighbour);
+				if(tile.getOwner().getID()==playerID) {
+					ret.add(point);
+					break;
+				}
 			}
 		}
 		return ret;
