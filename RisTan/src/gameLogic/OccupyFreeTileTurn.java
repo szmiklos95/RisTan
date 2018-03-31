@@ -3,10 +3,10 @@ package gameLogic;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FreeTileOccupyTurn extends Turn {
+public class OccupyFreeTileTurn extends Turn {
 	private int amount;
 	
-	public FreeTileOccupyTurn(int amount){
+	public OccupyFreeTileTurn(int amount){
 		super(false);
 		this.amount=amount;
 	}
