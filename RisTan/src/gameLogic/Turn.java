@@ -16,7 +16,7 @@ public abstract class Turn {
 		this.tradeEnabled=tradeEnabled;
 	}
 	
-	abstract void reset();
+	abstract void reset(GameState gameState);
 	
 	int getRemainingTime() {
 		return remainingTime;

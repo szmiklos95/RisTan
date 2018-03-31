@@ -12,7 +12,7 @@ public class OccupyFreeTileTurn extends Turn {
 	}
 	
 	@Override
-	void reset() {
+	void reset(GameState gameState) {
 		List<Event> events=getObligatoryEvents();
 		events.clear();
 		for(int i=0;i<amount;++i) {

@@ -9,7 +9,7 @@ public class BuildVillageTurn extends Turn {
 	}
 	
 	@Override
-	void reset() {
+	void reset(GameState gameState) {
 		List<Event> events=getObligatoryEvents();
 		events.clear();
 		events.add(new BuildVillageEvent());
