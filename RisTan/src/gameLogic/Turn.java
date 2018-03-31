@@ -47,12 +47,16 @@ public abstract class Turn {
 		}
 	}
 	
-	abstract List<Action> getPossibleTileActions(GameState gameState);
+	List<Action> getPossibleTileActions(GameState gameState){
+		return new ArrayList<Action>();
+	}
 	
 	boolean isTradeEnabled() {
 		return tradeEnabled;
 	}
 	
 	//checks occur here which requires more tiles than the affected in the tile action (e.g. is the affected tile neighbour of an own)
-	abstract boolean isTileActionPossible(GameState gameState,TileAction action);
+	boolean isTileActionPossible(GameState gameState,TileAction action) {
+		return false;
+	}
 }
