@@ -3,9 +3,8 @@ package gameLogic;
 import java.util.ArrayList;
 import java.util.List;
 
-class StartTileChoiceTurn extends Turn {
-	
-	StartTileChoiceTurn(){
+public class StartTileChoiceTurn extends Turn {
+	public StartTileChoiceTurn(){
 		super(false);
 	}
 	
@@ -19,17 +18,20 @@ class StartTileChoiceTurn extends Turn {
 	@Override
 	List<Action> getPossibleTileActions(GameState gameState) {
 		List<Action> ret=new ArrayList<Action>();
-		List<Point> freeTileCoordinates=gameState.getBoard().getFreeTileCoordinates();
-		int activePlayerID=gameState.getActivePlayer().getID();
-		for(int i=0;i<freeTileCoordinates.size();++i) {
-			Point point=freeTileCoordinates.get(i);
-			ret.add(new OccupyFreeTileFree(activePlayerID,point));
+		if(getObligatoryEvents().size()>0) {
+			List<Point> freeTileCoordinates=gameState.getBoard().getFreeTileCoordinates();
+			int activePlayerID=gameState.getActivePlayer().getID();
+			for(int i=0;i<freeTileCoordinates.size();++i) {
+				Point point=freeTileCoordinates.get(i);
+				ret.add(new OccupyFreeTileFree(activePlayerID,point));
+			}
 		}
 		return ret;
 	}
 	
 	@Override
-	boolean isTileActionPossible(TileAction action) {
-		return action instanceof OccupyFreeTileFree;
+	boolean isTileActionPossible(GameState gameState,TileAction action) {
+		return (getObligatoryEvents().size()>0)&&
+				(action instanceof OccupyFreeTileFree);
 	}
 }
