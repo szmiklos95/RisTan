@@ -23,6 +23,7 @@ public class GameState {
 	
 	public void ExecuteAction(Action action)throws GameLogicException{
 		action.check(this);
+		getTurn().checkObligatoryEvents(action);
 		action.execute(this);
 	}
 	
