@@ -3,13 +3,13 @@ package gameLogic;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class Turn {
+public abstract class Turn {
 	private int remainingTime;
 	private List<Action> automaticActions;
 	private List<Event> obligatoryEvents;
 	private boolean tradeEnabled;
 	
-	Turn(boolean tradeEnabled){
+	public Turn(boolean tradeEnabled){
 		remainingTime=0;
 		automaticActions=new ArrayList<Action>();
 		obligatoryEvents=new ArrayList<Event>();
@@ -53,5 +53,5 @@ abstract class Turn {
 		return tradeEnabled;
 	}
 	
-	abstract boolean isTileActionPossible(TileAction action);
+	abstract boolean isTileActionPossible(GameState gameState,TileAction action);
 }

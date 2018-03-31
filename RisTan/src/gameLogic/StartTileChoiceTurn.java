@@ -19,10 +19,10 @@ public class StartTileChoiceTurn extends Turn {
 	List<Action> getPossibleTileActions(GameState gameState) {
 		List<Action> ret=new ArrayList<Action>();
 		if(getObligatoryEvents().size()>0) {
-			List<Point> freeTileCoordinates=gameState.getBoard().getFreeTileCoordinates();
+			List<Point> points=gameState.getBoard().getFreeTileCoordinates();
 			int activePlayerID=gameState.getActivePlayer().getID();
-			for(int i=0;i<freeTileCoordinates.size();++i) {
-				Point point=freeTileCoordinates.get(i);
+			for(int i=0;i<points.size();++i) {
+				Point point=points.get(i);
 				ret.add(new OccupyFreeTileFree(activePlayerID,point));
 			}
 		}
