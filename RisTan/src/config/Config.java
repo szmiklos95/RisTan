@@ -1,9 +1,16 @@
 package config;
 
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import gameLogic.GetResourceTurn;
+import gameLogic.NormalTurn;
+import gameLogic.OccupyFreeTileTurn;
 import gameLogic.Resource;
+import gameLogic.StartTileChoiceTurn;
+import gameLogic.Turn;
 
 //Configuration options for the game
 //Collection of magic constants
@@ -147,6 +154,31 @@ public abstract class Config {
 		public static class Town{
 			public static final int resourceNum=3;
 			public static final int score=6;
+		}
+	}
+	
+	//TurnOrder config
+	public static class TurnOrder{
+		public static final List<Turn> turns=createTurns();
+		private static List<Turn> createTurns(){
+			List<Turn> ret=new ArrayList<Turn>();
+			ret.add(new StartTileChoiceTurn());
+			for(int i=0;i<5;++i) {
+				ret.add(new OccupyFreeTileTurn(1));
+			}
+			ret.add(new GetResourceTurn(startingResources));
+			for(int i=0;i<10;++i) {
+				ret.add(new NormalTurn());
+			}
+			return ret;
+		}
+		private static final Map<Resource,Integer> startingResources=createStartingResources();
+		private static Map<Resource,Integer> createStartingResources(){
+			Map<Resource,Integer> ret=new HashMap<Resource,Integer>();
+			ret.put(Resource.Stone,2);
+			ret.put(Resource.Wheat,2);
+			ret.put(Resource.Wood,2);
+			return ret;
 		}
 	}
 }
