@@ -55,7 +55,7 @@ public abstract class Turn {
 		return tradeEnabled;
 	}
 	
-	//checks occur here which requires more tiles than the affected in the tile action (e.g. is the affected tile neighbour of an own)
+	//checks occur here of action type or which require more tiles than the affected in the tile action (e.g. is the affected tile neighbour of an own)
 	boolean isTileActionPossible(GameState gameState,TileAction action) {
 		return false;
 	}
