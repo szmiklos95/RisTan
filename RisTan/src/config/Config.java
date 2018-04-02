@@ -148,7 +148,7 @@ public abstract class Config {
 		
 		public static class Village{
 			public static final int resourceNum=2;
-			public static final int score=4;
+			public static final int score=3;
 		}
 		
 		public static class Town{

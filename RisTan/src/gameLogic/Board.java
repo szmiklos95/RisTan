@@ -86,6 +86,8 @@ public class Board {
 		return tiles.get(point);
 	}
 	
+	//coordinate functions
+	
 	private List<Point> getTileCoordinates(){
 		List<Point> ret=new ArrayList<Point>();
 		int size=Config.Board.size;
@@ -94,19 +96,6 @@ public class Board {
 				if(Math.abs(i+j)<=size) {
 					ret.add(new Point(i,j));
 				}
-			}
-		}
-		return ret;
-	}
-	
-	List<Point> getFreeTileCoordinates(){
-		List<Point> ret=new ArrayList<Point>();
-		List<Point> points=getTileCoordinates();
-		for(int i=0;i<points.size();++i) {
-			Point point=points.get(i);
-			Tile tile=tiles.get(point);
-			if(tile.getOwner()==null) {
-				ret.add(point);
 			}
 		}
 		return ret;
@@ -138,11 +127,62 @@ public class Board {
 		return ret;
 	}
 	
-	List<Point> getFreeNeighbourTileCoordinates(int playerID){
+	private List<Point> filterForFree(List<Point> input){
 		List<Point> ret=new ArrayList<Point>();
-		List<Point> points=getFreeTileCoordinates();
-		for(int i=0;i<points.size();++i) {
-			Point point=points.get(i);
+		for(int i=0;i<input.size();++i) {
+			Point point=input.get(i);
+			Tile tile=tiles.get(point);
+			if(tile.getOwner()==null) {
+				ret.add(point);
+			}
+		}
+		return ret;
+	}
+	
+	private List<Point> filterForOwn(List<Point> input,int playerID){
+		List<Point> ret=new ArrayList<Point>();
+		for(int i=0;i<input.size();++i) {
+			Point point=input.get(i);
+			Tile tile=tiles.get(point);
+			if(tile.getOwner()!=null) {
+				if(tile.getOwner().getID()==playerID) {
+					ret.add(point);
+				}
+			}
+		}
+		return ret;
+	}
+	
+	private List<Point> filterForEnemy(List<Point> input,int playerID){
+		List<Point> ret=new ArrayList<Point>();
+		for(int i=0;i<input.size();++i) {
+			Point point=input.get(i);
+			Tile tile=tiles.get(point);
+			if(tile.getOwner()!=null) {
+				if(tile.getOwner().getID()!=playerID) {
+					ret.add(point);
+				}
+			}
+		}
+		return ret;
+	}
+	
+	private List<Point> filterForBuildingLevel(List<Point> input,BuildingLevel buildingLevel){
+		List<Point> ret=new ArrayList<Point>();
+		for(int i=0;i<input.size();++i) {
+			Point point=input.get(i);
+			Tile tile=tiles.get(point);
+			if(tile.getBuildingLevel()==buildingLevel) {
+				ret.add(point);
+			}
+		}
+		return ret;
+	}
+	
+	private List<Point> filterForNeighbourOf(List<Point> input,int playerID){
+		List<Point> ret=new ArrayList<Point>();
+		for(int i=0;i<input.size();++i) {
+			Point point=input.get(i);
 			List<Point> neighbours=getNeighbourTileCoordinates(point);
 			for(int j=0;j<neighbours.size();++j) {
 				Point neighbour=neighbours.get(j);
@@ -156,29 +196,39 @@ public class Board {
 		return ret;
 	}
 	
+	List<Point> getFreeTileCoordinates(){
+		return filterForFree(getTileCoordinates());
+	}
+	
+	List<Point> getFreeNeighbourTileCoordinates(int playerID){
+		return filterForNeighbourOf(getFreeTileCoordinates(),playerID);
+	}
+	
 	List<Point> getPlayerTileCoordinates(int playerID){
-		List<Point> ret=new ArrayList<Point>();
-		List<Point> points=getTileCoordinates();
-		for(int i=0;i<points.size();++i) {
-			Point point=points.get(i);
-			Tile tile=tiles.get(point);
-			if(tile.getOwner().getID()==playerID) {
-				ret.add(point);
-			}
-		}
-		return ret;
+		return filterForOwn(getTileCoordinates(),playerID);
 	}
 	
 	List<Point> getPlayerEmptyTileCoordinates(int playerID){
-		List<Point> ret=new ArrayList<Point>();
-		List<Point> points=getPlayerTileCoordinates(playerID);
-		for(int i=0;i<points.size();++i) {
-			Point point=points.get(i);
-			Tile tile=tiles.get(point);
-			if(tile.getBuildingLevel()==BuildingLevel.None) {
-				ret.add(point);
-			}
-		}
-		return ret;
+		return filterForBuildingLevel(getPlayerTileCoordinates(playerID),BuildingLevel.None);
+	}
+	
+	List<Point> getPlayerVillageCoordinates(int playerID){
+		return filterForBuildingLevel(getPlayerTileCoordinates(playerID),BuildingLevel.Village);
+	}
+	
+	private List<Point> getEnemyNeighbourTileCoordinates(int playerID){
+		return filterForNeighbourOf(filterForEnemy(getTileCoordinates(),playerID),playerID);
+	}
+	
+	List<Point> getEnemyNeighbourEmptyTileCoordinates(int playerID){
+		return filterForBuildingLevel(getEnemyNeighbourTileCoordinates(playerID),BuildingLevel.None);
+	}
+	
+	List<Point> getEnemyNeighbourVillageTileCoordinates(int playerID){
+		return filterForBuildingLevel(getEnemyNeighbourTileCoordinates(playerID),BuildingLevel.Village);
+	}
+	
+	List<Point> getEnemyNeighbourTownTileCoordinates(int playerID){
+		return filterForBuildingLevel(getEnemyNeighbourTileCoordinates(playerID),BuildingLevel.Town);
 	}
 }
