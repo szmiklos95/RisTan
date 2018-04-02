@@ -3,6 +3,8 @@ package gameLogic;
 import java.util.ArrayList;
 import java.util.List;
 
+import config.Config;
+
 //stores the state of the game
 public class GameState {
 	private boolean over;
@@ -53,11 +55,21 @@ public class GameState {
 		return null;
 	}
 	
-	Turn getTurn() {
+	public Turn getTurn() {
 		return turnOrder.getActive();
 	}
 	
 	public Market getMarket() {
 		return market;
+	}
+	
+	void initGame() {
+		board.generate(Config.Board.res_prob);
+		playerOrder=new PlayerOrder(players);
+		turnOrder=new TurnOrder(Config.TurnOrder.turns);
+	}
+	
+	void startGame() {
+		
 	}
 }
