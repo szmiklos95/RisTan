@@ -20,12 +20,12 @@ public class GBoard extends JFrame{
 
 	public void drawHexagon(){
 
-	    drawingPanel = new DrawingPanel();
-	    add(drawingPanel);
+        drawingPanel = new DrawingPanel();
 
-	    pack();
-	    setLocationByPlatform(true);
-	    setVisible(true);
+        setContentPane(drawingPanel);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
 	}
 	
 }

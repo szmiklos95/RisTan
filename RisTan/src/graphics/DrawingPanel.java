@@ -1,9 +1,14 @@
 package graphics;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.util.ArrayList;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
+
 import javax.swing.JPanel;
 
 import config.Config;
@@ -11,61 +16,92 @@ import config.Config;
 
 public class DrawingPanel extends JPanel {
  
-	private static final long serialVersionUID = 1L;
-	private Hexagon hexagon;
-	private ArrayList<Point> points;
-	private ArrayList<Hexagon> hexagons;
-	private int tilenum;
+	 private static final long serialVersionUID = 1L;
+	    private final int WIDTH = 1200;
+	    private final int HEIGHT = 800;
 
-    public DrawingPanel() {
-    	tilenum = 0;
-    	points = new ArrayList<Point>();
-    	hexagons = new ArrayList<Hexagon>();
-        setCoordinates();
-        setHexagons();
-        this.hexagon = hexagon;
-        this.setPreferredSize(new Dimension(Config.DrawingPanel.width, Config.DrawingPanel.height));
-    }
+	    private Font font = new Font("Arial", Font.BOLD, 18);
+	    FontMetrics metrics;
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+	    public DrawingPanel() {
+	        setPreferredSize(new Dimension(Config.DrawingPanel.width, Config.DrawingPanel.height));
+	    }
 
-        for(int i=0; i<tilenum;++i) {
-        	if(i == 0) {
-        		g.setColor(Color.RED);
-        	}
-        	else g.setColor(Color.BLACK);
-            g.drawPolygon(hexagons.get(i).getHexagon());
-        }
-        
-    }
-    
-	/**
-	 * Sets the coordinates for the tiles
-	 */
-	private void setCoordinates() {
-		int size=Config.Board.size;
-		for(int i=-size;i<=size;++i) {
-			for(int j=-size;j<=size;++j) {
-				if(Math.abs(i+j)<=size) {
-					points.add(new Point(i,j));
-					tilenum++;
-				}
-			}
-		}
-	}
-	
-	
-	/**
-	 * Sets the hexagon coordinates
-	 */
-	private void setHexagons() {
-		Point point;
-		for(int i = 0; i<tilenum; ++i) {
-			point = points.get(i);
-			hexagons.add(new Hexagon(point));
-		}
-	}
-	
+	    @Override
+	    public void paintComponent(Graphics g) {
+	        Graphics2D g2d = (Graphics2D) g;
+	        Point origin = new Point(WIDTH / 2, HEIGHT / 2);
+
+	        g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
+	        g2d.setFont(font);
+	        metrics = g.getFontMetrics();
+
+	        drawCircle(g2d, origin, 380, true, true, 0x4488FF, 0);
+	        drawHexGridLoop(g2d, origin, 7, 50, 8);
+	    }
+
+	    private void drawHexGridLoop(Graphics g, Point origin, int size, int radius, int padding) {
+	        double ang30 = Math.toRadians(30);
+	        double xOff = Math.cos(ang30) * (radius + padding);
+	        double yOff = Math.sin(ang30) * (radius + padding);
+	        int half = size / 2;
+
+	        for (int row = 0; row < size; row++) {
+	            int cols = size - java.lang.Math.abs(row - half);
+
+	            for (int col = 0; col < cols; col++) {
+	                int xLbl = row < half ? col - row : col - half;
+	                int yLbl = row - half;
+	                int x = (int) (origin.getX() + xOff * (col * 2 + 1 - cols));
+	                int y = (int) (origin.getY() + yOff * (row - half) * 3);
+
+	                drawHex(g, xLbl, yLbl, x, y, radius);
+	            }
+	        }
+	    }
+
+	    private void drawHex(Graphics g, int posX, int posY, int x, int y, int r) {
+	        Graphics2D g2d = (Graphics2D) g;
+
+	        Hexagon hex = new Hexagon(x, y, r);
+	        String text = String.format("%s : %s", coord(posX), coord(posY));
+	        int w = metrics.stringWidth(text);
+	        int h = metrics.getHeight();
+
+	        hex.draw(g2d, x, y, 0, 0x008844, true);
+	        hex.draw(g2d, x, y, 4, 0xFFDD88, false);
+
+	        g.setColor(new Color(0xFFFFFF));
+	        g.drawString(text, x - w/2, y + h/2);
+	    }
+
+	    private String coord(int value) {
+	        return (value > 0 ? "+" : "") + Integer.toString(value);
+	    }
+
+	    public void drawCircle(Graphics2D g, Point origin, int radius,
+	            boolean centered, boolean filled, int colorValue, int lineThickness) {
+	        // Store before changing.
+	        Stroke tmpS = g.getStroke();
+	        Color tmpC = g.getColor();
+
+	        g.setColor(new Color(colorValue));
+	        g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_ROUND,
+	                BasicStroke.JOIN_ROUND));
+
+	        int diameter = radius * 2;
+	        int x2 = centered ? origin.getX() - radius : origin.getX();
+	        int y2 = centered ? origin.getY() - radius : origin.getY();
+
+	        if (filled)
+	            g.fillOval(x2, y2, diameter, diameter);
+	        else
+	            g.drawOval(x2, y2, diameter, diameter);
+
+	        // Set values to previous when done.
+	        g.setColor(tmpC);
+	        g.setStroke(tmpS);
+	    }
+
 }
+	

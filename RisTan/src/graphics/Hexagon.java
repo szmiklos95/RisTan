@@ -1,55 +1,99 @@
 package graphics;
 
-import java.awt.Polygon;
+import java.awt.*;
 
-import config.Config;
+public class Hexagon extends Polygon {
 
-public class Hexagon {
-    private final int radius;
-    private final Point center;
-    private final Polygon hexagon;
+    private static final long serialVersionUID = 1L;
 
-    public Hexagon(Point coordinates) {
-    	radius = Config.Hexagon.radius;
-    	this.center = convertToCenter(coordinates);
-        this.hexagon = createHexagon();
+    public static final int SIDES = 6;
+
+    private Point[] points = new Point[SIDES];
+    private Point center = new Point(0, 0);
+    private int radius;
+    private int rotation = 90;
+
+    public Hexagon(Point center, int radius) {
+        npoints = SIDES;
+        xpoints = new int[SIDES];
+        ypoints = new int[SIDES];
+
+        this.center = center;
+        this.radius = radius;
+
+        updatePoints();
     }
 
-    private Polygon createHexagon() {
-        Polygon polygon = new Polygon();
-
-        for (int i = 0; i < 6; i++) {
-            int xval = (int) (center.getX() + radius
-                    * Math.cos(i * 2 * Math.PI / 6D));
-            int yval = (int) (center.getY() + radius
-                    * Math.sin(i * 2 * Math.PI / 6D));
-            polygon.addPoint(xval, yval);
-        }
-
-        return polygon;
+    public Hexagon(int x, int y, int radius) {
+        this(new Point(x, y), radius);
     }
 
     public int getRadius() {
         return radius;
     }
 
-    public Point getCenter() {
-        return center;
+    public void setRadius(int radius) {
+        this.radius = radius;
+
+        updatePoints();
     }
 
-    public Polygon getHexagon() {
-        return hexagon;
-    }
-    
-    private Point convertToCenter(Point coordinates) {
-    	coordinates.printPoint();
-    	int boardCenterX = Config.DrawingPanel.width/2;
-    	int boardCenterY = Config.DrawingPanel.height/2;
-    	int newX = boardCenterX + coordinates.getX()*radius*2;
-    	int newY = boardCenterY + coordinates.getY()*radius*2;
-    	Point center = new Point(newX,newY);
-    	return center;
+    public int getRotation() {
+        return rotation;
     }
 
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
+
+        updatePoints();
+    }
+
+    public void setCenter(Point center) {
+        this.center = center;
+
+        updatePoints();
+    }
+
+    public void setCenter(int x, int y) {
+        setCenter(new Point(x, y));
+    }
+
+    private double findAngle(double fraction) {
+        return fraction * Math.PI * 2 + Math.toRadians((rotation + 180) % 360);
+    }
+
+    private Point findPoint(double angle) {
+        int x = (int) (center.getX() + Math.cos(angle) * radius);
+        int y = (int) (center.getY() + Math.sin(angle) * radius);
+
+        return new Point(x, y);
+    }
+
+    protected void updatePoints() {
+        for (int p = 0; p < SIDES; p++) {
+            double angle = findAngle((double) p / SIDES);
+            Point point = findPoint(angle);
+            xpoints[p] = point.getX();
+            ypoints[p] = point.getY();
+            points[p] = point;
+        }
+    }
+
+    public void draw(Graphics2D g, int x, int y, int lineThickness, int colorValue, boolean filled) {
+        // Store before changing.
+        Stroke tmpS = g.getStroke();
+        Color tmpC = g.getColor();
+
+        g.setColor(new Color(colorValue));
+        g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
+
+        if (filled)
+            g.fillPolygon(xpoints, ypoints, npoints);
+        else
+            g.drawPolygon(xpoints, ypoints, npoints);
+
+        // Set values to previous when done.
+        g.setColor(tmpC);
+        g.setStroke(tmpS);
+    }
 }
-
