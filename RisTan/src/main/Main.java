@@ -5,7 +5,6 @@
 
 package main;
 
-import graphics.GUI;
 import graphics.GControl;
 import graphics.MainMenu;
 

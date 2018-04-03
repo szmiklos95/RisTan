@@ -4,13 +4,11 @@ import java.awt.Point;
 
 
 public class GControl {
-	private GUI gui;
 
 	public GControl() {
 	}
 
-	public void setGUI(GUI g) {
-		gui = g;
+	public void setGUI() {
 	}
 
 	void startServer() {
@@ -26,8 +24,6 @@ public class GControl {
 	}
 
 	void clickReceived(Point p) {
-		if (gui == null)
-			return;
-		gui.addPoint(p);
+
 	}
 }

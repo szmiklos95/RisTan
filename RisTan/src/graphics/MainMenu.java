@@ -10,49 +10,82 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import config.Config;
 
 public class MainMenu {
 	
-
+	/**
+	 * Interfaces and Actions for button press
+	 */
+	private interface Function{
+		void doAction();
+	}
+	
+	/**
+	 * Default button handler
+	 */
+	private static final Function defaultAction = new Function() {
+		public void doAction() {
+			System.out.print("Please assign an action for this button!\n");
+		}
+	};
+	
+	/**
+	 * Do this when the start button is pressed
+	 */
+	private static final Function startAction = new Function() {
+		public void doAction() {
+			System.out.print("Starting the game.\n");
+			/*
+			 * start the game
+			 */
+			System.out.print("...Just kidding, it is not implemented yet.");
+		}
+	};
+	
+	/**
+	 * Do this when the exit button is pressed
+	 */
+	private static final Function exitAction = new Function() {
+		public void doAction() {
+			System.out.print("Closing the game.\n");
+			System.exit(0);
+		}
+	};
+	
+	/**
+	 * Sets the layout, size and buttons.
+	 * @param pane The container where the items will be added.
+	 */
     public static void addComponentsToPane(Container pane) {
         pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
         
-        pane.setPreferredSize(new Dimension(800,600));
+        pane.setPreferredSize(new Dimension(Config.MainMenu.width,Config.MainMenu.height));
         
-        JButton button;
-        
-        button =  new JButton("Start");
-        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.addActionListener(new ActionListener() { 
-        	 public void actionPerformed(ActionEvent e) { 
-        	   startAction();
-        	 } 
-        } );
-        pane.add(button);
-        
-        addAButton("Button 2", pane);
-        addAButton("Button 3", pane);
-        addAButton("Long-Named Button 4", pane);
-        addAButton("Exit", pane);
+        setButton("Start", pane, startAction);
+        setButton("Button 2", pane, defaultAction);
+        setButton("Button 3", pane, defaultAction);
+        setButton("Long-Named Button 4", pane, defaultAction);
+        setButton("Exit", pane, exitAction);
       
     }
     
-    private static void startAction(){
-    	System.out.print("Hello World!");
-    }
 
-    private static void addAButton(String text, Container container) {
+    /**
+     * Creates a new button within the given container.
+     * @param text 		The display name of the button
+     * @param container The container
+     * @param f 		The method that will be called upon clicking on the button
+     */
+    private static void setButton(String text, Container container, Function f) {
         JButton button = new JButton(text);
         button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        container.add(button);
-    }
-    
-    private static void setButton(JButton button, String text, Container container) {
-        button = new JButton(text);
-        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.addActionListener(new ActionListener() { 
+       	 public void actionPerformed(ActionEvent e) { 
+       	   f.doAction();
+       	 } 
+        } );
         container.add(button);
     }
     
