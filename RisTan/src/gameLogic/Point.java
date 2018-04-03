@@ -3,7 +3,7 @@ package gameLogic;
 import java.io.Serializable;
 import java.util.Objects;
 
-//A point in the coordinate system
+//A point in the board coordinate system
 public class Point implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -42,4 +42,13 @@ public class Point implements Serializable{
 	public int hashCode() {
         return Objects.hash(i,j);
     }
+	
+	//conversion functions to the Descartes coordinate system
+	public double getDescartesX() {
+		return i+(double)j/2;
+	}
+	
+	public double getDescartesY() {
+		return (double)j*Math.sqrt(3)/2;
+	}
 }
