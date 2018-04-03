@@ -13,6 +13,7 @@ public class GameState {
 	private PlayerOrder playerOrder;
 	private TurnOrder turnOrder;
 	private Market market;
+	private boolean automaticActionsExecuted;
 	
 	public GameState() {
 		over=true;
@@ -21,12 +22,16 @@ public class GameState {
 		playerOrder=null;
 		turnOrder=null;
 		market=new Market();
+		automaticActionsExecuted=false;
 	}
 	
 	public void ExecuteAction(Action action)throws GameLogicException{
 		action.check(this);
 		getTurn().checkObligatoryEvents(action);
 		action.execute(this);
+		if(checkForSwitchToNextPlayer()) {
+			
+		}
 	}
 	
 	public boolean isOver() {
@@ -77,10 +82,45 @@ public class GameState {
 		return new StartGameAction(boardGenerator,playerShuffleOrder,turnOrderGenerator);
 	}
 	
-	void startGame(String boardGenerator,String playerShuffleOrder,String turnOrderGenerator) {
-		board.generate(boardGenerator);
-		playerOrder=new PlayerOrder(players,playerShuffleOrder);
-		turnOrder=new TurnOrder(turnOrderGenerator);
-		over=false;
+	void startGame(String boardGenerator,String playerShuffleOrder,String turnOrderGenerator) throws GameLogicException{
+		if(over) {//true on clients, needs to generate game state according to server
+			board.generate(boardGenerator);
+			playerOrder=new PlayerOrder(players,playerShuffleOrder);
+			turnOrder=new TurnOrder(turnOrderGenerator);
+			over=false;
+		}
+		//effectively starting the game
+		activePlayerStart();
+	}
+	
+	void activePlayerStart()throws GameLogicException{
+		automaticActionsExecuted=false;
+		List<Action> automaticActions=getTurn().getAutomaticActions();
+		for(int i=0;i<automaticActions.size();++i) {
+			Action action=automaticActions.get(i);
+			action.execute(this);
+		}
+		automaticActionsExecuted=true;
+	}
+	
+	private boolean checkForSwitchToNextPlayer() {
+		if(!automaticActionsExecuted) {
+			return false;
+		}
+		Turn turn=getTurn();
+		if(turn.getObligatoryEvents().size()>0) {
+			return false;
+		}
+		return !turn.canDoAnything(this);
+	}
+	
+	void activePlayerEnd() throws GameLogicException {
+		boolean toNextTurn=playerOrder.next();
+		if(toNextTurn) {
+			over=turnOrder.next();
+		}
+		if(!over) {
+			activePlayerStart();
+		}
 	}
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import config.Config;
+
 public abstract class Turn {
 	static Turn fromGeneratorString(String generator) {
 		String[] parts=generator.split(" ");
@@ -80,6 +82,24 @@ public abstract class Turn {
 	
 	boolean isTradeEnabled() {
 		return tradeEnabled;
+	}
+	
+	boolean canDoAnything(GameState gameState) {
+		if(tradeEnabled) {
+			if(remainingTime>=Config.Action.TradeWithGameAction.time) {
+				return true;
+			}
+			if(remainingTime>=Config.Action.OfferTradeAction.time) {
+				return true;
+			}
+			if(remainingTime>=Config.Action.AcceptTradeAction.time) {
+				return true;
+			}
+		}
+		if(getPossibleTileActions(gameState).size()>0) {
+			return true;
+		}
+		return false;
 	}
 	
 	//checks occur here of action type or which require more tiles than the affected in the tile action (e.g. is the affected tile neighbour of an own)
