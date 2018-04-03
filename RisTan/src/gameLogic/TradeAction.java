@@ -3,7 +3,7 @@ package gameLogic;
 public abstract class TradeAction extends InGameAction {
 	private static final long serialVersionUID = 1L;
 	
-	TradeAction(int playerID,int time){
+	public TradeAction(int playerID,int time){
 		super(playerID,time);
 	}
 	

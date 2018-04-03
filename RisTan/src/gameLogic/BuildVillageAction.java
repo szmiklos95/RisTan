@@ -5,7 +5,7 @@ import java.util.Map;
 public abstract class BuildVillageAction extends TileAction {
 	private static final long serialVersionUID = 1L;
 	
-	BuildVillageAction(int playerID,int time,Point point,Map<Resource,Integer> cost){
+	public BuildVillageAction(int playerID,int time,Point point,Map<Resource,Integer> cost){
 		super(playerID,time,point,cost);
 	}
 	

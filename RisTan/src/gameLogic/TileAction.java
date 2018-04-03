@@ -9,7 +9,7 @@ public abstract class TileAction extends InGameAction {
 	private Point point;
 	private Map<Resource,Integer> cost;
 	
-	TileAction(int playerID,int time,Point point,Map<Resource,Integer> cost){
+	public TileAction(int playerID,int time,Point point,Map<Resource,Integer> cost){
 		super(playerID,time);
 		this.point=point;
 		this.cost=cost;

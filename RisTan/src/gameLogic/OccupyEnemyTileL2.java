@@ -5,7 +5,7 @@ import config.Config;
 public class OccupyEnemyTileL2 extends OccupyEnemyEmptyTileAction {
 	private static final long serialVersionUID = 1L;
 	
-	OccupyEnemyTileL2(int playerID,Point point){
+	public OccupyEnemyTileL2(int playerID,Point point){
 		super(playerID,
 				Config.Action.OccupyEnemyTileL2.time,
 				point,

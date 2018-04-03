@@ -5,7 +5,7 @@ import config.Config;
 public class OccupyEnemyTown extends OccupyEnemyTownAction {
 	private static final long serialVersionUID = 1L;
 	
-	OccupyEnemyTown(int playerID,Point point){
+	public OccupyEnemyTown(int playerID,Point point){
 		super(playerID,
 				Config.Action.OccupyEnemyTown.time,
 				point,

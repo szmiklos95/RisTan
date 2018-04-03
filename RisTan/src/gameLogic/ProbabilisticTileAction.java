@@ -9,7 +9,7 @@ public abstract class ProbabilisticTileAction extends TileAction {
 	
 	private boolean successful;
 	
-	ProbabilisticTileAction(int playerID,int time,Point point,Map<Resource,Integer> cost,double probability){
+	public ProbabilisticTileAction(int playerID,int time,Point point,Map<Resource,Integer> cost,double probability){
 		super(playerID,time,point,cost);
 		Random rand=new Random();
 		successful=rand.nextDouble()<probability;

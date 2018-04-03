@@ -5,7 +5,7 @@ import java.util.Map;
 public abstract class OccupyEnemyEmptyTileAction extends OccupyEnemyTileAction {
 	private static final long serialVersionUID = 1L;
 	
-	OccupyEnemyEmptyTileAction(int playerID,int time,Point point,Map<Resource,Integer> cost,double probability){
+	public OccupyEnemyEmptyTileAction(int playerID,int time,Point point,Map<Resource,Integer> cost,double probability){
 		super(playerID,time,point,cost,probability);
 	}
 	

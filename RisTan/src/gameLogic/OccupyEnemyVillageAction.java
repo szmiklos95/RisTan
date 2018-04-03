@@ -5,7 +5,7 @@ import java.util.Map;
 public abstract class OccupyEnemyVillageAction extends OccupyEnemyTileAction{
 	private static final long serialVersionUID = 1L;
 	
-	OccupyEnemyVillageAction(int playerID,int time,Point point,Map<Resource,Integer> cost,double probability){
+	public OccupyEnemyVillageAction(int playerID,int time,Point point,Map<Resource,Integer> cost,double probability){
 		super(playerID,time,point,cost,probability);
 	}
 	

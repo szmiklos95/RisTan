@@ -8,11 +8,11 @@ public abstract class InGameAction extends Action{
 	private int time;
 	
 	
-	InGameAction(int playerID){
+	public InGameAction(int playerID){
 		init(playerID,0);
 	}
 	
-	InGameAction(int playerID,int time){
+	public InGameAction(int playerID,int time){
 		init(playerID,time);
 	}
 	
