@@ -11,6 +11,11 @@ public class NormalTurn extends Turn {
 	}
 	
 	@Override
+	String getGeneratorString() {
+		return NormalTurn.class.getCanonicalName();
+	}
+	
+	@Override
 	void reset(GameState gameState) {
 		List<Action> actions=getAutomaticActions();
 		actions.clear();

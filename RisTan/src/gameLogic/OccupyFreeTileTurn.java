@@ -12,6 +12,11 @@ public class OccupyFreeTileTurn extends Turn {
 	}
 	
 	@Override
+	String getGeneratorString() {
+		return OccupyFreeTileTurn.class.getCanonicalName()+" "+amount;
+	}
+	
+	@Override
 	void reset(GameState gameState) {
 		List<Event> events=getObligatoryEvents();
 		events.clear();

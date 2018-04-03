@@ -67,9 +67,20 @@ public class GameState {
 		board.generate(Config.Board.res_prob);
 		playerOrder=new PlayerOrder(players);
 		turnOrder=new TurnOrder(Config.TurnOrder.turns);
+		over=false;
 	}
 	
-	void startGame() {
-		
+	StartGameAction getStartGameAction() {
+		String boardGenerator=board.getGeneratorString();
+		String playerShuffleOrder=playerOrder.getShuffleOrder();
+		String turnOrderGenerator=turnOrder.getGeneratorString();
+		return new StartGameAction(boardGenerator,playerShuffleOrder,turnOrderGenerator);
+	}
+	
+	void startGame(String boardGenerator,String playerShuffleOrder,String turnOrderGenerator) {
+		board.generate(boardGenerator);
+		playerOrder=new PlayerOrder(players,playerShuffleOrder);
+		turnOrder=new TurnOrder(turnOrderGenerator);
+		over=false;
 	}
 }

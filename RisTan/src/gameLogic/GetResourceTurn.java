@@ -12,6 +12,19 @@ public class GetResourceTurn extends Turn {
 	}
 	
 	@Override
+	String getGeneratorString() {
+		StringBuilder builder=new StringBuilder();
+		builder.append(GetResourceTurn.class.getCanonicalName());
+		for(Map.Entry<Resource,Integer> e:resources.entrySet()) {
+			builder.append(" ");
+			builder.append(e.getKey().ordinal());
+			builder.append(" ");
+			builder.append(e.getValue().toString());
+		}
+		return builder.toString();
+	}
+	
+	@Override
 	void reset(GameState gameState) {
 		List<Action> actions=getAutomaticActions();
 		actions.clear();

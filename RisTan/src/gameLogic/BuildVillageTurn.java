@@ -9,6 +9,11 @@ public class BuildVillageTurn extends Turn {
 	}
 	
 	@Override
+	String getGeneratorString() {
+		return BuildVillageTurn.class.getCanonicalName();
+	}
+	
+	@Override
 	void reset(GameState gameState) {
 		List<Event> events=getObligatoryEvents();
 		events.clear();

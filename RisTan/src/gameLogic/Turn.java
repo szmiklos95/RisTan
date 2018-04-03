@@ -1,9 +1,34 @@
 package gameLogic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Turn {
+	static Turn fromGeneratorString(String generator) {
+		String[] parts=generator.split(" ");
+		String type=parts[0];
+		if(type.equals(BuildVillageTurn.class.getCanonicalName())) {
+			return new BuildVillageTurn();
+		}else if(type.equals(GetResourceTurn.class.getCanonicalName())) {
+			Map<Resource,Integer> resources=new HashMap<Resource,Integer>();
+			for(int i=1;i<parts.length;i+=2) {
+				Resource resource=Resource.values()[Integer.parseInt(parts[i])];
+				Integer amount=Integer.parseInt(parts[i+1]);
+				resources.put(resource,amount);
+			}
+			return new GetResourceTurn(resources);
+		}else if(type.equals(NormalTurn.class.getCanonicalName())) {
+			return new NormalTurn();
+		}else if(type.equals(OccupyFreeTileTurn.class.getCanonicalName())) {
+			return new OccupyFreeTileTurn(Integer.parseInt(parts[1]));
+		}else if(type.equals(StartTileChoiceTurn.class.getCanonicalName())) {
+			return new StartTileChoiceTurn();
+		}
+		return null;
+	}
+	
 	private int remainingTime;
 	private List<Action> automaticActions;
 	private List<Event> obligatoryEvents;
@@ -15,6 +40,8 @@ public abstract class Turn {
 		obligatoryEvents=new ArrayList<Event>();
 		this.tradeEnabled=tradeEnabled;
 	}
+	
+	abstract String getGeneratorString();
 	
 	abstract void reset(GameState gameState);
 	
