@@ -1,7 +1,7 @@
 package gameLogic;
 
-// after executing the initGameAction  on the server,
-// get an instance of this on the server, then execute it on the clients to start the game
+// after executing the initGameAction on the server,
+// get an instance of this on the server, then execute it on the clients and server to start the game
 public class StartGameAction extends ManagementAction {
 	private static final long serialVersionUID = 1L;
 	
