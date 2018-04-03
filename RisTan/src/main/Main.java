@@ -1,27 +1,24 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package main;
 
-import graphics.GControl;
 import graphics.MainMenu;
 
-/**
- *
- * @author Predi
+/*
+ * ToDo:
+ * - Hide MainMenu when the game starts (DrawingPanel)
+ * - Bring back MainMenu when someone closes the DrawingPanel
  */
+
 public class Main {
 
 	/**
 	 * @param args
-	 *            the command line arguments
+	 *the command line arguments
 	 */
 	public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                MainMenu.createAndShowGUI();
+            	MainMenu mainmenu = new MainMenu();
+                mainmenu.createAndShowGUI();
             }
         });
 	}

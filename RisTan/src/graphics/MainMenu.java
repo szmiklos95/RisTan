@@ -14,6 +14,12 @@ import config.Config;
 
 public class MainMenu {
 	
+	GBoard board;
+	
+	public MainMenu() {
+		board = new GBoard();
+	}
+	
 	/**
 	 * Interfaces and Actions for button press
 	 */
@@ -24,7 +30,7 @@ public class MainMenu {
 	/**
 	 * Default button handler
 	 */
-	private static final Function defaultAction = new Function() {
+	private final Function defaultAction = new Function() {
 		public void doAction() {
 			System.out.print("Please assign an action for this button!\n");
 		}
@@ -33,20 +39,20 @@ public class MainMenu {
 	/**
 	 * Do this when the start button is pressed
 	 */
-	private static final Function startAction = new Function() {
+	private final Function startAction = new Function() {
 		public void doAction() {
 			System.out.print("Starting the game.\n");
 			/*
 			 * start the game
 			 */
-			System.out.print("...Just kidding, it is not implemented yet.");
+			board.drawHexagon();
 		}
 	};
 	
 	/**
 	 * Do this when the exit button is pressed
 	 */
-	private static final Function exitAction = new Function() {
+	private final Function exitAction = new Function() {
 		public void doAction() {
 			System.out.print("Closing the game.\n");
 			System.exit(0);
@@ -57,7 +63,7 @@ public class MainMenu {
 	 * Sets the layout, size and buttons.
 	 * @param pane The container where the items will be added.
 	 */
-    public static void addComponentsToPane(Container pane) {
+    public void addComponentsToPane(Container pane) {
         pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
         
         pane.setPreferredSize(new Dimension(Config.MainMenu.width,Config.MainMenu.height));
@@ -77,7 +83,7 @@ public class MainMenu {
      * @param container The container
      * @param f 		The method that will be called upon clicking on the button
      */
-    private static void setButton(String text, Container container, Function f) {
+    private void setButton(String text, Container container, Function f) {
         JButton button = new JButton(text);
         button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -95,7 +101,7 @@ public class MainMenu {
      * this method should be invoked from the
      * event-dispatching thread.
      */
-    public static void createAndShowGUI() {
+    public void createAndShowGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame("Welcome to RisTan!");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
