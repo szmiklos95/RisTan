@@ -12,7 +12,7 @@ public class GBoard extends JFrame{
 	
 	public GBoard() {
         super("RisTan board");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //Only close this window
 	}
 	
 	

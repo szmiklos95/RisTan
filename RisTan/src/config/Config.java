@@ -1,7 +1,7 @@
 package config;
 
 import java.util.Map;
-
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -183,12 +183,13 @@ public abstract class Config {
 		}
 	}
 	
-	/* **************************
-	 *  Graphic configurations
-	 * ***************************/
+	/* *****************************************************************************
+	 *  @@@@@@@@@@@@@@@@@@@@@@@@@@ Graphic configurations @@@@@@@@@@@@@@@@@@@@@@@@@@
+	 * *****************************************************************************/
 	
 	/**
 	 * Main menu
+	 * @author Miklós
 	 */
 	public static class MainMenu{
 		public static final int width = 800;
@@ -198,19 +199,45 @@ public abstract class Config {
 	
 	/**
 	 * Hexagon config
+	 * @author Miklós
 	 */
 	public static class Hexagon{
 		//The radius of a hexagon
 		public static final int radius = 50;
+		//The distance between hexa tiles
+		public static final int padding = 8;
+		// The thickness of the outer hexagon line
+		public static final int outerLineThickness = 0;
+		// The thickness of the inner hexagon line
+		public static final int innerLineThickness = 4;
+		// The color of the outer "frame" hexagon
+		public static final int outerColor = 0x008844;
+		// The color of the inner "main" hexagon
+		public static final int innerColor = 0xFFDD88;
+		// Hexagon text color
+		public static final int textColor = 0xFFFFFF;
+		
 	}
 	
 	/**
 	 * DrawingPanel config
+	 * @author Miklós
 	 */
 	public static class DrawingPanel{
-		//The radius of a hexagon
 		public static final int width = 1200;
 		public static final int height = 800;
+		public static final Font font = new Font("Arial", Font.BOLD, 18);
+	}
+	
+	/**
+	 * The circle behind the hexagonal map
+	 * @author Miklós
+	 *
+	 */
+	public static class Circle{
+		public static final int radius = 380;
+		public static final int color = 0x4488FF;
+		public static final int lineThickness = 0;
 	}
 	
 }

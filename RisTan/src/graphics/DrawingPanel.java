@@ -3,7 +3,6 @@ package graphics;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,30 +16,49 @@ import config.Config;
 public class DrawingPanel extends JPanel {
  
 	 private static final long serialVersionUID = 1L;
-	    private final int WIDTH = 1200;
-	    private final int HEIGHT = 800;
 
-	    private Font font = new Font("Arial", Font.BOLD, 18);
 	    FontMetrics metrics;
-
+	    
+	    /*
+	     * Constructor: sets the panel size
+	     */
 	    public DrawingPanel() {
 	        setPreferredSize(new Dimension(Config.DrawingPanel.width, Config.DrawingPanel.height));
 	    }
-
+	    
+	    
+	    /*
+	     * (non-Javadoc)
+	     * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+	     * 
+	     * The main drawing function.
+	     */
 	    @Override
 	    public void paintComponent(Graphics g) {
 	        Graphics2D g2d = (Graphics2D) g;
-	        Point origin = new Point(WIDTH / 2, HEIGHT / 2);
+	        
+	        //The center point
+	        Point origin = new Point(Config.DrawingPanel.width / 2, Config.DrawingPanel.height / 2);
 
 	        g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
-	        g2d.setFont(font);
+	        g2d.setFont(Config.DrawingPanel.font);
 	        metrics = g.getFontMetrics();
 
-	        drawCircle(g2d, origin, 380, true, true, 0x4488FF, 0);
-	        drawHexGridLoop(g2d, origin, 7, 50, 8);
+	        drawCircle(g2d, origin, Config.Circle.radius, true, true, Config.Circle.color, Config.Circle.lineThickness);
+	        drawHexGridLoop(g2d, origin, Config.Board.size, Config.Hexagon.radius, Config.Hexagon.padding);
 	    }
-
+	    
+	    /**
+	     * Draws the hexagonal map around the given origin point.
+	     * @param g Graphics object
+	     * @param origin The center hexa tile
+	     * @param size Number of hexa layers around the center one
+	     * @param radius The radius of each hexagon
+	     * @param padding The distance between hexagons
+	     */
 	    private void drawHexGridLoop(Graphics g, Point origin, int size, int radius, int padding) {
+	    	// size: the total number of rows and columns 
+	    	size = size*2 + 1; // Correction: Config.Board.size returns the number of layers around the center tile
 	        double ang30 = Math.toRadians(30);
 	        double xOff = Math.cos(ang30) * (radius + padding);
 	        double yOff = Math.sin(ang30) * (radius + padding);
@@ -59,7 +77,16 @@ public class DrawingPanel extends JPanel {
 	            }
 	        }
 	    }
-
+	    
+	    /**
+	     * Draws a hexagon to the given position with the given radius
+	     * @param g Graphics object
+	     * @param posX The x coordinate of the text
+	     * @param posY The y coordinate of the text
+	     * @param x The x coordinate of the hexagon
+	     * @param y The y coordinate of the hexagon
+	     * @param r The radius of the hexagon
+	     */
 	    private void drawHex(Graphics g, int posX, int posY, int x, int y, int r) {
 	        Graphics2D g2d = (Graphics2D) g;
 
@@ -68,17 +95,32 @@ public class DrawingPanel extends JPanel {
 	        int w = metrics.stringWidth(text);
 	        int h = metrics.getHeight();
 
-	        hex.draw(g2d, x, y, 0, 0x008844, true);
-	        hex.draw(g2d, x, y, 4, 0xFFDD88, false);
+	        hex.draw(g2d, x, y, Config.Hexagon.outerLineThickness, Config.Hexagon.outerColor, true);
+	        hex.draw(g2d, x, y, Config.Hexagon.innerLineThickness, Config.Hexagon.innerColor, false);
 
-	        g.setColor(new Color(0xFFFFFF));
+	        g.setColor(new Color(Config.Hexagon.textColor));
 	        g.drawString(text, x - w/2, y + h/2);
 	    }
-
+	    
+	    /**
+	     * Returns the coordinates in string format
+	     * @param value
+	     * @return
+	     */
 	    private String coord(int value) {
 	        return (value > 0 ? "+" : "") + Integer.toString(value);
 	    }
 
+	    /**
+	     * Draws a circle with the given parameters.
+	     * @param g Graphics object
+	     * @param origin The center of the circle
+	     * @param radius The radius of the circle
+	     * @param centered 
+	     * @param filled
+	     * @param colorValue
+	     * @param lineThickness
+	     */
 	    public void drawCircle(Graphics2D g, Point origin, int radius,
 	            boolean centered, boolean filled, int colorValue, int lineThickness) {
 	        // Store before changing.
