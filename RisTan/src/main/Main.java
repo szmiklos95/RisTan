@@ -7,6 +7,7 @@ import graphics.MainMenu;
  * - Hide MainMenu when the game starts (DrawingPanel)
  * - Bring back MainMenu when someone closes the DrawingPanel
  * - Modify the copied DrawingPanel and Hexagon classes to accommodate our own methods
+ * - Padding = 0 still leaves a padding
  */
 
 public class Main {

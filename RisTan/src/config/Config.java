@@ -205,7 +205,7 @@ public abstract class Config {
 		//The radius of a hexagon
 		public static final int radius = 50;
 		//The distance between hexa tiles
-		public static final int padding = 8;
+		public static final int padding = 0;
 		// The thickness of the outer hexagon line
 		public static final int outerLineThickness = 0;
 		// The thickness of the inner hexagon line

@@ -104,21 +104,17 @@ public class DrawingPanel extends JPanel {
 	    
 	    private void drawHexGridFromPoints(Graphics g, Point origin, int layerNum, int radius, int padding, List<gameLogic.Point> points) {
 	    	int size = layerNum*2 + 1; // size: the total number of rows and columns 
-	        double ang30 = Math.toRadians(30);
-	        double xOff = Math.cos(ang30) * (radius + padding);
-	        double yOff = Math.sin(ang30) * (radius + padding);
-	        int half = size / 2;
 	        
 	        int pointNum = points.size();
 	        
 	        for(int i=0; i<pointNum; ++i) {
-	        	int row = points.get(i).getJ();
-	        	int col = points.get(i).getI();
-	        	int cols = size - java.lang.Math.abs(row - half);
-	        	int xLbl = row < half ? col - row : col - half;
-                int yLbl = row - half;
-                int x = (int) (origin.getX() + xOff * (col * 2 + 1 - cols));
-                int y = (int) (origin.getY() + yOff * (row - half) * 3);
+	        	gameLogic.Point pointi = points.get(i);
+		        double xOff = pointi.getDescartesX()*(radius+padding)*2;
+		        double yOff = pointi.getDescartesY()*(radius+padding)*2;
+	        	int xLbl = pointi.getJ();
+                int yLbl = pointi.getI();
+                int x = (int) (origin.getX() + xOff);
+                int y = (int) (origin.getY() + yOff);
                 
                 drawHex(g, xLbl, yLbl, x, y, radius);
 	        }
