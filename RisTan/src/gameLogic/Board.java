@@ -81,6 +81,10 @@ public class Board {
 		}
 	}
 	
+	public Map<Point,Tile> getTiles(){
+		return tiles;
+	}
+	
 	//gets the tile at the given position
 	public Tile getTileAt(Point point) {
 		return tiles.get(point);
