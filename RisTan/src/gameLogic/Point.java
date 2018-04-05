@@ -51,4 +51,8 @@ public class Point implements Serializable{
 	public double getDescartesY() {
 		return (double)j*Math.sqrt(3)/2;
 	}
+	
+	public void printPoint() {
+		System.out.printf("(%d:%d)\n", i,j);
+	}
 }

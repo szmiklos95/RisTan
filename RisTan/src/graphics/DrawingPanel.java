@@ -7,10 +7,13 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
 import config.Config;
+import gameLogic.GameLogicException;
 
 
 public class DrawingPanel extends JPanel {
@@ -18,12 +21,28 @@ public class DrawingPanel extends JPanel {
 	 private static final long serialVersionUID = 1L;
 
 	    FontMetrics metrics;
+	    gameLogic.GameState gameState;
+	    gameLogic.Board board;
 	    
 	    /*
 	     * Constructor: sets the panel size
 	     */
 	    public DrawingPanel() {
 	        setPreferredSize(new Dimension(Config.DrawingPanel.width, Config.DrawingPanel.height));
+	        
+	        // New game state
+	        gameState = new gameLogic.GameState();
+	        // Init game action
+	        gameLogic.InitGameAction action = new gameLogic.InitGameAction();
+	        try { //Execute the action
+				gameState.ExecuteAction(action);
+			} catch (GameLogicException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        
+	        board = gameState.getBoard();
+	        
 	    }
 	    
 	    
@@ -45,7 +64,10 @@ public class DrawingPanel extends JPanel {
 	        metrics = g.getFontMetrics();
 
 	        drawCircle(g2d, origin, Config.Circle.radius, true, true, Config.Circle.color, Config.Circle.lineThickness);
-	        drawHexGridLoop(g2d, origin, Config.Board.size, Config.Hexagon.radius, Config.Hexagon.padding);
+	        
+	        ArrayList<gameLogic.Point> points = new ArrayList<gameLogic.Point>(board.getTiles().keySet());
+	        drawHexGridFromPoints(g2d, origin, Config.Board.size, Config.Hexagon.radius, Config.Hexagon.padding, points);
+	        
 	    }
 	    
 	    /**
@@ -77,6 +99,33 @@ public class DrawingPanel extends JPanel {
 	            }
 	        }
 	    }
+	    
+	    
+	    
+	    private void drawHexGridFromPoints(Graphics g, Point origin, int layerNum, int radius, int padding, List<gameLogic.Point> points) {
+	    	int size = layerNum*2 + 1; // size: the total number of rows and columns 
+	        double ang30 = Math.toRadians(30);
+	        double xOff = Math.cos(ang30) * (radius + padding);
+	        double yOff = Math.sin(ang30) * (radius + padding);
+	        int half = size / 2;
+	        
+	        int pointNum = points.size();
+	        
+	        for(int i=0; i<pointNum; ++i) {
+	        	int row = points.get(i).getJ();
+	        	int col = points.get(i).getI();
+	        	int cols = size - java.lang.Math.abs(row - half);
+	        	int xLbl = row < half ? col - row : col - half;
+                int yLbl = row - half;
+                int x = (int) (origin.getX() + xOff * (col * 2 + 1 - cols));
+                int y = (int) (origin.getY() + yOff * (row - half) * 3);
+                
+                drawHex(g, xLbl, yLbl, x, y, radius);
+	        }
+
+	    }
+	    
+	    
 	    
 	    /**
 	     * Draws a hexagon to the given position with the given radius
@@ -116,8 +165,8 @@ public class DrawingPanel extends JPanel {
 	     * @param g Graphics object
 	     * @param origin The center of the circle
 	     * @param radius The radius of the circle
-	     * @param centered 
-	     * @param filled
+	     * @param centered Should be true
+	     * @param filled 
 	     * @param colorValue
 	     * @param lineThickness
 	     */

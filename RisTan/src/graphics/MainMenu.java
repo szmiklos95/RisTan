@@ -12,6 +12,11 @@ import javax.swing.JFrame;
 
 import config.Config;
 
+/**
+ * The first window to appear when the game starts
+ * @author Miklós
+ *
+ */
 public class MainMenu {
 	
 	GBoard board;
@@ -45,7 +50,7 @@ public class MainMenu {
 			/*
 			 * start the game
 			 */
-			board.drawHexagon();
+			board.drawPlayField();
 		}
 	};
 	

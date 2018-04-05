@@ -27,10 +27,12 @@ public class GameState {
 	
 	public void ExecuteAction(Action action)throws GameLogicException{
 		action.check(this);
-		getTurn().checkObligatoryEvents(action);
 		action.execute(this);
-		if(checkForSwitchToNextPlayer()) {
-			
+		if(!over) {
+			getTurn().checkObligatoryEvents(action);
+			if(checkForSwitchToNextPlayer()) {
+				activePlayerEnd();
+			}
 		}
 	}
 	

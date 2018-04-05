@@ -2,6 +2,7 @@ package graphics;
 
 import java.awt.*;
 
+
 public class Hexagon extends Polygon {
 
     private static final long serialVersionUID = 1L;

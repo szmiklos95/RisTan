@@ -13,7 +13,7 @@ public class Board {
 	private Map<Point,Tile> tiles;
 	private Random rand;
 	
-	Board() {
+	public Board() {
 		tiles=null;
 		rand=new Random();
 	}
@@ -79,6 +79,11 @@ public class Board {
 				tile.harvest();
 			}
 		}
+	}
+	
+	
+	public Map<Point,Tile> getTiles(){
+		return tiles;
 	}
 	
 	//gets the tile at the given position
@@ -231,4 +236,5 @@ public class Board {
 	List<Point> getEnemyNeighbourTownTileCoordinates(int playerID){
 		return filterForBuildingLevel(getEnemyNeighbourTileCoordinates(playerID),BuildingLevel.Town);
 	}
+	
 }

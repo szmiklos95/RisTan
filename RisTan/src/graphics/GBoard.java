@@ -3,7 +3,11 @@ package graphics;
 
 import javax.swing.JFrame;
 
-
+/**
+ * The board itself.
+ * @author Miklós
+ *
+ */
 public class GBoard extends JFrame{
 
 	private static final long serialVersionUID = 1L;
@@ -17,8 +21,10 @@ public class GBoard extends JFrame{
 	
 	
 	 
-
-	public void drawHexagon(){
+	/**
+	 * Creates the panel where the game is played.
+	 */
+	public void drawPlayField(){
 
         drawingPanel = new DrawingPanel();
 
