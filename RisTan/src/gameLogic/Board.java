@@ -88,7 +88,7 @@ public class Board {
 	
 	//coordinate functions
 	
-	private List<Point> getTileCoordinates(){
+	public List<Point> getTileCoordinates(){
 		List<Point> ret=new ArrayList<Point>();
 		int size=Config.Board.size;
 		for(int i=-size;i<=size;++i) {
