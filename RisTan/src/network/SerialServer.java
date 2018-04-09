@@ -2,25 +2,30 @@ package network;
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import network.Message.eMsgType;
 
 public class SerialServer {
 	// class variables
 	private ServerSocket serverSocket = null;
-	private Socket clientSocket = null;
-	private ObjectInputStream in;
-	private ObjectOutputStream out;
+	static int num_threads = 3;
+	private ArrayList<ReceiverThread> clientArray;
 	
 	/* Thread is necessary for handling receiving messages 
 	 * - accept() and readObject() are blocking methods 
 	 * */
 	private class ReceiverThread implements Runnable {
+		private Socket clientSocket = null;
+		private ObjectInputStream in;
+		private ObjectOutputStream out;
+		private int PlayerId;	
+		
 		public void run() {
 			try {
-				System.out.println("System: Waiting for Players");
 				clientSocket = serverSocket.accept(); // blocking the running
-				System.out.println("System: Player connected.");
 			} catch (IOException e) {
 				System.err.println("System: Accept failed.");
 				disconnect();
@@ -39,8 +44,13 @@ public class SerialServer {
 			
 			try {
 				while (true) {
-					TransferClass rec = (TransferClass) in.readObject();
-					System.out.println("System: arrived - s=" + rec.GetString() + "  i=" + rec.GetInt() + "  d=" + rec.GetDouble());
+					Message rec = (Message) in.readObject();
+					if(rec.GetType() == eMsgType.Identification) {
+						PlayerId = (int)rec.GetData();
+						System.out.println("System: Player" + PlayerId +" assigned to systemThread");
+					}
+					
+					System.out.println("Player"+PlayerId+" --> System: " + rec.GetData());
 				}
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
@@ -56,24 +66,25 @@ public class SerialServer {
 			if(serverSocket != null)
 				disconnect();
 			serverSocket = new ServerSocket(455);
-			//System.out.println(serverSocket.getLocalPort());
-			// Listener thread has to be created here
-			Thread rec = new Thread(new ReceiverThread());
-			rec.start();
-			
+
+			clientArray= new ArrayList<ReceiverThread>();
+			// Listener threads
+			for(int i=0; i<num_threads; i++) {
+				ReceiverThread rec = new ReceiverThread();
+				clientArray.add(rec);
+				new Thread(rec).start();
+			}
 		} catch (IOException e) {
 			System.err.println("System: Connection error");
 		}
 	}
 	
-	public void Send(TransferClass data) {
-		if (out == null)
-			return;
+	public void Send(Message msg, int dest) {
+		if (getThread(dest).clientSocket == null)
+			return; 
 		try {
-			System.out.println("System: sending - s=" + data.GetString() + "  i=" + data.GetInt() + "  d=" + data.GetDouble());
-			out.writeObject(data);
-			out.flush();
-			
+			getThread(dest).out.writeObject(msg);
+			getThread(dest).out.flush();	
 		} catch (IOException e) {
 			System.err.println("System: Send error.");
 		}	
@@ -82,18 +93,30 @@ public class SerialServer {
 	
 	void disconnect() {
 		try {
-			if (out != null)
-				out.close();
-			if (in != null)
-				in.close();
-			if (clientSocket != null)
-				clientSocket.close();
+			for(int i = 0; i < num_threads; ++i) {
+			if (clientArray.get(i).out != null)
+				clientArray.get(i).out.close();
+			if (clientArray.get(i).in != null)
+				clientArray.get(i).in.close();
+			if (clientArray.get(i).clientSocket != null)
+				clientArray.get(i).clientSocket.close();
 			if (serverSocket != null)
 				serverSocket.close();
+			}
 		} catch (IOException ex) {
 			Logger.getLogger(SerialServer.class.getName()).log(Level.SEVERE,
 			null, ex);
 		}
 	}
+	
+	private ReceiverThread getThread(int id) {
+		int idx = 0;
+		for(int i = 0; i < num_threads; ++i) {
+			if(clientArray.get(i).PlayerId == id)
+				idx = i;
+		}
+		return clientArray.get(idx);
+	}
+	
 	
 }
