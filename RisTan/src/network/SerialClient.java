@@ -3,37 +3,52 @@ package network;
 import java.io.*;
 import java.net.*;
 
+import network.Message.eMsgType;
+
 public class SerialClient {
     /* Class variables */
 	private Socket socket = null;
 	// The data transfer is done through the Stream
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
+	static int playersNum = 0;
+	private int playerId = 0;
 	
 	/* Thread is necessary for handling receiving messages 
 	 * readObject() is a blocking method
 	 * */
 	private class ReceiverThread implements Runnable{
 		public void run(){
-			System.out.println("Player: Waiting for messages");
 			try {
 			while(true) {
 					// Blocking
-					TransferClass rec = (TransferClass) in.readObject();
-					System.out.println("Player: arrived - s=" + rec.GetString() + "  i=" + rec.GetInt() + "  d=" + rec.GetDouble());
+					Message rec = (Message) in.readObject();
+					if(rec.GetType() == eMsgType.Identification) {
+						playerId = (int) rec.GetData();
+						System.out.println("Player id=" +(int)rec.GetData());
+					}
+					else if (rec.GetType() == eMsgType.String)
+						System.out.println("System  --> Player"+ playerId +" " + rec.GetData() );
+						
 			}
 				} catch (Exception ex) {
 					System.out.println(ex.getMessage());
-					System.err.println("Player: System disconnected!");
+					System.err.println("Player" + playerId + ": System disconnected!");
 				}
 			}
 		}
+	
+	// Constructor
+	SerialClient(){
+		playerId = playersNum;
+		playersNum++;
+	}
 	
 	// Methods
 	public void Connect(String ip) {
 		try {
 			socket = new Socket(ip, 455);
-			System.out.println("Player: Connecting to System.");
+			System.out.println("Player" + playerId + ": Connecting to System.");
 			
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
@@ -43,18 +58,17 @@ public class SerialClient {
 			rec.start();
 			
 		} catch (IOException e) {
-			System.err.println("Player: Connection failed to Server");
+			System.err.println("Player" + playerId + ": Connection failed to Server");
 		}
 	}
 	
-	public void Send(TransferClass data) {
+	public void Send(Message msg) {
 		try {
-			System.out.println("Player: sending - s=" + data.GetString() + "  i=" + data.GetInt() + "  d=" + data.GetDouble());
-			out.writeObject(data);
+			out.writeObject(msg);
 			out.flush();
 			
 		} catch (IOException e) {
-			System.err.println("Player: The msg wasn't sent.");
+			System.err.println("Player" + playerId + ": The msg wasn't sent.");
 		} 
 	}
 	
