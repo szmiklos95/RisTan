@@ -11,7 +11,8 @@ import network.Message.eMsgType;
 public class SerialServer {
 	// class variables
 	private ServerSocket serverSocket = null;
-	static int num_threads = 3;
+	private int num_threads = 3;
+	private int connectedClients = 0;
 	private ArrayList<ReceiverThread> clientArray;
 	
 	/* Thread is necessary for handling receiving messages 
@@ -21,11 +22,14 @@ public class SerialServer {
 		private Socket clientSocket = null;
 		private ObjectInputStream in;
 		private ObjectOutputStream out;
-		private int PlayerId = -1;
+		private int playerId = -1;
+		private String name;
 		
 		public void run() {
 			try {
 				clientSocket = serverSocket.accept(); // blocking the running
+				playerId = connectedClients;
+				connectedClients++;
 			} catch (IOException e) {
 				System.err.println("System: Accept failed.");
 				disconnect();
@@ -36,6 +40,9 @@ public class SerialServer {
 				out = new ObjectOutputStream(clientSocket.getOutputStream());
 				in = new ObjectInputStream(clientSocket.getInputStream());
 				out.flush();
+				
+				out.writeObject(new Message(playerId));
+				
 			} catch (IOException e) {
 				System.err.println("System: Error while getting streams.");
 				disconnect();
@@ -45,16 +52,18 @@ public class SerialServer {
 			try {
 				while (true) {
 					Message msg = (Message) in.readObject();
-					
-					if(msg.GetType() == eMsgType.Identification) {
-						PlayerId = (int)msg.GetData();
-						System.out.println("System: Player" + PlayerId +" assigned to systemThread");
+					Object data = msg.GetData();
+					switch(msg.GetType()) { 
+					case Name:
+						name = (String)data;
+						break;
+					case Text:
+						SendtoAll(new Message(eMsgType.Text,name + ": " + (String)data + "\n"));
+						break;
+					default:
+						break;
 					}
-					else if(msg.GetType() == eMsgType.String) {
-						SendtoAll(msg);
-					}
-					
-					System.out.println("Player"+PlayerId+" --> System: " + msg.GetData());
+					System.out.println("Player"+playerId+" --> System: " + msg.GetData());
 				}
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
@@ -126,7 +135,7 @@ public class SerialServer {
 	private ReceiverThread getThread (int id) {
 		
 		for(int i = 0; i < num_threads; ++i) {
-			if(clientArray.get(i).PlayerId == id)
+			if(clientArray.get(i).playerId == id)
 				return clientArray.get(i);
 		}
 		return null;

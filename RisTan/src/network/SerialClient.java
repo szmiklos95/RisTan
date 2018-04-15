@@ -11,8 +11,7 @@ public class SerialClient {
 	// The data transfer is done through the Stream
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
-	static int playersNum = 0;
-	private int playerId;
+	private int playerId = -1;
 	private String name = null;
 	
 	private boolean isReceived = false;
@@ -28,8 +27,12 @@ public class SerialClient {
 					// Blocking
 					msg = (Message) in.readObject();
 					isReceived = true;
+					if (msg.GetType() == eMsgType.Identification) {
+						playerId = (int)msg.GetData();
+						System.err.println(playerId);
+					}
 			
-					if (msg.GetType() == eMsgType.String) {
+					else if (msg.GetType() == eMsgType.Text) {
 						System.out.println("System  --> Player"+ playerId +" " + msg.GetData() );
 					}
 	
@@ -43,14 +46,9 @@ public class SerialClient {
 	
 	// Constructor
 	SerialClient(){
-		playerId = playersNum;
-		playersNum++;
 	}
 	
 	SerialClient(String name){
-		playerId = playersNum;
-		playersNum++;
-		System.err.println(playersNum);
 		this.name = name;
 	}
 	
@@ -66,7 +64,10 @@ public class SerialClient {
 			
 			Thread rec = new Thread(new ReceiverThread());
 			rec.start();
-			
+		} 
+		
+		catch (UnknownHostException e) {
+			System.err.println("Don't know about host");
 		} catch (IOException e) {
 			System.err.println("Player" + playerId + ": Connection failed to Server");
 		}
@@ -101,7 +102,7 @@ public class SerialClient {
 	}
 	
 	public boolean isRecText() {
-		if(isReceived == true && msg.GetType() == eMsgType.String) {
+		if(isReceived == true && msg.GetType() == eMsgType.Text) {
 			return true;
 		}
 		else {

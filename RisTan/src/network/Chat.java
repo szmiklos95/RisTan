@@ -16,7 +16,7 @@ public class Chat extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private SerialClient client = null;
 	private TextArea display = null;
-	static int instance = 0;
+	private String name;
 	
 	private class displayUpdateThread extends Thread implements Runnable{
 		private String text = "";
@@ -25,7 +25,7 @@ public class Chat extends JFrame{
 				try {
 					if(client.isRecText()) {
 						String newtext = new String((String)client.getMsg().GetData());
-						text = text.concat(client.getName()+": "+newtext+"\n");
+						text = text.concat(newtext);
 						display.setText(text);
 						}
 					//Sleep the thread for 500ms
@@ -37,17 +37,19 @@ public class Chat extends JFrame{
 		}
 	}
 
-	Chat(){
-		super("RisTan Beta");
+	Chat(String name){
+		super("RisTan Beta - " + name);
 		setSize(500, 500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		GridBagLayout gbl = new GridBagLayout();
 		this.setLayout(gbl);
 		
-		client = new SerialClient("Oli");
+		this.name = name;
+		
+		client = new SerialClient(this.name);
 		client.Connect("localhost");
 		
-		client.Send(new Message(eMsgType.Identification, client.GetId()));
+		client.Send(new Message(eMsgType.Name,this.name));
 		
 		// Display messages
 		GridBagConstraints GBC_display = new GridBagConstraints();
@@ -86,7 +88,7 @@ public class Chat extends JFrame{
 				if ( id == '\n') {
 					String msg = new String(input.getText());
 					input.setText(" ");
-					client.Send(new Message(eMsgType.String,msg));
+					client.Send(new Message(eMsgType.Text,msg));
 				}
 				
 			}
@@ -107,8 +109,6 @@ public class Chat extends JFrame{
 		
 		setVisible(true);
 		
-		/*
-		}*/
 	}
 
 }

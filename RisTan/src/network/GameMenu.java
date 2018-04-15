@@ -7,8 +7,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Label;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JFrame;
 
 
@@ -46,13 +50,11 @@ public class GameMenu extends JFrame{
 		setSize(500, 500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		GridBagLayout gbl = new GridBagLayout();
-		this.setLayout(gbl);
+		this.setLayout(gbl);;
 		//Main menu
 		GridBagConstraints GBC_mainMenu = new GridBagConstraints();
 		GBC_mainMenu.gridx = 3;
 		GBC_mainMenu.gridy = 0;
-		GBC_mainMenu.gridwidth = 1;
-		GBC_mainMenu.gridheight = 2;
 		GBC_mainMenu.fill = GridBagConstraints.CENTER;
 		GBC_mainMenu.insets = new Insets(10,10,10,10);
 		
@@ -60,6 +62,25 @@ public class GameMenu extends JFrame{
 		mainMenu.setFont(new Font("Arial Bold",0,20));
 		gbl.setConstraints(mainMenu, GBC_mainMenu);
 		this.add(mainMenu);
+		
+		//Enter name
+		GridBagConstraints GBC_name = new GridBagConstraints();
+		GBC_name.gridx = 3;
+		GBC_name.gridy = 1;
+		GBC_name.fill = GridBagConstraints.CENTER;
+		GBC_name.insets = new Insets(10,10,10,10);
+		
+		TextField name = new TextField("Enter your name");
+		name.setEditable(true);
+		gbl.setConstraints(name, GBC_name);
+		name.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				name.setText("");
+			}
+		});;
+		this.add(name);
 		
 		//Create the game
 		GridBagConstraints GBC_create = new GridBagConstraints();
@@ -83,7 +104,7 @@ public class GameMenu extends JFrame{
 
 				// Close the window
 				dispose();
-				new Chat();
+				new Chat(new String(name.getText()));
 			}
 		});
 		this.add(create);
@@ -108,7 +129,7 @@ public class GameMenu extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// Close the window
 				dispose();
-				new Chat();
+				new Chat(new String(name.getText()));
 			}
 		});
 		this.add(join);

@@ -16,7 +16,8 @@ public class Message implements Serializable{
  enum eMsgType{
 	 	Init,
 		Identification,
-		String,
+		Name,
+		Text,
 		Map,
 		Action
 	};
@@ -37,7 +38,7 @@ public class Message implements Serializable{
 	}
 	
 	Message(String s){
-		type = eMsgType.String;
+		type = eMsgType.Text;
 		data = s;
 	}
 	
@@ -62,7 +63,7 @@ public class Message implements Serializable{
 		case Identification:
 			data = (int)payload;
 			break;
-		case String:
+		case Text:
 			data = (String)payload;
 			break;
 		case Map:
