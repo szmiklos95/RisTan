@@ -21,7 +21,7 @@ public class SerialServer {
 		private Socket clientSocket = null;
 		private ObjectInputStream in;
 		private ObjectOutputStream out;
-		private int PlayerId;	
+		private int PlayerId = -1;
 		
 		public void run() {
 			try {
@@ -44,13 +44,17 @@ public class SerialServer {
 			
 			try {
 				while (true) {
-					Message rec = (Message) in.readObject();
-					if(rec.GetType() == eMsgType.Identification) {
-						PlayerId = (int)rec.GetData();
+					Message msg = (Message) in.readObject();
+					
+					if(msg.GetType() == eMsgType.Identification) {
+						PlayerId = (int)msg.GetData();
 						System.out.println("System: Player" + PlayerId +" assigned to systemThread");
 					}
+					else if(msg.GetType() == eMsgType.String) {
+						SendtoAll(msg);
+					}
 					
-					System.out.println("Player"+PlayerId+" --> System: " + rec.GetData());
+					System.out.println("Player"+PlayerId+" --> System: " + msg.GetData());
 				}
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
@@ -80,6 +84,10 @@ public class SerialServer {
 	}
 	
 	public void Send(Message msg, int dest) {
+		if(getThread(dest) == null) {
+			System.out.println("Ez a szál még nincs csatlakozva");
+			return;
+		}
 		if (getThread(dest).clientSocket == null)
 			return; 
 		try {
@@ -88,6 +96,12 @@ public class SerialServer {
 		} catch (IOException e) {
 			System.err.println("System: Send error.");
 		}	
+	}
+	
+	public void SendtoAll(Message msg) {
+		for(int i=0; i<num_threads; ++i) {
+			Send(msg,i);
+		}
 	}
 	
 	
@@ -109,13 +123,13 @@ public class SerialServer {
 		}
 	}
 	
-	private ReceiverThread getThread(int id) {
-		int idx = 0;
+	private ReceiverThread getThread (int id) {
+		
 		for(int i = 0; i < num_threads; ++i) {
 			if(clientArray.get(i).PlayerId == id)
-				idx = i;
+				return clientArray.get(i);
 		}
-		return clientArray.get(idx);
+		return null;
 	}
 	
 	

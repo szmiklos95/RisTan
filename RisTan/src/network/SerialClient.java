@@ -12,7 +12,11 @@ public class SerialClient {
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	static int playersNum = 0;
-	private int playerId = 0;
+	private int playerId;
+	private String name = null;
+	
+	private boolean isReceived = false;
+	private Message msg = null;
 	
 	/* Thread is necessary for handling receiving messages 
 	 * readObject() is a blocking method
@@ -22,14 +26,13 @@ public class SerialClient {
 			try {
 			while(true) {
 					// Blocking
-					Message rec = (Message) in.readObject();
-					if(rec.GetType() == eMsgType.Identification) {
-						playerId = (int) rec.GetData();
-						System.out.println("Player id=" +(int)rec.GetData());
+					msg = (Message) in.readObject();
+					isReceived = true;
+			
+					if (msg.GetType() == eMsgType.String) {
+						System.out.println("System  --> Player"+ playerId +" " + msg.GetData() );
 					}
-					else if (rec.GetType() == eMsgType.String)
-						System.out.println("System  --> Player"+ playerId +" " + rec.GetData() );
-						
+	
 			}
 				} catch (Exception ex) {
 					System.out.println(ex.getMessage());
@@ -42,6 +45,13 @@ public class SerialClient {
 	SerialClient(){
 		playerId = playersNum;
 		playersNum++;
+	}
+	
+	SerialClient(String name){
+		playerId = playersNum;
+		playersNum++;
+		System.err.println(playersNum);
+		this.name = name;
 	}
 	
 	// Methods
@@ -84,5 +94,27 @@ public class SerialClient {
 			System.err.println("Error while closing conn.");
 		}
 	
+	}
+	
+	public int GetId() {
+		return this.playerId;
+	}
+	
+	public boolean isRecText() {
+		if(isReceived == true && msg.GetType() == eMsgType.String) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public Message getMsg() {
+		isReceived = false;
+		return msg;
+	}
+	
+	public String getName() {
+		return name;
 	}
 }

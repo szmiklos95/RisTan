@@ -22,7 +22,7 @@ public class Message implements Serializable{
 	};
 	
 	/* I need a tag variable what can cointain anytype of message:
-	/* --> Polymorfismus ?? ~ void*                             */
+	/*  ~ void*                             */
 	private eMsgType type;
 	private Object data;
 	
