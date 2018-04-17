@@ -1,14 +1,8 @@
 package main;
 
-import graphics.MainMenu;
+import gameLogic.GameLogicException;
+import graphics.GUI;
 
-/*
- * ToDo:
- * - Hide MainMenu when the game starts (DrawingPanel)
- * - Bring back MainMenu when someone closes the DrawingPanel
- * - Modify the copied DrawingPanel and Hexagon classes to accommodate our own methods
- * - Padding = 0 still leaves a padding
- */
 
 public class Main {
 
@@ -19,8 +13,20 @@ public class Main {
 	public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-            	MainMenu mainmenu = new MainMenu();
-                mainmenu.createAndShowGUI();
+    	        // New game state
+    	        gameLogic.GameState gameState = new gameLogic.GameState();
+    	        // Init game action
+    	        gameLogic.InitGameAction action = new gameLogic.InitGameAction();
+    	        try { //Execute the action
+    				gameState.ExecuteAction(action);
+    			} catch (GameLogicException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}
+    	        
+            	GUI gui = new GUI();
+            	gui.refreshGameState(gameState);
+                gui.createAndShowGUI();
             }
         });
 	}

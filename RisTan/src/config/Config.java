@@ -191,9 +191,11 @@ public abstract class Config {
 	 * Main menu
 	 * @author Miklós
 	 */
-	public static class MainMenu{
-		public static final int width = 800;
-		public static final int height = 600;
+	public static class GUI{
+		public static final String title = "Welcome to RisTan!";
+		public static final String mainmenu = "Main Menu";
+		public static final String newgame = "New Game";
+		public static final String exit = "Exit";
 	}
 	
 	
@@ -220,10 +222,10 @@ public abstract class Config {
 	}
 	
 	/**
-	 * DrawingPanel config
+	 * GameBoard config
 	 * @author Miklós
 	 */
-	public static class DrawingPanel{
+	public static class GameBoard{
 		public static final int width = 1200;
 		public static final int height = 800;
 		public static final Font font = new Font("Arial", Font.BOLD, 18);
