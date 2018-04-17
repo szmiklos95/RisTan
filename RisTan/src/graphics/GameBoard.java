@@ -7,6 +7,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class GameBoard extends JPanel{
 	    private FontMetrics metrics;
 	    private gameLogic.GameState gameState;
 	    private gameLogic.Board board;
+	    private ArrayList<Hexagon> hexagons;
 	    
 	    
 	    /**
@@ -36,8 +39,25 @@ public class GameBoard extends JPanel{
 	    public GameBoard(gameLogic.GameState gameState) {
 	        setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
 	        
+	        hexagons = new ArrayList<Hexagon>();
 	        this.gameState = gameState;
 	        board = this.gameState.getBoard();
+	        
+	        
+		    addMouseListener(new MouseAdapter() {
+	            @Override
+	            public void mouseClicked(MouseEvent me) {
+	                super.mouseClicked(me);
+	                for (Hexagon h : hexagons) {
+
+	                    if (h.contains(me.getPoint())) {//check if mouse is clicked within shape
+
+	                        System.out.println("Clicked a "+h.getClass().getName()+" at coordinates: ("+h.getCenter().getX()+":"+h.getCenter().getY()+")");
+
+	                    }
+	                }
+	            }
+		    });
 	        
 	    }
 	    
@@ -89,7 +109,7 @@ public class GameBoard extends JPanel{
                 int x = (int) (origin.getX() + xOff);
                 int y = (int) (origin.getY() + yOff);
                 
-                drawHex(g, xLbl, yLbl, x, y, radius);
+                drawHex(g, xLbl, yLbl, x, y, radius, i);
 	        }
 
 	    }
@@ -104,17 +124,18 @@ public class GameBoard extends JPanel{
 	     * @param x The x coordinate of the hexagon
 	     * @param y The y coordinate of the hexagon
 	     * @param r The radius of the hexagon
+	     * @param i The i-th element in the hexagon list
 	     */
-	    private void drawHex(Graphics g, int posX, int posY, int x, int y, int r) {
+	    private void drawHex(Graphics g, int posX, int posY, int x, int y, int r, int i) {
 	        Graphics2D g2d = (Graphics2D) g;
 
-	        Hexagon hex = new Hexagon(x, y, r);
+	        hexagons.add(new Hexagon(x, y, r));
 	        String text = String.format("%s : %s", coord(posX), coord(posY));
 	        int w = metrics.stringWidth(text);
 	        int h = metrics.getHeight();
 
-	        hex.draw(g2d, x, y, Config.Hexagon.outerLineThickness, Config.Hexagon.outerColor, true);
-	        hex.draw(g2d, x, y, Config.Hexagon.innerLineThickness, Config.Hexagon.innerColor, false);
+	        hexagons.get(i).draw(g2d, x, y, Config.Hexagon.outerLineThickness, Config.Hexagon.outerColor, true);
+	        hexagons.get(i).draw(g2d, x, y, Config.Hexagon.innerLineThickness, Config.Hexagon.innerColor, false);
 
 	        g.setColor(new Color(Config.Hexagon.textColor));
 	        g.drawString(text, x - w/2, y + h/2);

@@ -95,23 +95,14 @@ public class GUI extends JFrame {
     
 	/**
 	 * This function implements the card layout.
-	 * @param pane The containar for the objects, cards
+	 * @param pane The container for the objects, cards
 	 */
-    public void addComponentToPane(Container pane) {
+    public void addComponentsToPane(Container pane) {
     	
         //Create the "cards".
     	
-        JPanel card1 = new JPanel();
-        setButton(Config.GUI.newgame, card1, switchCardAction);
-        setButton(Config.GUI.exit, card1, exitAction);
-        
-        JPanel card2 = new GameBoard(gameState);
-        card2.setLayout(new FlowLayout(FlowLayout.LEFT));
-        JMenuBar menubar = new JMenuBar();
-        JMenu menu = new JMenu("File");
-        addMenuItem("Main Menu", menu, switchCardAction);
-        menubar.add(menu, BorderLayout.LINE_END);
-        card2.add(menubar, BorderLayout.LINE_END);
+        JPanel card1 = createCard_MainMenu();
+        JPanel card2 = createCard_GameBoard();
         
         //Create the panel that contains the "cards".
         cards = new JPanel(new CardLayout());
@@ -121,7 +112,33 @@ public class GUI extends JFrame {
         pane.add(cards, BorderLayout.CENTER);
     }
 
+    /**
+     * Creates the game board card (JPanel) and returns it
+     * @return
+     */
+    private JPanel createCard_GameBoard() {
+        JPanel card = new GameBoard(gameState);
+        card.setLayout(new FlowLayout(FlowLayout.LEFT));
+        JMenuBar menubar = new JMenuBar();
+        JMenu file = new JMenu("File");
+        addMenuItem("Main Menu", file, switchCardAction);
+        addMenuItem("Exit", file, exitAction);
+        menubar.add(file);
+        card.add(menubar);
+        
+        return card;
+    }
     
+    /**
+     * Creates the main menu card and returns it
+     * @return
+     */
+    private JPanel createCard_MainMenu() {
+        JPanel card = new JPanel();
+        setButton(Config.GUI.newgame, card, switchCardAction);
+        setButton(Config.GUI.exit, card, exitAction);
+        return card;
+    }
 
     /**
      * Creates a new button within the given container.
@@ -141,7 +158,12 @@ public class GUI extends JFrame {
         container.add(button);
     }
     
-    
+    /**
+     * Adds a JMenuItem to a JMenu
+     * @param text
+     * @param container
+     * @param f Action listener function
+     */
     private void addMenuItem(String text, Container container, Function f) {
         JMenuItem menuItem = new JMenuItem(text);
         menuItem.addActionListener(new ActionListener() { 
@@ -163,7 +185,7 @@ public class GUI extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Set up the content pane.
-        addComponentToPane(frame.getContentPane());
+        addComponentsToPane(frame.getContentPane());
 
         //Display the window.
         frame.pack();

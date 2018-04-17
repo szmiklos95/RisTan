@@ -218,6 +218,8 @@ public abstract class Config {
 		public static final int innerColor = 0xFFDD88;
 		// Hexagon text color
 		public static final int textColor = 0xFFFFFF;
+		// The color of the inner hexagon when it is selected
+		public static final int selectedInnerColor = 0xDA6F25;
 		
 	}
 	
