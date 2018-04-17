@@ -2,6 +2,8 @@ package graphics;
 
 import java.awt.*;
 
+import config.Config;
+
 
 public class Hexagon extends Polygon {
 
@@ -63,6 +65,14 @@ public class Hexagon extends Polygon {
     public Point getCenter() {
     	return center;
     }
+    
+    public void toggleSelected() {
+    	selected = !selected;
+    }
+    
+    public boolean isSelected() {
+    	return selected;
+    }
 
     private double findAngle(double fraction) {
         return fraction * Math.PI * 2 + Math.toRadians((rotation + 180) % 360);
@@ -102,4 +112,5 @@ public class Hexagon extends Polygon {
         g.setColor(tmpC);
         g.setStroke(tmpS);
     }
+    
 }

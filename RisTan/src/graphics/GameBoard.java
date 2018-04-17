@@ -46,13 +46,15 @@ public class GameBoard extends JPanel{
 	        
 		    addMouseListener(new MouseAdapter() {
 	            @Override
-	            public void mouseClicked(MouseEvent me) {
-	                super.mouseClicked(me);
+	            public void mousePressed(MouseEvent me) {
+	                super.mousePressed(me);
 	                for (Hexagon h : hexagons) {
 
 	                    if (h.contains(me.getPoint())) {//check if mouse is clicked within shape
 
 	                        System.out.println("Clicked a "+h.getClass().getName()+" at coordinates: ("+h.getCenter().getX()+":"+h.getCenter().getY()+")");
+	                        h.toggleSelected();
+	                        repaint();
 
 	                    }
 	                }
@@ -133,9 +135,14 @@ public class GameBoard extends JPanel{
 	        String text = String.format("%s : %s", coord(posX), coord(posY));
 	        int w = metrics.stringWidth(text);
 	        int h = metrics.getHeight();
-
-	        hexagons.get(i).draw(g2d, x, y, Config.Hexagon.outerLineThickness, Config.Hexagon.outerColor, true);
-	        hexagons.get(i).draw(g2d, x, y, Config.Hexagon.innerLineThickness, Config.Hexagon.innerColor, false);
+	        
+	        Hexagon hexagon = hexagons.get(i);
+	        
+	        int outerColor = Config.Hexagon.outerColor;
+	        if(hexagon.isSelected()) outerColor = Config.Hexagon.selectedOuterColor;
+	        
+	        hexagon.draw(g2d, x, y, Config.Hexagon.innerLineThickness, Config.Hexagon.innerColor, true);
+	        hexagon.draw(g2d, x, y, Config.Hexagon.outerLineThickness, outerColor, false);
 
 	        g.setColor(new Color(Config.Hexagon.textColor));
 	        g.drawString(text, x - w/2, y + h/2);

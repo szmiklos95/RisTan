@@ -208,18 +208,18 @@ public abstract class Config {
 		public static final int radius = 50;
 		//The distance between hexa tiles
 		public static final int padding = 0;
-		// The thickness of the outer hexagon line
-		public static final int outerLineThickness = 0;
 		// The thickness of the inner hexagon line
-		public static final int innerLineThickness = 4;
-		// The color of the outer "frame" hexagon
-		public static final int outerColor = 0x008844;
+		public static final int innerLineThickness = 0;
+		// The thickness of the outer hexagon line
+		public static final int outerLineThickness = 4;
 		// The color of the inner "main" hexagon
-		public static final int innerColor = 0xFFDD88;
+		public static final int innerColor = 0x008844;
+		// The color of the outer "frame" hexagon
+		public static final int outerColor = 0xFFDD88;
 		// Hexagon text color
 		public static final int textColor = 0xFFFFFF;
 		// The color of the inner hexagon when it is selected
-		public static final int selectedInnerColor = 0xDA6F25;
+		public static final int selectedOuterColor = 0xDA6F25;
 		
 	}
 	
