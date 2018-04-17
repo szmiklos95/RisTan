@@ -3,8 +3,6 @@ package network;
 import java.io.*;
 import java.net.*;
 
-import network.Message.eMsgType;
-
 public class SerialClient {
     /* Class variables */
 	private Socket socket = null;
@@ -14,7 +12,7 @@ public class SerialClient {
 	private int playerId = -1;
 	private String name = null;
 	
-	private boolean isReceived = false;
+	private boolean isTextReceived = false;
 	private Message msg = null;
 	
 	/* Thread is necessary for handling receiving messages 
@@ -26,16 +24,19 @@ public class SerialClient {
 			while(true) {
 					// Blocking
 					msg = (Message) in.readObject();
-					isReceived = true;
-					if (msg.GetType() == eMsgType.Identification) {
+					switch(msg.GetType()) {
+					case Identification:
 						playerId = (int)msg.GetData();
-						System.err.println(playerId);
+						break;
+					case Text:
+						isTextReceived = true;
+						break;
+					case Action:
+						break;
+					default:
+						break;
 					}
-			
-					else if (msg.GetType() == eMsgType.Text) {
-						System.out.println("System  --> Player"+ playerId +" " + msg.GetData() );
-					}
-	
+
 			}
 				} catch (Exception ex) {
 					System.out.println(ex.getMessage());
@@ -55,7 +56,7 @@ public class SerialClient {
 	// Methods
 	public void Connect(String ip) {
 		try {
-			socket = new Socket(ip, 455);
+			socket = new Socket(InetAddress.getByName(ip), 455);
 			System.out.println("Player" + playerId + ": Connecting to System.");
 			
 			out = new ObjectOutputStream(socket.getOutputStream());
@@ -102,16 +103,11 @@ public class SerialClient {
 	}
 	
 	public boolean isRecText() {
-		if(isReceived == true && msg.GetType() == eMsgType.Text) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return isTextReceived;
 	}
 	
 	public Message getMsg() {
-		isReceived = false;
+		isTextReceived = false;
 		return msg;
 	}
 	

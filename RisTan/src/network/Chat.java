@@ -28,8 +28,8 @@ public class Chat extends JFrame{
 						text = text.concat(newtext);
 						display.setText(text);
 						}
-					//Sleep the thread for 500ms
-					sleep(500);
+					//Sleep the thread for 100ms
+					sleep(100);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -47,7 +47,8 @@ public class Chat extends JFrame{
 		this.name = name;
 		
 		client = new SerialClient(this.name);
-		client.Connect("localhost");
+		//This is my IP address
+		client.Connect("152.66.177.145");
 		
 		client.Send(new Message(eMsgType.Name,this.name));
 		

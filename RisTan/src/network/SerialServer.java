@@ -60,6 +60,10 @@ public class SerialServer {
 					case Text:
 						SendtoAll(new Message(eMsgType.Text,name + ": " + (String)data + "\n"));
 						break;
+					case Action:
+						//Call Control class check method, and if the action was right send to all client
+						// If wasn't the send a fault message just to this client
+						break;
 					default:
 						break;
 					}
@@ -74,7 +78,7 @@ public class SerialServer {
 		}
 	}
 	
-	public void Connect(String ip) {
+	public void Connect() {
 		try {
 			if(serverSocket != null)
 				disconnect();
@@ -108,7 +112,7 @@ public class SerialServer {
 	}
 	
 	public void SendtoAll(Message msg) {
-		for(int i=0; i<num_threads; ++i) {
+		for(int i=0; i<connectedClients; ++i) {
 			Send(msg,i);
 		}
 	}
@@ -131,9 +135,12 @@ public class SerialServer {
 			null, ex);
 		}
 	}
-	
+	/**
+	 * This method is find thread what's assigned to PlayerId
+	 * @param id
+	 * @return
+	 */
 	private ReceiverThread getThread (int id) {
-		
 		for(int i = 0; i < num_threads; ++i) {
 			if(clientArray.get(i).playerId == id)
 				return clientArray.get(i);

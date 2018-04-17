@@ -12,9 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.JFrame;
-
 
 public class GameMenu extends JFrame{
 
@@ -100,7 +98,7 @@ public class GameMenu extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			    server = new SerialServer();
-				server.Connect("localhost");
+				server.Connect();
 
 				// Close the window
 				dispose();
@@ -138,11 +136,11 @@ public class GameMenu extends JFrame{
 		
 		GridBagConstraints GBC_exit = new GridBagConstraints();
 		GBC_exit.gridx = 3;
-		GBC_exit.gridy = 7;
+		GBC_exit.gridy = 12;
 		GBC_exit.gridwidth = 2;
 		GBC_exit.gridheight = 10;
 		GBC_exit.fill = GridBagConstraints.CENTER;
-		GBC_exit.insets = new Insets(10,10,10,10);
+		//GBC_exit.insets = new Insets(10,10,10,10);
 
 		Button exit = new Button("exit");
 		exit.setFont(new Font("Arial Bold",0,20));
