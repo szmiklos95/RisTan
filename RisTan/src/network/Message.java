@@ -9,7 +9,7 @@ import java.io.*;
 public class Message implements Serializable{
 	private static final long serialVersionUID = 1L;
 
- enum eMsgType{
+ public enum eMsgType{
 		Identification,
 		Name,
 		Text,
@@ -24,12 +24,12 @@ public class Message implements Serializable{
 		data = id;
 	}
 	
-	Message(String s){
+	public Message(String s){
 		type = eMsgType.Text;
 		data = s;
 	}
 	
-	Message(eMsgType t, Object d){
+	public Message(eMsgType t, Object d){
 		type = t;
 		data = d;
 	}

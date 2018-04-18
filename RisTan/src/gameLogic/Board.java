@@ -81,6 +81,10 @@ public class Board {
 		}
 	}
 	
+	public Map<Point,Tile> getTiles(){
+		return tiles;
+	}
+	
 	//gets the tile at the given position
 	public Tile getTileAt(Point point) {
 		return tiles.get(point);
@@ -88,7 +92,7 @@ public class Board {
 	
 	//coordinate functions
 	
-	private List<Point> getTileCoordinates(){
+	public List<Point> getTileCoordinates(){
 		List<Point> ret=new ArrayList<Point>();
 		int size=Config.Board.size;
 		for(int i=-size;i<=size;++i) {

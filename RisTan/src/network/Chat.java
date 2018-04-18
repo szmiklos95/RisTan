@@ -46,9 +46,9 @@ public class Chat extends JFrame{
 		
 		this.name = name;
 		
-		client = new SerialClient(this.name);
-		//This is my IP address
-		client.Connect("152.66.177.145");
+		client = new SerialClient();
+		//This is localhost IP address
+		client.Connect("127.0.0.1");
 		
 		client.Send(new Message(eMsgType.Name,this.name));
 		

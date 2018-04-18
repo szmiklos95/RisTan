@@ -6,6 +6,10 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import gameLogic.Action;
+import gameLogic.AddPlayerAction;
+import gameLogic.Player;
+import gameLogic.ServerController;
 import network.Message.eMsgType;
 
 public class SerialServer {
@@ -14,6 +18,11 @@ public class SerialServer {
 	private int num_threads = 3;
 	private int connectedClients = 0;
 	private ArrayList<ReceiverThread> clientArray;
+	private ServerController controller;
+	
+	public SerialServer() {
+		controller=new ServerController(this);
+	}
 	
 	/* Thread is necessary for handling receiving messages 
 	 * - accept() and readObject() are blocking methods 
@@ -56,13 +65,21 @@ public class SerialServer {
 					switch(msg.GetType()) { 
 					case Name:
 						name = (String)data;
+						//gameState játékoslista frissítések
+						Player player=new Player(name,playerId);
+						List<Player> oldPlayers=controller.getPlayers();
+						for(Player p:oldPlayers) {//a most csatlakozóhoz az eddigiek hozzáadása
+							Send(new Message(eMsgType.Action,new AddPlayerAction(p)),playerId);
+						}
+						//mindegyikhez a most csatlakozó hozzáadása
+						controller.executeAction(playerId, new AddPlayerAction(player));
 						break;
 					case Text:
 						SendtoAll(new Message(eMsgType.Text,name + ": " + (String)data + "\n"));
 						break;
 					case Action:
-						//Call Control class check method, and if the action was right send to all client
-						// If wasn't the send a fault message just to this client
+						System.out.println("C "+playerId+" "+msg.GetData());
+						controller.executeAction(playerId,(Action)data);
 						break;
 					default:
 						break;

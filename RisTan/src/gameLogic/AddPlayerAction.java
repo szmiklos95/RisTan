@@ -1,7 +1,7 @@
 package gameLogic;
 
 //to add a player to the game, instantiate a Player, get this action with that player, and execute the action on the server and the clients - before the initGameAction
-public abstract class AddPlayerAction extends ManagementAction {
+public class AddPlayerAction extends ManagementAction {
 	private static final long serialVersionUID = 1L;
 	
 	private int ID;
