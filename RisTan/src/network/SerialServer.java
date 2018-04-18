@@ -78,6 +78,7 @@ public class SerialServer {
 						SendtoAll(new Message(eMsgType.Text,name + ": " + (String)data + "\n"));
 						break;
 					case Action:
+						System.out.println("C "+playerId+" "+msg.GetData());
 						controller.executeAction(playerId,(Action)data);
 						break;
 					default:
