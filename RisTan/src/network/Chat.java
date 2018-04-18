@@ -46,7 +46,7 @@ public class Chat extends JFrame{
 		
 		this.name = name;
 		
-		client = new SerialClient(this.name);
+		client = new SerialClient();
 		//This is my IP address
 		client.Connect("152.66.177.145");
 		

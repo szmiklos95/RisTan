@@ -157,6 +157,52 @@ public abstract class Config {
 		}
 	}
 	
+	//GameLogicExceptions config
+	public static class Exception{
+		public static class GameLogic{
+			public static final String errorMessage="Az akció nem hajtható végre, mert érvénytelen.";
+		}
+		public static class GameOver{
+			public static final String errorMessage="Az akció nem hajtható végre, mert vége a játéknak, vagy még nem kezdõdött el.";
+		}
+		public static class InsufficientResource{
+			public static final String errorMessage="Az akció nem hajtható végre, mert nong hozzá elég nyersanyagod.";
+		}
+		public static class InvalidTileAction{
+			public static final String errorMessage="Ez az akció nem hajtható végre ezen a mezõn.";
+		}
+		public static class NotEnoughTime{
+			public static final String errorMessage="Az akció nem hajtható végre, mert nincs hozzá elég idõd.";
+		}
+		public static class NoTileAtPoint{
+			public static final String errorMessage="Az akció nem hajtható végre, mert ezen a ponton nincs mezõ.";
+		}
+		public static class PlayerOutOfTurn{
+			public static final String errorMessage="Az akció nem hajtható végre, mert nem te következel.";
+		}
+		public static class TileIsNotEmpty{
+			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mert a mezõ nem üres.";
+		}
+		public static class TileIsNotEnemy{
+			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mert a mezõt nem birtokolja ellenséges játékos.";
+		}
+		public static class TileIsNotFree{
+			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mert a mezõ nem szabad.";
+		}
+		public static class TileIsNotOwn{
+			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mert a mezõ nem saját.";
+		}
+		public static class TileIsNotTown{
+			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mivel a mezõn nem áll város.";
+		}
+		public static class TileIsNotVillage{
+			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mivel a mezõn nem áll falu.";
+		}
+		public static class TradeIsNotAllowed{
+			public static final String errorMessage="Az akció nem hajtható végre, mert a kereskedelem nem lehetésges.";
+		}
+	}
+	
 	//TurnOrder config
 	public static class TurnOrder{
 		public static final List<Turn> turns=createTurns();

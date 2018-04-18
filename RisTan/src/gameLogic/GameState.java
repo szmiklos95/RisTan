@@ -25,7 +25,7 @@ public class GameState {
 		automaticActionsExecuted=false;
 	}
 	
-	public void ExecuteAction(Action action)throws GameLogicException{
+	public void executeAction(Action action)throws GameLogicException{
 		action.check(this);
 		action.execute(this);
 		if(!over) {
