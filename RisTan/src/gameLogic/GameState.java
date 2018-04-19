@@ -26,7 +26,6 @@ public class GameState {
 	}
 	
 	public void executeAction(Action action)throws GameLogicException{
-		action.check(this);
 		action.execute(this);
 		if(!over) {
 			getTurn().checkObligatoryEvents(action);

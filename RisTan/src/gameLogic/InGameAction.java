@@ -36,6 +36,7 @@ public abstract class InGameAction extends Action{
 	
 	@Override
 	void execute(GameState gameState)throws GameLogicException{
+		super.execute(gameState);
 		gameState.getTurn().takeTime(time);
 	}
 }

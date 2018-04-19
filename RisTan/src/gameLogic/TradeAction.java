@@ -14,4 +14,9 @@ public abstract class TradeAction extends InGameAction {
 			throw new TradeIsNotAllowedException();
 		}
 	}
+	
+	@Override
+	void execute(GameState gameState)throws GameLogicException{
+		super.execute(gameState);
+	}
 }
