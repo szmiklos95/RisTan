@@ -18,7 +18,7 @@ public class ServerController extends Controller {
 			//the following line runs if and only if the action executed proprely on the server
 			server.SendtoAll(new Message(Message.eMsgType.Action,action));
 		}catch(GameLogicException e) {
-			server.Send(new Message(e.getErrorMessage()),playerID);
+			server.Send(new Message(e.getMessage()),playerID);
 		}
 	}
 }

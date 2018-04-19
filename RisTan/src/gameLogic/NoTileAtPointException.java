@@ -6,8 +6,7 @@ import config.Config;
 public class NoTileAtPointException extends GameLogicException {
 	private static final long serialVersionUID = 1L;
 	
-	@Override
-	public String getErrorMessage() {
-		return Config.Exception.GameOver.errorMessage;
+	NoTileAtPointException() {
+		super(Config.Exception.GameOver.errorMessage);
 	}
 }

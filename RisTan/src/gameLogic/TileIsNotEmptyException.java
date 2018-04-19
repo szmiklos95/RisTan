@@ -6,8 +6,7 @@ import config.Config;
 public class TileIsNotEmptyException extends GameLogicException {
 	private static final long serialVersionUID = 1L;
 	
-	@Override
-	public String getErrorMessage() {
-		return Config.Exception.TileIsNotEmpty.errorMessage;
+	TileIsNotEmptyException() {
+		super(Config.Exception.TileIsNotEmpty.errorMessage);
 	}
 }

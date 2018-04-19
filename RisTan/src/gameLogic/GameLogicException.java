@@ -6,7 +6,11 @@ import config.Config;
 public class GameLogicException extends Exception {
 	private static final long serialVersionUID=1L;
 	
-	public String getErrorMessage() {
-		return Config.Exception.GameLogic.errorMessage;
+	GameLogicException() {
+		super(Config.Exception.GameLogic.errorMessage);
+	}
+	
+	GameLogicException(String message) {
+		super(message);
 	}
 }

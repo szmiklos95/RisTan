@@ -6,8 +6,7 @@ import config.Config;
 public class GameOverException extends GameLogicException {
 	private static final long serialVersionUID = 1L;
 	
-	@Override
-	public String getErrorMessage() {
-		return Config.Exception.GameOver.errorMessage;
+	GameOverException() {
+		super(Config.Exception.GameOver.errorMessage);
 	}
 }
