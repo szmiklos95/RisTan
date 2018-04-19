@@ -95,6 +95,7 @@ public class GameState {
 	}
 	
 	void activePlayerStart()throws GameLogicException{
+		getTurn().reset(this);
 		automaticActionsExecuted=false;
 		List<Action> automaticActions=getTurn().getAutomaticActions();
 		for(int i=0;i<automaticActions.size();++i) {
