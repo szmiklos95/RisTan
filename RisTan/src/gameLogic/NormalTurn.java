@@ -6,17 +6,21 @@ import java.util.List;
 import config.Config;
 
 public class NormalTurn extends Turn {
-	public NormalTurn() {
+	private final int time;
+	
+	public NormalTurn(int time) {
 		super(true);
+		this.time=time;
 	}
 	
 	@Override
 	String getGeneratorString() {
-		return NormalTurn.class.getCanonicalName();
+		return NormalTurn.class.getCanonicalName()+" "+time;
 	}
 	
 	@Override
 	void reset(GameState gameState) {
+		setRemainingTime(time);
 		List<Action> actions=getAutomaticActions();
 		actions.clear();
 		int activePlayerID=gameState.getActivePlayer().getID();
