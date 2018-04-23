@@ -6,15 +6,22 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 
 import config.Config;
 
@@ -101,13 +108,15 @@ public class GUI extends JFrame {
     	
         //Create the "cards".
     	
-        JPanel card1 = createCard_MainMenu();
-        JPanel card2 = createCard_GameBoard();
+        JPanel card_MainMenu = createCard_MainMenu();
+        JPanel card_GameBoard = createCard_GameBoard();
+        JPanel card_GameSettings = createCard_GameSettings();
         
         //Create the panel that contains the "cards".
         cards = new JPanel(new CardLayout());
-        cards.add(card1, Config.GUI.mainmenu);
-        cards.add(card2, Config.GUI.newgame);
+        cards.add(card_MainMenu, Config.GUI.mainmenu);
+        cards.add(card_GameBoard, Config.GUI.newgame);
+        cards.add(card_GameSettings, Config.GUI.newgame_settings);
         
         pane.add(cards, BorderLayout.CENTER);
     }
@@ -135,8 +144,20 @@ public class GUI extends JFrame {
      */
     private JPanel createCard_MainMenu() {
         JPanel card = new JPanel();
-        setButton(Config.GUI.newgame, card, switchCardAction);
+        setButton(Config.GUI.newgame_settings, card, switchCardAction);
         setButton(Config.GUI.exit, card, exitAction);
+        return card;
+    }
+    
+    /**
+     * Creates the settings menu before starting a new game
+     * @return
+     */
+    private JPanel createCard_GameSettings() {
+        JPanel card = new JPanel();
+
+        setInputFields(card);
+        setButton(Config.GUI.newgame, card, switchCardAction);
         return card;
     }
 
@@ -156,6 +177,35 @@ public class GUI extends JFrame {
        	 } 
         } );
         container.add(button);
+    }
+    
+    /**
+     * Creates an input field with the given title
+     * @param container
+     */
+    private void setInputFields(Container container) {
+    	
+    	JPanel panel = new JPanel();
+    	panel.setLayout(new GridBagLayout());
+    	GridBagConstraints c = new GridBagConstraints();
+
+      	
+    	c.gridx = 0;
+    	c.gridy = 0;
+    	panel.add(new JLabel(Config.GUI.playerCount), c);
+      	c.gridx = 1;
+      	c.gridy = 0;
+      	panel.add(new JSpinner(new SpinnerNumberModel(Config.GUI.default_playerCount,Config.GUI.min_playerCount,Config.GUI.max_playerCount,1)), c);
+      	
+    	c.gridx = 0;
+    	c.gridy = 1;
+    	panel.add(new JLabel("Some other random setting:"), c);
+    	c.gridx = 1;
+    	c.gridy = 1;
+      	panel.add(new JTextField("Set this", Config.GUI.default_textfield_columnCount), c);
+      	
+    	container.add(panel);
+        
     }
     
     /**
