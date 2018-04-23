@@ -18,7 +18,7 @@ public class Main {
     	        // Init game action
     	        gameLogic.InitGameAction action = new gameLogic.InitGameAction();
     	        try { //Execute the action
-    				gameState.ExecuteAction(action);
+    				gameState.executeAction(action);
     			} catch (GameLogicException e) {
     				// TODO Auto-generated catch block
     				e.printStackTrace();
