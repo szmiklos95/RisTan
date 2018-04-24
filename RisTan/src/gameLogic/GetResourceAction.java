@@ -1,10 +1,21 @@
 package gameLogic;
 
+/**
+ * Describes an action when the player gets an amount of a resource. This action requires no time.
+ * @author Andras
+ *
+ */
 public class GetResourceAction extends InGameAction {
 	private static final long serialVersionUID = 1L;
 	
-	private Resource resource;
-	private int amount;
+	/**
+	 * The got resource.
+	 */
+	private final Resource resource;
+	/**
+	 * The amount of the got resource.
+	 */
+	private final int amount;
 	
 	public GetResourceAction(int playerID,Resource resource,int amount){
 		super(playerID);
