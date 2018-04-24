@@ -73,6 +73,12 @@ public class SerialServer {
 						}
 						//mindegyikhez a most csatlakozó hozzáadása
 						controller.executeAction(playerId, new AddPlayerAction(player));
+						
+						//ha mindenki csatlakozott, a játék elndítása
+						if(connectedClients==num_threads) {
+							Action action=controller.initGame();
+							SendtoAll(new Message(eMsgType.Action,action));
+						}
 						break;
 					case Text:
 						SendtoAll(new Message(eMsgType.Text,name + ": " + (String)data + "\n"));
@@ -89,13 +95,16 @@ public class SerialServer {
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
 				System.err.println("System: Player disconnected!");
+				ex.printStackTrace(System.err);
 			} finally {
 				disconnect();
 			}
 		}
 	}
 	
-	public void Connect() {
+	public void Connect(int num_players) {
+		//creates a thread for all the clients
+		num_threads=num_players;		
 		try {
 			if(serverSocket != null)
 				disconnect();

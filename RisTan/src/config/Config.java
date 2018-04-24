@@ -213,13 +213,12 @@ public abstract class Config {
 			for(int i=0;i<5;++i) {
 				ret.add(new OccupyFreeTileTurn(1));
 			}
-			ret.add(new GetResourceTurn(startingResources));
+			ret.add(new GetResourceTurn(createStartingResources()));
 			for(int i=0;i<10;++i) {
 				ret.add(new NormalTurn(7));
 			}
 			return ret;
 		}
-		private static final Map<Resource,Integer> startingResources=createStartingResources();
 		private static Map<Resource,Integer> createStartingResources(){
 			Map<Resource,Integer> ret=new HashMap<Resource,Integer>();
 			ret.put(Resource.Stone,2);

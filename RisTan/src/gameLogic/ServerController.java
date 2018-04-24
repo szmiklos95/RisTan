@@ -21,4 +21,11 @@ public class ServerController extends Controller {
 			server.Send(new Message(e.getMessage()),playerID);
 		}
 	}
+	
+	//init the gameState before game start
+	//returns the StartGameAction to execute at the clients
+	public Action initGame() {
+		getGameState().initGame();
+		return getGameState().getStartGameAction();
+	}
 }

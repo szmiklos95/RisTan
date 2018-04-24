@@ -45,12 +45,13 @@ public class SerialClient {
 				} catch (Exception ex) {
 					System.out.println(ex.getMessage());
 					System.err.println("Player" + controller.getLocalPlayerID() + ": System disconnected!");
+					ex.printStackTrace(System.err);
 				}
 			}
 		}
 	
 	// Constructor
-	SerialClient(){
+	public SerialClient(){
 		controller=new ClientController(this);
 	}
 	
@@ -114,5 +115,9 @@ public class SerialClient {
 	
 	public String getName() {
 		return controller.getLocalPlayerName();
+	}
+	
+	public ClientController getController() {
+		return controller;
 	}
 }
