@@ -2,18 +2,30 @@ package gameLogic;
 
 import config.Config;
 
+/**
+ * An action which describes the acceptance of a trade offer.
+ * @author András
+ * 
+ */
 public class AcceptTradeAction extends TradeAction {
 	private static final long serialVersionUID = 1L;
 	
-	private int offerID;
+	/**
+	 * offerID: the ID of the accepted offer
+	 */
+	private final int offerID;
 
-	public AcceptTradeAction(int playerID, int offerID) {
+	/**
+	 * Constructor.
+	 * @param playerID: the ID of the accepting player
+	 * @param offerID: the ID of the accepted offer
+	 */
+	public AcceptTradeAction(final int playerID,final int offerID) {
 		super(playerID,Config.Action.OfferTradeAction.time);
 		this.offerID=offerID;
 	}
-	
 	@Override
-	void check(GameState gameState)throws GameLogicException{
+	void check(final GameState gameState)throws GameLogicException{
 		super.check(gameState);
 		TradeOffer tradeOffer=gameState.getMarket().getOffer(offerID);
 		Resource take=tradeOffer.getTake();
@@ -24,7 +36,7 @@ public class AcceptTradeAction extends TradeAction {
 	}
 
 	@Override
-	void execute(GameState gameState)throws GameLogicException{
+	void execute(final GameState gameState)throws GameLogicException{
 		super.execute(gameState);
 		Player player=gameState.getActivePlayer();
 		TradeOffer tradeOffer=gameState.getMarket().getOffer(offerID);

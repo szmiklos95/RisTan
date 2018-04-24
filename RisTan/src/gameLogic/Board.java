@@ -25,7 +25,7 @@ public class Board {
 		for(int i=0;i<points.size();++i) {
 			Point point=points.get(i);
 			Tile tile;
-			do{
+			do {
 				tile=getNewTile(res_prob);
 			}while(tile==null);
 			tiles.put(point,tile);
@@ -40,6 +40,8 @@ public class Board {
 			Resource resource=resources[i];
 			if(rnd<res_prob.get(resource)){
 				return new Tile(resource);
+			}else{
+				rnd-=res_prob.get(resource);
 			}
 		}
 		return null;

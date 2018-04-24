@@ -32,7 +32,10 @@ import javax.swing.SpinnerNumberModel;
 import config.Config;
 import gameLogic.GameLogicException;
 import network.Chat;
+import network.Message;
+import network.SerialClient;
 import network.SerialServer;
+import network.Message.eMsgType;
 
 
 /**
@@ -289,6 +292,7 @@ public class GUI extends JFrame {
 		card.add(create);
 		
 		//Join
+		//TODO new Join window
 		GridBagConstraints GBC_join = new GridBagConstraints();
 		GBC_join.gridx = 3;
 		GBC_join.gridy = 5;
@@ -305,10 +309,13 @@ public class GUI extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				new Chat(new String(name.getText()));
+				ConnectTo("127.0.0.1");//TODO: connect to selected address, move this to connection window, open here connection window
 				
-		        // Get gameStatus from server and draw board
+				DrawBoard();
+				
+				CardLayout cl = (CardLayout)(cards.getLayout());
+	 	        cl.show(cards, e.getActionCommand());
+	 	        System.out.print("Starting the game.\n");
 			}
 		});
 		card.add(join);
@@ -448,10 +455,20 @@ public class GUI extends JFrame {
     
     /**
      * Creates a new GameBoard JPanel and adds it to the main JPanel (cards).
-     * This is a server side function
+     * This function runs at the host player.
      */
     private void SetupNewGame() {
+    	network.SerialServer server = new SerialServer();
+		server.Connect(settings.getPlayerCount());
     	
+		//This is localhost IP address, connects the local client to the server
+		ConnectTo("127.0.0.1");
+		
+		DrawBoard();
+		
+		
+		
+        /* old code
         // New game state
         gameState = new gameLogic.GameState();
         
@@ -480,10 +497,27 @@ public class GUI extends JFrame {
    		gameBoard = new GameBoard(gameState, settings);
    		cards.remove(card_GameBoard);
    		card_GameBoard = createCard_GameBoard();
-   		cards.add(card_GameBoard, Config.GUI.ok);
+   		cards.add(card_GameBoard, Config.GUI.ok);*/
     }
     
+    private void ConnectTo(String IPstring) {
+    	network.SerialClient client=new SerialClient();
+		client.Connect(IPstring);
+		
+		new network.Chat(client,settings.getServerPlayerName());
+		client.Send(new Message(eMsgType.Name,settings.getServerPlayerName()));
+		
+		gameLogic.ClientController controller=client.getController();
+		gameState=controller.getGameState();
+    }
     
+    private void DrawBoard() {
+    	// Update the settings, and draw a new board.
+		gameBoard = new GameBoard(gameState, settings); //TODO: a GUI-nak továbbítani a controllert, hogy tudjon action-t feladni
+   		cards.remove(card_GameBoard);
+   		card_GameBoard = createCard_GameBoard();
+   		cards.add(card_GameBoard, Config.GUI.ok);
+    }
     
     
     

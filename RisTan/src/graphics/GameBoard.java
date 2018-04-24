@@ -28,7 +28,6 @@ public class GameBoard extends JPanel{
 
 	    private FontMetrics metrics;
 	    private gameLogic.GameState gameState;
-	    private gameLogic.Board board;
 	    private ArrayList<Hexagon> hexagons;
 	    private NewGameSettings initialSettings;
 	    
@@ -49,7 +48,6 @@ public class GameBoard extends JPanel{
 	        
 	        hexagons = new ArrayList<Hexagon>();
 	        this.gameState = gameState;
-	        board = this.gameState.getBoard();
 	        
 	        
 		    addMouseListener(new MouseAdapter() {
@@ -71,6 +69,13 @@ public class GameBoard extends JPanel{
 	        
 	    }
 	    
+	    /**
+	     * Gets the Board from the gameState, necessary because the board is only created at the start of the game which is later than the GameBoard instantiation.
+	     * @return Board from gameState
+	     */
+	    private gameLogic.Board getBoard(){
+	    	return gameState.getBoard();
+	    }
 	    
 	    /*
 	     * (non-Javadoc)
@@ -91,9 +96,11 @@ public class GameBoard extends JPanel{
 
 	        drawCircle(g2d, origin, Config.Circle.radius, true, true, Config.Circle.color, Config.Circle.lineThickness);
 	        
-	        ArrayList<gameLogic.Point> points = new ArrayList<gameLogic.Point>(board.getTiles().keySet());
-	        drawHexGridFromPoints(g2d, origin, Config.Hexagon.radius, Config.Hexagon.padding, points);
-	        
+	        gameLogic.Board board=getBoard();
+	        if(board!=null) {
+		        ArrayList<gameLogic.Point> points = new ArrayList<gameLogic.Point>(board.getTiles().keySet());
+		        drawHexGridFromPoints(g2d, origin, Config.Hexagon.radius, Config.Hexagon.padding, points);
+	        }
 	    }
 	    
 

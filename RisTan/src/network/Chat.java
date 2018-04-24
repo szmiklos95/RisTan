@@ -37,7 +37,7 @@ public class Chat extends JFrame{
 		}
 	}
 
-	public Chat(String name){
+	public Chat(SerialClient client,String name){
 		super("RisTan Beta - " + name);
 		setSize(500, 500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -45,12 +45,7 @@ public class Chat extends JFrame{
 		this.setLayout(gbl);
 		
 		this.name = name;
-		
-		client = new SerialClient();
-		//This is localhost IP address
-		client.Connect("127.0.0.1");
-		
-		client.Send(new Message(eMsgType.Name,this.name));
+		this.client=client;
 		
 		// Display messages
 		GridBagConstraints GBC_display = new GridBagConstraints();
