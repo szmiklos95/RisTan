@@ -12,7 +12,9 @@ public class AddPlayerAction extends ManagementAction {
 		name=player.getName();
 	}
 	
+	@Override
 	void execute(GameState gameState)throws GameLogicException{
+		super.execute(gameState);
 		gameState.getPlayers().add(new Player(name,ID));
 	}
 }

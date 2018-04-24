@@ -26,7 +26,6 @@ public class GameState {
 	}
 	
 	public void executeAction(Action action)throws GameLogicException{
-		action.check(this);
 		action.execute(this);
 		if(!over) {
 			getTurn().checkObligatoryEvents(action);
@@ -96,6 +95,7 @@ public class GameState {
 	}
 	
 	void activePlayerStart()throws GameLogicException{
+		getTurn().reset(this);
 		automaticActionsExecuted=false;
 		List<Action> automaticActions=getTurn().getAutomaticActions();
 		for(int i=0;i<automaticActions.size();++i) {

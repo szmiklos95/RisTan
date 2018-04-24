@@ -6,8 +6,7 @@ import config.Config;
 public class TileIsNotVillageException extends GameLogicException {
 	private static final long serialVersionUID = 1L;
 	
-	@Override
-	public String getErrorMessage() {
-		return Config.Exception.TileIsNotVillage.errorMessage;
+	TileIsNotVillageException(){
+		super(Config.Exception.TileIsNotVillage.errorMessage);
 	}
 }

@@ -6,8 +6,7 @@ import config.Config;
 public class TileIsNotTownException extends GameLogicException {
 	private static final long serialVersionUID = 1L;
 	
-	@Override
-	public String getErrorMessage() {
-		return Config.Exception.TileIsNotTown.errorMessage;
+	TileIsNotTownException(){
+		super(Config.Exception.TileIsNotTown.errorMessage);
 	}
 }

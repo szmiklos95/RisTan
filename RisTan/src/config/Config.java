@@ -214,7 +214,7 @@ public abstract class Config {
 			}
 			ret.add(new GetResourceTurn(startingResources));
 			for(int i=0;i<10;++i) {
-				ret.add(new NormalTurn());
+				ret.add(new NormalTurn(7));
 			}
 			return ret;
 		}

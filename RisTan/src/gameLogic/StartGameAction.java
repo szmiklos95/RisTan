@@ -15,7 +15,9 @@ public class StartGameAction extends ManagementAction {
 		this.turnOrderGenerator=turnOrderGenerator;
 	}
 	
+	@Override
 	void execute(GameState gameState)throws GameLogicException{
+		super.execute(gameState);
 		gameState.startGame(boardGenerator,playerShuffleOrder,turnOrderGenerator);
 	}
 }
