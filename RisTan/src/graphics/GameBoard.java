@@ -30,14 +30,17 @@ public class GameBoard extends JPanel{
 	    private gameLogic.GameState gameState;
 	    private gameLogic.Board board;
 	    private ArrayList<Hexagon> hexagons;
+	    private NewGameSettings initialSettings;
 	    
 	    
 	    /**
 	     * Constructor that sets the game state and the panel size
 	     * @param gameState
 	     */
-	    public GameBoard(gameLogic.GameState gameState) {
+	    public GameBoard(gameLogic.GameState gameState, NewGameSettings initialSettings) {
 	        setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
+	        
+	        this.initialSettings = initialSettings;
 	        
 	        hexagons = new ArrayList<Hexagon>();
 	        this.gameState = gameState;

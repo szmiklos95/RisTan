@@ -2,8 +2,6 @@ package graphics;
 
 import java.awt.*;
 
-import config.Config;
-
 
 public class Hexagon extends Polygon {
 

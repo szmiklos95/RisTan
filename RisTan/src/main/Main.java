@@ -24,8 +24,7 @@ public class Main {
     				e.printStackTrace();
     			}
     	        
-            	GUI gui = new GUI();
-            	gui.refreshGameState(gameState);
+            	GUI gui = new GUI(gameState);
                 gui.createAndShowGUI();
             }
         });
