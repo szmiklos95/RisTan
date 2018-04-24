@@ -37,7 +37,7 @@ public class Chat extends JFrame{
 		}
 	}
 
-	Chat(String name){
+	public Chat(String name){
 		super("RisTan Beta - " + name);
 		setSize(500, 500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

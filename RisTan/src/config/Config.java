@@ -1,6 +1,7 @@
 package config;
 
 import java.util.Map;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -227,4 +228,74 @@ public abstract class Config {
 			return ret;
 		}
 	}
+	
+	/* *****************************************************************************
+	 *  @@@@@@@@@@@@@@@@@@@@@@@@@@ Graphic configurations @@@@@@@@@@@@@@@@@@@@@@@@@@
+	 * *****************************************************************************/
+	
+	/**
+	 * Main menu
+	 * @author Miklós
+	 */
+	public static class GUI{
+		public static final String title = "Welcome to RisTan!";
+		public static final String mainmenu = "Main Menu";
+		public static final String newgame = "New Game";
+		public static final String exit = "Exit";
+		public static final String ok= "OK";
+		
+		public static final int default_textfield_columnCount = 5;
+		public static final String playerCount = "Number of players: ";
+		
+		public static final int default_playerCount = 3;
+		public static final int min_playerCount = 2;
+		public static final int max_playerCount = 4;
+	}
+	
+	
+	/**
+	 * Hexagon config
+	 * @author Miklós
+	 */
+	public static class Hexagon{
+		//The radius of a hexagon
+		public static final int radius = 50;
+		//The distance between hexa tiles
+		public static final int padding = 0;
+		// The thickness of the inner hexagon line
+		public static final int innerLineThickness = 0;
+		// The thickness of the outer hexagon line
+		public static final int outerLineThickness = 4;
+		// The color of the inner "main" hexagon
+		public static final int innerColor = 0x008844;
+		// The color of the outer "frame" hexagon
+		public static final int outerColor = 0xFFDD88;
+		// Hexagon text color
+		public static final int textColor = 0xFFFFFF;
+		// The color of the inner hexagon when it is selected
+		public static final int selectedOuterColor = 0xDA6F25;
+		
+	}
+	
+	/**
+	 * GameBoard config
+	 * @author Miklós
+	 */
+	public static class GameBoard{
+		public static final int width = 1200;
+		public static final int height = 800;
+		public static final Font font = new Font("Arial", Font.BOLD, 18);
+	}
+	
+	/**
+	 * The circle behind the hexagonal map
+	 * @author Miklós
+	 *
+	 */
+	public static class Circle{
+		public static final int radius = 380;
+		public static final int color = 0x4488FF;
+		public static final int lineThickness = 0;
+	}
+	
 }
