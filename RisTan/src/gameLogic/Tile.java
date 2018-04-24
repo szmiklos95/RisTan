@@ -60,4 +60,14 @@ class Tile {
 		owner=newOwner;
 		owner.addScore(score);
 	}
+	
+	/**
+	 * 
+	 * @return
+	 * 
+	 * @author Miklós
+	 */
+	public Resource getResource() {
+		return resource;
+	}
 }

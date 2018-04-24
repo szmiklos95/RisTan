@@ -40,7 +40,9 @@ public class Board {
 			Resource resource=resources[i];
 			if(rnd<res_prob.get(resource)){
 				return new Tile(resource);
-			}
+			}else{
+				rnd-=res_prob.get(resource);
+ 			}
 		}
 		return null;
 	}
@@ -88,6 +90,17 @@ public class Board {
 	//gets the tile at the given position
 	public Tile getTileAt(Point point) {
 		return tiles.get(point);
+	}
+	
+	/**
+	 * 
+	 * @param point
+	 * @return
+	 * 
+	 * @author Miklós
+	 */
+	public Resource getResourceAt(Point point) {
+		return getTileAt(point).getResource();
 	}
 	
 	//coordinate functions
@@ -235,4 +248,5 @@ public class Board {
 	List<Point> getEnemyNeighbourTownTileCoordinates(int playerID){
 		return filterForBuildingLevel(getEnemyNeighbourTileCoordinates(playerID),BuildingLevel.Town);
 	}
+	
 }

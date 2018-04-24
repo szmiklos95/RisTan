@@ -1,9 +1,7 @@
 package graphics;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -68,7 +66,7 @@ public class GUI extends JFrame {
         
         settings = new NewGameSettings();
         this.gameState = gameState;
-        gameBoard = new GameBoard(this.gameState, settings);
+        gameBoard = new GameBoard(this.gameState);
 	}
 	
     
@@ -150,23 +148,6 @@ public class GUI extends JFrame {
         container.add(menuItem);
     }
     
-    /**
-     * Creates a new button within the given container.
-     * @param text 		The display name of the button
-     * @param container The container
-     * @param f 		The method that will be called upon clicking on the button
-     */
-    private void setButton(String text, Container container, Function f) {
-        JButton button = new JButton(text);
-        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.addActionListener(new ActionListener() { 
-       	 public void actionPerformed(ActionEvent e) { 
-       	   f.doAction(e);
-       	 } 
-        } );
-        container.add(button);
-    }
     
     /**
      * Creates a new button within the given container with GridBagLayout.
@@ -477,7 +458,7 @@ public class GUI extends JFrame {
 		new network.Chat(settings.getServerPlayerName());
     	
    		// Update the settings, and draw a new board.
-   		gameBoard = new GameBoard(gameState, settings);
+   		gameBoard = new GameBoard(gameState);
    		cards.remove(card_GameBoard);
    		card_GameBoard = createCard_GameBoard();
    		cards.add(card_GameBoard, Config.GUI.ok);
