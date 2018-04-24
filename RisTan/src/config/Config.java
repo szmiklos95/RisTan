@@ -242,7 +242,7 @@ public abstract class Config {
 		public static final String mainmenu = "Main Menu";
 		public static final String newgame = "New Game";
 		public static final String exit = "Exit";
-		public static final String newgame_settings = "New Game Settings";
+		public static final String ok= "OK";
 		
 		public static final int default_textfield_columnCount = 5;
 		public static final String playerCount = "Number of players: ";

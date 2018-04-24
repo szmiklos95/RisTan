@@ -1,15 +1,23 @@
 package graphics;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Label;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,6 +30,9 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import config.Config;
+import gameLogic.GameLogicException;
+import network.Chat;
+import network.SerialServer;
 
 
 /**
@@ -38,14 +49,23 @@ public class GUI extends JFrame {
 	private JFrame frame;
 	private NewGameSettings settings;
 	
-	JPanel cards; //a panel that uses CardLayout
-	JPanel card_GameBoard; //need to store a reference because this will get updated later
+	private JPanel cards; //a panel that uses CardLayout
+	private JPanel card_GameBoard; //need to store a reference because this will get updated later
+	private JPanel card_GameSettings;
 	
+	
+	public GUI() {
+        frame = new JFrame(Config.GUI.title); 
+        settings = new NewGameSettings();
+        gameBoard = new GameBoard();
+	}
 	
 	
 	public GUI(gameLogic.GameState gameState) {
         //Create and set up the window.
         frame = new JFrame(Config.GUI.title); 
+        frame.setSize(Config.GameBoard.width, Config.GameBoard.height);
+        
         settings = new NewGameSettings();
         this.gameState = gameState;
         gameBoard = new GameBoard(this.gameState, settings);
@@ -61,16 +81,16 @@ public class GUI extends JFrame {
         //Create the "cards".
     	
         JPanel card_MainMenu = createCard_MainMenu();
-        card_GameBoard = createCard_GameBoard();
-        JPanel card_GameSettings = createCard_GameSettings();
+        card_GameBoard = gameBoard; //Add an empty board to the cards for the JFrame to be set to optimal size
+        card_GameSettings = createCard_GameSettings();
         
         //Create the panel that contains the "cards".
         cards = new JPanel(new CardLayout());
         
         //The param is the card itself, the second is the command with which we can call this card
         cards.add(card_MainMenu, Config.GUI.mainmenu);
-        cards.add(card_GameBoard, Config.GUI.newgame);
-        cards.add(card_GameSettings, Config.GUI.newgame_settings);
+        cards.add(card_GameBoard, Config.GUI.ok);
+        cards.add(card_GameSettings, Config.GUI.newgame);
         
         pane.add(cards, BorderLayout.CENTER);
     }
@@ -194,16 +214,120 @@ public class GUI extends JFrame {
         return card;
     }
     
+    
+    
     /**
      * Creates the main menu card and returns it
      * @return
      */
     private JPanel createCard_MainMenu() {
         JPanel card = new JPanel();
-        setButton(Config.GUI.newgame_settings, card, switchCardAction);
-        setButton(Config.GUI.exit, card, exitAction);
+        
+        
+        GridBagLayout gbl = new GridBagLayout();
+		card.setLayout(gbl);;
+		//Main menu
+		GridBagConstraints GBC_mainMenu = new GridBagConstraints();
+		GBC_mainMenu.gridx = 3;
+		GBC_mainMenu.gridy = 0;
+		GBC_mainMenu.fill = GridBagConstraints.CENTER;
+		GBC_mainMenu.insets = new Insets(10,10,10,10);
+		
+		Label mainMenu = new Label("Main menu");
+		mainMenu.setFont(new Font("Arial Bold",0,20));
+		gbl.setConstraints(mainMenu, GBC_mainMenu);
+		card.add(mainMenu);
+		
+		//Enter name
+		GridBagConstraints GBC_name = new GridBagConstraints();
+		GBC_name.gridx = 3;
+		GBC_name.gridy = 1;
+		GBC_name.fill = GridBagConstraints.CENTER;
+		GBC_name.insets = new Insets(10,10,10,10);
+		
+		TextField name = new TextField("Enter your name");
+		name.setEditable(true);
+		gbl.setConstraints(name, GBC_name);
+		name.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				name.setText("");
+			}
+		});;
+		card.add(name);
+		
+		//New game
+		GridBagConstraints GBC_create = new GridBagConstraints();
+		GBC_create.gridx = 3;
+		GBC_create.gridy = 3;
+		GBC_create.gridwidth = 1;
+		GBC_create.gridheight = 2;
+		GBC_create.fill = GridBagConstraints.HORIZONTAL;
+		GBC_create.insets = new Insets(10,10,10,10);
+
+		JButton create = new JButton(Config.GUI.newgame);
+        create.setMaximumSize(new Dimension(Integer.MAX_VALUE, create.getMinimumSize().height));
+        create.setAlignmentX(Component.CENTER_ALIGNMENT);
+		gbl.setConstraints(create, GBC_create);
+		create.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				settings.setServerPlayerName(new String(name.getText()));
+				
+				// Need to update card
+				cards.remove(card_GameSettings);
+				card_GameSettings = createCard_GameSettings();
+				cards.add(card_GameSettings, Config.GUI.newgame);
+				
+		        CardLayout cl = (CardLayout)(cards.getLayout());
+		        cl.show(cards, e.getActionCommand());
+		        System.out.print("Switching to "+e.getActionCommand()+" panel.\n");
+			}
+		});
+		card.add(create);
+		
+		//Join
+		GridBagConstraints GBC_join = new GridBagConstraints();
+		GBC_join.gridx = 3;
+		GBC_join.gridy = 5;
+		GBC_join.gridwidth = 1;
+		GBC_join.gridheight = 2;
+		GBC_join.fill = GridBagConstraints.CENTER;
+		GBC_join.insets = new Insets(10,10,10,10);
+
+		JButton join = new JButton("Join");
+        create.setMaximumSize(new Dimension(Integer.MAX_VALUE, create.getMinimumSize().height));
+        create.setAlignmentX(Component.CENTER_ALIGNMENT);
+		gbl.setConstraints(join, GBC_join);
+		join.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				new Chat(new String(name.getText()));
+				
+		        // Get gameStatus from server and draw board
+			}
+		});
+		card.add(join);
+		
+		//Exit
+		
+		GridBagConstraints GBC_exit = new GridBagConstraints();
+		GBC_exit.gridx = 3;
+		GBC_exit.gridy = 12;
+		GBC_exit.gridwidth = 2;
+		GBC_exit.gridheight = 10;
+		GBC_exit.fill = GridBagConstraints.CENTER;
+		//GBC_exit.insets = new Insets(10,10,10,10);
+
+        setButtonGrid(Config.GUI.exit, card, exitAction, GBC_exit);
         return card;
     }
+    
+    
     
     /**
      * Creates the settings menu before starting a new game
@@ -211,45 +335,66 @@ public class GUI extends JFrame {
      */
     private JPanel createCard_GameSettings() {
         JPanel card = new JPanel();
-
-    	JPanel panel = new JPanel();
-    	panel.setLayout(new GridBagLayout());
-    	GridBagConstraints c = new GridBagConstraints();
-
+        
+        GridBagLayout gbl = new GridBagLayout();
+		card.setLayout(gbl);;
+		
+		//Settings label
+		GridBagConstraints GBC_settings = new GridBagConstraints();
+		GBC_settings.gridx = 0;
+		GBC_settings.gridy = 0;
+		GBC_settings.gridwidth = 2;
+		GBC_settings.fill = GridBagConstraints.CENTER;
+		GBC_settings.insets = new Insets(10,10,10,10);
+		
+		Label settings_label = new Label("Hello "+settings.getServerPlayerName()+"!");
+		settings_label.setFont(new Font("Arial Bold",0,20));
+		gbl.setConstraints(settings_label, GBC_settings);
+		card.add(settings_label);
+		
+		
+		// Player count label
+		GridBagConstraints GBC_label = new GridBagConstraints();
+		GBC_label.gridx = 0;
+		GBC_label.gridy = 5;
+		GBC_label.fill = GridBagConstraints.CENTER;
+		GBC_label.insets = new Insets(10,10,10,10);
+        
+		JLabel label = new JLabel(Config.GUI.playerCount);
+		gbl.setConstraints(label, GBC_label);
       	
-    	c.gridx = 0;
-    	c.gridy = 0;
-    	panel.add(new JLabel(Config.GUI.playerCount), c);
-      	c.gridx = 1;
-      	c.gridy = 0;
+    	card.add(label);
+    	
+    	// Spinner
+		GridBagConstraints GBC_spinner = new GridBagConstraints();
+		GBC_spinner.gridx = 1;
+		GBC_spinner.gridy = 5;
+		GBC_spinner.fill = GridBagConstraints.CENTER;
+		GBC_spinner.insets = new Insets(10,10,10,10);
       	JSpinner spinner_PCount = new JSpinner(new SpinnerNumberModel(Config.GUI.default_playerCount,Config.GUI.min_playerCount,Config.GUI.max_playerCount,1));
-      	panel.add(spinner_PCount, c);
+      	gbl.setConstraints(spinner_PCount, GBC_spinner);
+      	card.add(spinner_PCount);
       	
-      	//New game button
-    	c.gridx = 1;
-    	c.gridy = 1;
-        JButton button = new JButton(Config.GUI.newgame);
-        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+      	// OK button
+		GridBagConstraints GBC_ok = new GridBagConstraints();
+		GBC_ok.gridx = 0;
+		GBC_ok.gridy = 7;
+		GBC_ok.gridwidth = 2;
+		GBC_ok.gridheight = 2;
+		GBC_ok.fill = GridBagConstraints.HORIZONTAL;
+		GBC_ok.insets = new Insets(10,10,10,10);
+        JButton button = new JButton(Config.GUI.ok);
+        
+        gbl.setConstraints(button, GBC_ok);
+        
         button.addActionListener(new ActionListener() { 
        	 public void actionPerformed(ActionEvent e) { 
        		 
-       		try {
-       		    spinner_PCount.commitEdit();
-       		} 
-       		catch ( java.text.ParseException pe ){
-       			System.out.print(pe);
-       		}
-       		int value_PCount = (Integer) spinner_PCount.getValue();
+       		int value_PCount = getSpinnerValue(spinner_PCount);
        		System.out.print("Player count set to "+value_PCount+".\n");
-       		
        		settings.setPlayerCount(value_PCount);
        		
-       		// Update the settings, and draw a new board.
-       		gameBoard = new GameBoard(gameState, settings);
-       		cards.remove(card_GameBoard);
-       		card_GameBoard = createCard_GameBoard();
-       		cards.add(card_GameBoard, Config.GUI.newgame);
+       		SetupNewGame();
        		
  	        CardLayout cl = (CardLayout)(cards.getLayout());
  	        cl.show(cards, e.getActionCommand());
@@ -257,20 +402,87 @@ public class GUI extends JFrame {
        	 } 
         } );
         
-        panel.add(button, c);
+        card.add(button);
         
         
-    	c.gridx = 1;
-    	c.gridy = 2;
-        setButtonGrid(Config.GUI.exit, panel, exitAction, c);
-    	
-    	
-      	
-    	card.add(panel);
-
+        // Back to menu button
+		GridBagConstraints GBC_backToMenu = new GridBagConstraints();
+		GBC_backToMenu.gridx = 0;
+		GBC_backToMenu.gridy = 9;
+		GBC_backToMenu.gridwidth = 2;
+		GBC_backToMenu.gridheight = 2;
+		GBC_backToMenu.fill = GridBagConstraints.HORIZONTAL;
+		GBC_backToMenu.insets = new Insets(10,10,10,10);
+    	setButtonGrid(Config.GUI.mainmenu, card, switchCardAction, GBC_backToMenu);
+        
+        
+        // Exit button
+		GridBagConstraints GBC_exit = new GridBagConstraints();
+		GBC_exit.gridx = 0;
+		GBC_exit.gridy = 11;
+		GBC_exit.gridwidth = 2;
+		GBC_exit.gridheight = 2;
+		GBC_exit.fill = GridBagConstraints.HORIZONTAL;
+		GBC_exit.insets = new Insets(10,10,10,10);
+        setButtonGrid(Config.GUI.exit, card, exitAction, GBC_exit);
+ 
         
         return card;
     }
+    
+    /**
+     * Returns the spinner value.
+     * Has protection against invalid user input.
+     * @param spinner
+     * @return
+     */
+    int getSpinnerValue(JSpinner spinner) {
+   		try {
+   		    spinner.commitEdit();
+   		} 
+   		catch ( java.text.ParseException pe ){
+   			System.out.print(pe);
+   		}
+   		return (Integer) spinner.getValue();
+    }
+    
+    /**
+     * Creates a new GameBoard JPanel and adds it to the main JPanel (cards).
+     * This is a server side function
+     */
+    private void SetupNewGame() {
+    	
+        // New game state
+        gameState = new gameLogic.GameState();
+        
+        // New player
+        gameLogic.Player player = new gameLogic.Player(settings.getServerPlayerName());
+        try {
+			gameState.executeAction(new gameLogic.AddPlayerAction(player));
+		} catch (GameLogicException e1) {
+			e1.printStackTrace();
+		}
+        
+        // Init game action
+        gameLogic.InitGameAction action = new gameLogic.InitGameAction();
+        try { //Execute the action
+			gameState.executeAction(action);
+		} catch (GameLogicException e) {
+			e.printStackTrace();
+		}
+        
+        network.SerialServer server = new SerialServer();
+		server.Connect();
+
+		new network.Chat(settings.getServerPlayerName());
+    	
+   		// Update the settings, and draw a new board.
+   		gameBoard = new GameBoard(gameState, settings);
+   		cards.remove(card_GameBoard);
+   		card_GameBoard = createCard_GameBoard();
+   		cards.add(card_GameBoard, Config.GUI.ok);
+    }
+    
     
     
     
@@ -287,14 +499,6 @@ public class GUI extends JFrame {
 		void doAction(ActionEvent e);
 	}
 	
-	/**
-	 * Default button handler
-	 */
-	private final Function defaultAction = new Function() {
-		public void doAction(ActionEvent e) {
-			System.out.print("Please assign an action for this button!\n");
-		}
-	};
 	
 	
 	/**
@@ -317,4 +521,5 @@ public class GUI extends JFrame {
 	        System.out.print("Switching to "+e.getActionCommand()+" panel.\n");
 		}
 	};
+	
 }

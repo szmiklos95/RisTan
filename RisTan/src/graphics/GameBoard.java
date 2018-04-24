@@ -33,6 +33,11 @@ public class GameBoard extends JPanel{
 	    private NewGameSettings initialSettings;
 	    
 	    
+	    public GameBoard() {
+	    	setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
+	    }
+	    
+	    
 	    /**
 	     * Constructor that sets the game state and the panel size
 	     * @param gameState
