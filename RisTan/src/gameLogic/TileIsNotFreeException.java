@@ -6,8 +6,7 @@ import config.Config;
 public class TileIsNotFreeException extends GameLogicException {
 	private static final long serialVersionUID = 1L;
 	
-	@Override
-	public String getErrorMessage() {
-		return Config.Exception.TileIsNotFree.errorMessage;
+	TileIsNotFreeException() {
+		super(Config.Exception.TileIsNotFree.errorMessage);
 	}
 }

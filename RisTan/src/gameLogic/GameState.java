@@ -17,7 +17,7 @@ public class GameState {
 	
 	public GameState() {
 		over=true;
-		board=new Board();
+		board=null;
 		players=new ArrayList<Player>();
 		playerOrder=null;
 		turnOrder=null;
@@ -26,7 +26,6 @@ public class GameState {
 	}
 	
 	public void executeAction(Action action)throws GameLogicException{
-		action.check(this);
 		action.execute(this);
 		if(!over) {
 			getTurn().checkObligatoryEvents(action);
@@ -71,6 +70,7 @@ public class GameState {
 	}
 	
 	void initGame() {
+		board=new Board();
 		board.generate(Config.Board.res_prob);
 		playerOrder=new PlayerOrder(players);
 		turnOrder=new TurnOrder(Config.TurnOrder.turns);
@@ -86,6 +86,7 @@ public class GameState {
 	
 	void startGame(String boardGenerator,String playerShuffleOrder,String turnOrderGenerator) throws GameLogicException{
 		if(over) {//true on clients, needs to generate game state according to server
+			board=new Board();
 			board.generate(boardGenerator);
 			playerOrder=new PlayerOrder(players,playerShuffleOrder);
 			turnOrder=new TurnOrder(turnOrderGenerator);
@@ -96,6 +97,7 @@ public class GameState {
 	}
 	
 	void activePlayerStart()throws GameLogicException{
+		getTurn().reset(this);
 		automaticActionsExecuted=false;
 		List<Action> automaticActions=getTurn().getAutomaticActions();
 		for(int i=0;i<automaticActions.size();++i) {

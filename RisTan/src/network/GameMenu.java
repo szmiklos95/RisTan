@@ -98,11 +98,11 @@ public class GameMenu extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			    server = new SerialServer();
-				server.Connect();
+				//server.Connect();
 
 				// Close the window
 				dispose();
-				new Chat(new String(name.getText()));
+				//new Chat(new String(name.getText()));
 			}
 		});
 		this.add(create);
@@ -127,7 +127,7 @@ public class GameMenu extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				// Close the window
 				dispose();
-				new Chat(new String(name.getText()));
+				//new Chat(new String(name.getText()));
 			}
 		});
 		this.add(join);

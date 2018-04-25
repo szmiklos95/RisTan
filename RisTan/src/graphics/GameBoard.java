@@ -25,10 +25,11 @@ public class GameBoard extends JPanel{
 	 private static final long serialVersionUID = 1L;
 	 
 	    private gameLogic.GameState gameState;
+
 	    private gameLogic.Board board;
 	    private ArrayList<HexaTile> hexaTiles;
 	    private Point origin;
-	    
+
 	    public GameBoard() {
 	    	setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
 	    }
@@ -47,12 +48,6 @@ public class GameBoard extends JPanel{
 	        hexaTiles = new ArrayList<HexaTile>();
 	        
 	        this.gameState = gameState;
-	        board = this.gameState.getBoard();
-	        board.generate(Config.Board.res_prob);
-	        
-	        ArrayList<gameLogic.Point> points = new ArrayList<gameLogic.Point>(board.getTiles().keySet());
-	        initTiles(origin, Config.Hexagon.radius, Config.Hexagon.padding, points);
-	        
 	        
 		    addMouseListener(new MouseAdapter() {
 	            @Override
@@ -73,6 +68,13 @@ public class GameBoard extends JPanel{
 	        
 	    }
 	    
+	    /**
+	     * Gets the Board from the gameState, necessary because the board is only created at the start of the game which is later than the GameBoard instantiation.
+	     * @return Board from gameState
+	     */
+	    private gameLogic.Board getBoard(){
+	    	return gameState.getBoard();
+	    }
 	    
 	    /*
 	     * (non-Javadoc)
@@ -92,6 +94,15 @@ public class GameBoard extends JPanel{
 	        drawTiles(g2d, origin);
 	        //drawHexGridFromPoints(g2d, origin, Config.Hexagon.radius, Config.Hexagon.padding, points);
 	        
+	        gameLogic.Board board=getBoard();
+	        if(board!=null) {
+		        board = this.gameState.getBoard();
+		        board.generate(Config.Board.res_prob);
+		        
+		        ArrayList<gameLogic.Point> points = new ArrayList<gameLogic.Point>(board.getTiles().keySet());
+		        initTiles(origin, Config.Hexagon.radius, Config.Hexagon.padding, points);
+	        	drawTiles(g2d, origin);
+	        }
 	    }
 	    
 

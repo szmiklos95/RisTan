@@ -22,7 +22,7 @@ public abstract class Turn {
 			}
 			return new GetResourceTurn(resources);
 		}else if(type.equals(NormalTurn.class.getCanonicalName())) {
-			return new NormalTurn();
+			return new NormalTurn(Integer.parseInt(parts[1]));
 		}else if(type.equals(OccupyFreeTileTurn.class.getCanonicalName())) {
 			return new OccupyFreeTileTurn(Integer.parseInt(parts[1]));
 		}else if(type.equals(StartTileChoiceTurn.class.getCanonicalName())) {
@@ -49,6 +49,10 @@ public abstract class Turn {
 	
 	int getRemainingTime() {
 		return remainingTime;
+	}
+	
+	void setRemainingTime(int time) {
+		remainingTime=time;
 	}
 	
 	void takeTime(int time)throws GameLogicException{

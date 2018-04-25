@@ -6,8 +6,7 @@ import config.Config;
 public class PlayerOutOfTurnException extends GameLogicException {
 	private static final long serialVersionUID=1L;
 	
-	@Override
-	public String getErrorMessage() {
-		return Config.Exception.PlayerOutOfTurn.errorMessage;
+	PlayerOutOfTurnException() {
+		super(Config.Exception.PlayerOutOfTurn.errorMessage);
 	}
 }
