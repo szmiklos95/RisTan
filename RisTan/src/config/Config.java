@@ -2,6 +2,7 @@ package config;
 
 import java.util.Map;
 import java.awt.Font;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -249,6 +250,14 @@ public abstract class Config {
 		public static final int default_playerCount = 3;
 		public static final int min_playerCount = 2;
 		public static final int max_playerCount = 4;
+		
+		public static class MainMenu {
+			public static final int startingGridX = 0;
+			public static final int startingGridY = 0;
+			public static final Insets defaultInsets = new Insets(10,10,10,10);
+			public static final int defaultGridWidth = 1;
+			public static final int defaultGridHeight = 2;
+		}
 	}
 	
 	

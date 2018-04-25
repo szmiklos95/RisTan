@@ -10,7 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JPanel;
 
 import config.Config;
@@ -26,9 +25,9 @@ public class GameBoard extends JPanel{
 	 
 	    private gameLogic.GameState gameState;
 
-	    private gameLogic.Board board;
 	    private ArrayList<HexaTile> hexaTiles;
-	    private Point origin;
+	    private Point origin; 
+	    private boolean tilesInitialized = false; //Necessary because the board (thus the tiles) are generated later
 
 	    public GameBoard() {
 	    	setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
@@ -68,13 +67,14 @@ public class GameBoard extends JPanel{
 	        
 	    }
 	    
+	    
 	    /**
 	     * Gets the Board from the gameState, necessary because the board is only created at the start of the game which is later than the GameBoard instantiation.
 	     * @return Board from gameState
 	     */
 	    private gameLogic.Board getBoard(){
 	    	return gameState.getBoard();
-	    }
+	    }   
 	    
 	    /*
 	     * (non-Javadoc)
@@ -96,11 +96,11 @@ public class GameBoard extends JPanel{
 	        
 	        gameLogic.Board board=getBoard();
 	        if(board!=null) {
-		        board = this.gameState.getBoard();
-		        board.generate(Config.Board.res_prob);
-		        
-		        ArrayList<gameLogic.Point> points = new ArrayList<gameLogic.Point>(board.getTiles().keySet());
-		        initTiles(origin, Config.Hexagon.radius, Config.Hexagon.padding, points);
+	        	if(!tilesInitialized) {
+			        ArrayList<gameLogic.Point> points = new ArrayList<gameLogic.Point>(board.getTiles().keySet());
+			        initTiles(origin, Config.Hexagon.radius, Config.Hexagon.padding, points);
+			        tilesInitialized = true;
+	        	}
 	        	drawTiles(g2d, origin);
 	        }
 	    }
@@ -123,7 +123,7 @@ public class GameBoard extends JPanel{
                 int x = (int) (origin.getX() + xOff);
                 int y = (int) (origin.getY() + yOff);
                 
-                hexaTiles.add(new HexaTile(x,y,radius, board.getResourceAt(pointi)));
+                hexaTiles.add(new HexaTile(x,y,radius, getBoard().getResourceAt(pointi)));
 	        }
 	    }
 	    
@@ -150,7 +150,7 @@ public class GameBoard extends JPanel{
 	     * @param colorValue
 	     * @param lineThickness
 	     */
-	    public void drawCircle(Graphics2D g, Point origin, int radius,
+	    private void drawCircle(Graphics2D g, Point origin, int radius,
 	            boolean centered, boolean filled, int colorValue, int lineThickness) {
 	        // Store before changing.
 	        Stroke tmpS = g.getStroke();

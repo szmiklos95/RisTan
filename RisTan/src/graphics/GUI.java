@@ -9,7 +9,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
@@ -28,6 +27,8 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import config.Config;
+import gameLogic.ClientController;
+import gameLogic.InitGameAction;
 import network.Message;
 import network.SerialClient;
 import network.SerialServer;
@@ -52,11 +53,15 @@ public class GUI extends JFrame {
 	private JPanel card_GameBoard; //need to store a reference because this will get updated later
 	private JPanel card_GameSettings;
 	
+    private SerialClient client = null;
+    private ClientController controller = null;
 	
 	public GUI() {
         frame = new JFrame(Config.GUI.title); 
         settings = new NewGameSettings();
         gameBoard = new GameBoard();
+        client = new SerialClient();
+        controller = client.getController();
 	}
 	
 	
@@ -68,6 +73,9 @@ public class GUI extends JFrame {
         settings = new NewGameSettings();
         this.gameState = gameState;
         gameBoard = new GameBoard(this.gameState);
+        
+        client = new SerialClient();
+        controller = client.getController();
 	}
 	
     
@@ -208,28 +216,25 @@ public class GUI extends JFrame {
         
         GridBagLayout gbl = new GridBagLayout();
 		card.setLayout(gbl);;
-		//Main menu
-		GridBagConstraints GBC_mainMenu = new GridBagConstraints();
-		GBC_mainMenu.gridx = 3;
-		GBC_mainMenu.gridy = 0;
-		GBC_mainMenu.fill = GridBagConstraints.CENTER;
-		GBC_mainMenu.insets = new Insets(10,10,10,10);
 		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = Config.GUI.MainMenu.startingGridX;
+		gbc.gridy = Config.GUI.MainMenu.startingGridY;
+		gbc.insets = Config.GUI.MainMenu.defaultInsets;
+		gbc.fill = GridBagConstraints.CENTER;
+		
+		//Main menu
 		Label mainMenu = new Label("Main menu");
 		mainMenu.setFont(new Font("Arial Bold",0,20));
-		gbl.setConstraints(mainMenu, GBC_mainMenu);
+		gbl.setConstraints(mainMenu, gbc);
 		card.add(mainMenu);
 		
 		//Enter name
-		GridBagConstraints GBC_name = new GridBagConstraints();
-		GBC_name.gridx = 3;
-		GBC_name.gridy = 1;
-		GBC_name.fill = GridBagConstraints.CENTER;
-		GBC_name.insets = new Insets(10,10,10,10);
+		gbc.gridy++;
 		
 		TextField name = new TextField("Enter your name");
 		name.setEditable(true);
-		gbl.setConstraints(name, GBC_name);
+		gbl.setConstraints(name, gbc);
 		name.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -240,23 +245,17 @@ public class GUI extends JFrame {
 		card.add(name);
 		
 		//New game
-		GridBagConstraints GBC_create = new GridBagConstraints();
-		GBC_create.gridx = 3;
-		GBC_create.gridy = 3;
-		GBC_create.gridwidth = 1;
-		GBC_create.gridheight = 2;
-		GBC_create.fill = GridBagConstraints.HORIZONTAL;
-		GBC_create.insets = new Insets(10,10,10,10);
+		gbc.gridy+=2;
+		gbc.gridwidth = Config.GUI.MainMenu.defaultGridWidth;
+		gbc.gridheight = Config.GUI.MainMenu.defaultGridHeight;
 
 		JButton create = new JButton(Config.GUI.newgame);
-        create.setMaximumSize(new Dimension(Integer.MAX_VALUE, create.getMinimumSize().height));
-        create.setAlignmentX(Component.CENTER_ALIGNMENT);
-		gbl.setConstraints(create, GBC_create);
+		gbl.setConstraints(create, gbc);
 		create.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				settings.setServerPlayerName(new String(name.getText()));
+				settings.setPlayerName(new String(name.getText()));
 				
 				// Need to update card
 				cards.remove(card_GameSettings);
@@ -272,44 +271,32 @@ public class GUI extends JFrame {
 		
 		//Join
 		//TODO new Join window
-		GridBagConstraints GBC_join = new GridBagConstraints();
-		GBC_join.gridx = 3;
-		GBC_join.gridy = 5;
-		GBC_join.gridwidth = 1;
-		GBC_join.gridheight = 2;
-		GBC_join.fill = GridBagConstraints.CENTER;
-		GBC_join.insets = new Insets(10,10,10,10);
+		gbc.gridy+=2;
 
 		JButton join = new JButton("Join");
-        create.setMaximumSize(new Dimension(Integer.MAX_VALUE, create.getMinimumSize().height));
-        create.setAlignmentX(Component.CENTER_ALIGNMENT);
-		gbl.setConstraints(join, GBC_join);
+
+		gbl.setConstraints(join, gbc);
 		join.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				settings.setPlayerName(new String(name.getText()));
 				ConnectTo("127.0.0.1");//TODO: connect to selected address, move this to connection window, open here connection window
 				
 				DrawBoard();
 				
 				CardLayout cl = (CardLayout)(cards.getLayout());
-	 	        cl.show(cards, e.getActionCommand());
-	 	        System.out.print("Starting the game.\n");
+	 	        cl.show(cards, Config.GUI.ok); //Change to board
+	 	        System.out.print("Player joining the game.\n");
 			}
 		});
 		card.add(join);
 		
 		//Exit
-		
-		GridBagConstraints GBC_exit = new GridBagConstraints();
-		GBC_exit.gridx = 3;
-		GBC_exit.gridy = 12;
-		GBC_exit.gridwidth = 2;
-		GBC_exit.gridheight = 10;
-		GBC_exit.fill = GridBagConstraints.CENTER;
-		//GBC_exit.insets = new Insets(10,10,10,10);
+		gbc.gridy+=10;
+		gbc.gridheight+=10;
 
-        setButtonGrid(Config.GUI.exit, card, exitAction, GBC_exit);
+        setButtonGrid(Config.GUI.exit, card, exitAction, gbc);
         return card;
     }
     
@@ -325,53 +312,45 @@ public class GUI extends JFrame {
         GridBagLayout gbl = new GridBagLayout();
 		card.setLayout(gbl);;
 		
-		//Settings label
-		GridBagConstraints GBC_settings = new GridBagConstraints();
-		GBC_settings.gridx = 0;
-		GBC_settings.gridy = 0;
-		GBC_settings.gridwidth = 2;
-		GBC_settings.fill = GridBagConstraints.CENTER;
-		GBC_settings.insets = new Insets(10,10,10,10);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = Config.GUI.MainMenu.startingGridX;
+		gbc.gridy = Config.GUI.MainMenu.startingGridY;
+		gbc.insets = Config.GUI.MainMenu.defaultInsets;
+		gbc.fill = GridBagConstraints.CENTER;
 		
-		Label settings_label = new Label("Hello "+settings.getServerPlayerName()+"!");
+		//Settings label
+		gbc.gridwidth = 2;
+		
+		Label settings_label = new Label("Hello "+settings.getPlayerName()+"!");
 		settings_label.setFont(new Font("Arial Bold",0,20));
-		gbl.setConstraints(settings_label, GBC_settings);
+		gbl.setConstraints(settings_label, gbc);
 		card.add(settings_label);
 		
 		
 		// Player count label
-		GridBagConstraints GBC_label = new GridBagConstraints();
-		GBC_label.gridx = 0;
-		GBC_label.gridy = 5;
-		GBC_label.fill = GridBagConstraints.CENTER;
-		GBC_label.insets = new Insets(10,10,10,10);
+		gbc.gridwidth = 1;
+		gbc.gridy+=5;
         
 		JLabel label = new JLabel(Config.GUI.playerCount);
-		gbl.setConstraints(label, GBC_label);
+		gbl.setConstraints(label, gbc);
       	
     	card.add(label);
     	
     	// Spinner
-		GridBagConstraints GBC_spinner = new GridBagConstraints();
-		GBC_spinner.gridx = 1;
-		GBC_spinner.gridy = 5;
-		GBC_spinner.fill = GridBagConstraints.CENTER;
-		GBC_spinner.insets = new Insets(10,10,10,10);
+    	gbc.gridx++;
+    	
       	JSpinner spinner_PCount = new JSpinner(new SpinnerNumberModel(Config.GUI.default_playerCount,Config.GUI.min_playerCount,Config.GUI.max_playerCount,1));
-      	gbl.setConstraints(spinner_PCount, GBC_spinner);
+      	gbl.setConstraints(spinner_PCount, gbc);
       	card.add(spinner_PCount);
       	
       	// OK button
-		GridBagConstraints GBC_ok = new GridBagConstraints();
-		GBC_ok.gridx = 0;
-		GBC_ok.gridy = 7;
-		GBC_ok.gridwidth = 2;
-		GBC_ok.gridheight = 2;
-		GBC_ok.fill = GridBagConstraints.HORIZONTAL;
-		GBC_ok.insets = new Insets(10,10,10,10);
+      	gbc.gridx=0;
+      	gbc.gridy+=2;
+      	gbc.gridwidth = 2;
+      	gbc.gridheight = 2;
+      	
         JButton button = new JButton(Config.GUI.ok);
-        
-        gbl.setConstraints(button, GBC_ok);
+        gbl.setConstraints(button, gbc);
         
         button.addActionListener(new ActionListener() { 
        	 public void actionPerformed(ActionEvent e) { 
@@ -381,6 +360,7 @@ public class GUI extends JFrame {
        		settings.setPlayerCount(value_PCount);
        		
        		SetupNewGame();
+       		DrawBoard();
        		
  	        CardLayout cl = (CardLayout)(cards.getLayout());
  	        cl.show(cards, e.getActionCommand());
@@ -392,27 +372,14 @@ public class GUI extends JFrame {
         
         
         // Back to menu button
-		GridBagConstraints GBC_backToMenu = new GridBagConstraints();
-		GBC_backToMenu.gridx = 0;
-		GBC_backToMenu.gridy = 9;
-		GBC_backToMenu.gridwidth = 2;
-		GBC_backToMenu.gridheight = 2;
-		GBC_backToMenu.fill = GridBagConstraints.HORIZONTAL;
-		GBC_backToMenu.insets = new Insets(10,10,10,10);
-    	setButtonGrid(Config.GUI.mainmenu, card, switchCardAction, GBC_backToMenu);
+        gbc.gridy+=2;  
+    	setButtonGrid(Config.GUI.mainmenu, card, switchCardAction, gbc);
         
         
         // Exit button
-		GridBagConstraints GBC_exit = new GridBagConstraints();
-		GBC_exit.gridx = 0;
-		GBC_exit.gridy = 11;
-		GBC_exit.gridwidth = 2;
-		GBC_exit.gridheight = 2;
-		GBC_exit.fill = GridBagConstraints.HORIZONTAL;
-		GBC_exit.insets = new Insets(10,10,10,10);
-        setButtonGrid(Config.GUI.exit, card, exitAction, GBC_exit);
+    	gbc.gridy+=4;
+        setButtonGrid(Config.GUI.exit, card, exitAction, gbc);
  
-        
         return card;
     }
     
@@ -422,7 +389,7 @@ public class GUI extends JFrame {
      * @param spinner
      * @return
      */
-    int getSpinnerValue(JSpinner spinner) {
+    private int getSpinnerValue(JSpinner spinner) {
    		try {
    		    spinner.commitEdit();
    		} 
@@ -443,54 +410,25 @@ public class GUI extends JFrame {
 		//This is localhost IP address, connects the local client to the server
 		ConnectTo("127.0.0.1");
 		
-		DrawBoard();
-		
-		
-		
-        /* old code
-        // New game state
-        gameState = new gameLogic.GameState();
-        
-        // New player
-        gameLogic.Player player = new gameLogic.Player(settings.getServerPlayerName());
-        try {
-			gameState.executeAction(new gameLogic.AddPlayerAction(player));
-		} catch (GameLogicException e1) {
-			e1.printStackTrace();
-		}
-        
-        // Init game action
-        gameLogic.InitGameAction action = new gameLogic.InitGameAction();
-        try { //Execute the action
-			gameState.executeAction(action);
-		} catch (GameLogicException e) {
-			e.printStackTrace();
-		}
-        
-        network.SerialServer server = new SerialServer();
-		server.Connect();
+    	controller.executeAction(controller.getLocalPlayerID(), new InitGameAction());
 
-		new network.Chat(settings.getServerPlayerName());
-    	
-   		// Update the settings, and draw a new board.
-   		gameBoard = new GameBoard(gameState);
-   		cards.remove(card_GameBoard);
-   		card_GameBoard = createCard_GameBoard();
-   		cards.add(card_GameBoard, Config.GUI.ok);*/
+
     }
     
     private void ConnectTo(String IPstring) {
-    	network.SerialClient client=new SerialClient();
+    	//network.SerialClient client=new SerialClient();
 		client.Connect(IPstring);
 		
-		new network.Chat(client,settings.getServerPlayerName());
-		client.Send(new Message(eMsgType.Name,settings.getServerPlayerName()));
+		new network.Chat(client,settings.getPlayerName());
+		client.Send(new Message(eMsgType.Name,settings.getPlayerName()));
 		
-		gameLogic.ClientController controller=client.getController();
+		//gameLogic.ClientController controller=client.getController();
 		gameState=controller.getGameState();
     }
     
     private void DrawBoard() {
+    	gameState = controller.getGameState();
+    	
     	// Update the settings, and draw a new board.
 		gameBoard = new GameBoard(gameState); //TODO: a GUI-nak továbbítani a controllert, hogy tudjon action-t feladni
    		cards.remove(card_GameBoard);
