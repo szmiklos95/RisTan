@@ -98,6 +98,7 @@ public class GameState {
 	
 	void activePlayerStart()throws GameLogicException{
 		getTurn().reset(this);
+		System.out.println("Player turn begins: "+getActivePlayer().getID());
 		automaticActionsExecuted=false;
 		List<Action> automaticActions=getTurn().getAutomaticActions();
 		for(int i=0;i<automaticActions.size();++i) {
@@ -105,6 +106,9 @@ public class GameState {
 			action.execute(this);
 		}
 		automaticActionsExecuted=true;
+		if(checkForSwitchToNextPlayer()) {
+			activePlayerEnd();
+		}
 	}
 	
 	private boolean checkForSwitchToNextPlayer() {
@@ -119,6 +123,7 @@ public class GameState {
 	}
 	
 	void activePlayerEnd() throws GameLogicException {
+		System.out.println("Player turn ends: "+getActivePlayer().getID());
 		boolean toNextTurn=playerOrder.next();
 		if(toNextTurn) {
 			over=turnOrder.next();

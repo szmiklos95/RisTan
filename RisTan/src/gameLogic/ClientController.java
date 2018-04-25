@@ -38,6 +38,7 @@ public class ClientController extends Controller {
 	public void executeAction(int playerID,Action action) {
 		try {
 			getGameState().executeAction(action);
+			//TODO GUI újrarajzolás
 		} catch (GameLogicException e) {
 			//this code should never execute
 			e.printStackTrace();

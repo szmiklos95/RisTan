@@ -91,7 +91,7 @@ public class GameBoard extends JPanel{
 
 	        drawCircle(g2d, origin, Config.Circle.radius, true, true, Config.Circle.color, Config.Circle.lineThickness);
 	        
-	        drawTiles(g2d, origin);
+	        //drawTiles(g2d, origin);
 	        //drawHexGridFromPoints(g2d, origin, Config.Hexagon.radius, Config.Hexagon.padding, points);
 	        
 	        gameLogic.Board board=getBoard();
