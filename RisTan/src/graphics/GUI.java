@@ -95,9 +95,9 @@ public class GUI extends JFrame {
         cards = new JPanel(new CardLayout());
         
         //The param is the card itself, the second is the command with which we can call this card
-        cards.add(card_MainMenu, Config.GUI.mainmenu);
-        cards.add(card_GameBoard, Config.GUI.ok);
-        cards.add(card_GameSettings, Config.GUI.newgame);
+        cards.add(card_MainMenu, Config.GUI.CardIDs.mainMenu);
+        cards.add(card_GameBoard, Config.GUI.CardIDs.gameBoard);
+        cards.add(card_GameSettings, Config.GUI.CardIDs.settings);
         
         pane.add(cards, BorderLayout.CENTER);
     }
@@ -144,11 +144,14 @@ public class GUI extends JFrame {
     /**
      * Adds a JMenuItem to a JMenu
      * @param text
+     * @param actionCommand 	A string stored for firing an action with the action listener. Leave null if not using switchCardAction.
      * @param container
      * @param f Action listener function
      */
-    private void addMenuItem(String text, Container container, Function f) {
+    private void addMenuItem(String text, String actionCommand, Container container, Function f) {
         JMenuItem menuItem = new JMenuItem(text);
+        menuItem.setActionCommand(actionCommand);
+        
         menuItem.addActionListener(new ActionListener() { 
        	 public void actionPerformed(ActionEvent e) { 
        	   f.doAction(e);
@@ -160,13 +163,15 @@ public class GUI extends JFrame {
     
     /**
      * Creates a new button within the given container with GridBagLayout.
-     * @param text 		The display name of the button
-     * @param container The container
-     * @param f 		The method that will be called upon clicking on the button
-     * @param g			The constraints for the grid layout
+     * @param text 			The display name of the button
+     * @param buttonAction 	A string stored for firing an action with the action listener. Leave null if not using switchCardAction.
+     * @param container 	The container
+     * @param f 			The method that will be called upon clicking on the button
+     * @param g				The constraints for the grid layout
      */
-    private void setButtonGrid(String text, Container container, Function f, GridBagConstraints gbc) {
+    private void setButtonGrid(String text, String buttonAction, Container container, Function f, GridBagConstraints gbc) {
         JButton button = new JButton(text);
+        button.setActionCommand(buttonAction);
         button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.addActionListener(new ActionListener() { 
@@ -196,8 +201,8 @@ public class GUI extends JFrame {
         gameBoard.setLayout(new FlowLayout(FlowLayout.LEFT));
         JMenuBar menubar = new JMenuBar();
         JMenu file = new JMenu("File");
-        addMenuItem("Main Menu", file, switchCardAction);
-        addMenuItem("Exit", file, exitAction);
+        addMenuItem(Config.GUI.ButtonTexts.mainMenu, Config.GUI.CardIDs.mainMenu, file, switchCardAction);
+        addMenuItem(Config.GUI.ButtonTexts.exit, null, file, exitAction);
         menubar.add(file);
         gameBoard.add(menubar);
         card.add(gameBoard);
@@ -218,9 +223,9 @@ public class GUI extends JFrame {
 		card.setLayout(gbl);;
 		
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = Config.GUI.MainMenu.startingGridX;
-		gbc.gridy = Config.GUI.MainMenu.startingGridY;
-		gbc.insets = Config.GUI.MainMenu.defaultInsets;
+		gbc.gridx = Config.GUI.GridSettings.startingGridX;
+		gbc.gridy = Config.GUI.GridSettings.startingGridY;
+		gbc.insets = Config.GUI.GridSettings.defaultInsets;
 		gbc.fill = GridBagConstraints.CENTER;
 		
 		//Main menu
@@ -246,10 +251,11 @@ public class GUI extends JFrame {
 		
 		//New game
 		gbc.gridy+=2;
-		gbc.gridwidth = Config.GUI.MainMenu.defaultGridWidth;
-		gbc.gridheight = Config.GUI.MainMenu.defaultGridHeight;
+		gbc.gridwidth = Config.GUI.GridSettings.defaultGridWidth;
+		gbc.gridheight = Config.GUI.GridSettings.defaultGridHeight;
 
-		JButton create = new JButton(Config.GUI.newgame);
+		JButton create = new JButton(Config.GUI.ButtonTexts.newGame);
+		create.setActionCommand(Config.GUI.CardIDs.settings);
 		gbl.setConstraints(create, gbc);
 		create.addActionListener(new ActionListener() {
 			
@@ -260,7 +266,7 @@ public class GUI extends JFrame {
 				// Need to update card
 				cards.remove(card_GameSettings);
 				card_GameSettings = createCard_GameSettings();
-				cards.add(card_GameSettings, Config.GUI.newgame);
+				cards.add(card_GameSettings, Config.GUI.CardIDs.settings);
 				
 		        CardLayout cl = (CardLayout)(cards.getLayout());
 		        cl.show(cards, e.getActionCommand());
@@ -274,6 +280,7 @@ public class GUI extends JFrame {
 		gbc.gridy+=2;
 
 		JButton join = new JButton("Join");
+		join.setActionCommand(Config.GUI.CardIDs.gameBoard);
 
 		gbl.setConstraints(join, gbc);
 		join.addActionListener(new ActionListener() {
@@ -286,7 +293,7 @@ public class GUI extends JFrame {
 				DrawBoard();
 				
 				CardLayout cl = (CardLayout)(cards.getLayout());
-	 	        cl.show(cards, Config.GUI.ok); //Change to board
+	 	        cl.show(cards, e.getActionCommand());
 	 	        System.out.print("Player joining the game.\n");
 			}
 		});
@@ -296,7 +303,7 @@ public class GUI extends JFrame {
 		gbc.gridy+=10;
 		gbc.gridheight+=10;
 
-        setButtonGrid(Config.GUI.exit, card, exitAction, gbc);
+        setButtonGrid(Config.GUI.ButtonTexts.exit, null, card, exitAction, gbc);
         return card;
     }
     
@@ -313,9 +320,9 @@ public class GUI extends JFrame {
 		card.setLayout(gbl);;
 		
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = Config.GUI.MainMenu.startingGridX;
-		gbc.gridy = Config.GUI.MainMenu.startingGridY;
-		gbc.insets = Config.GUI.MainMenu.defaultInsets;
+		gbc.gridx = Config.GUI.GridSettings.startingGridX;
+		gbc.gridy = Config.GUI.GridSettings.startingGridY;
+		gbc.insets = Config.GUI.GridSettings.defaultInsets;
 		gbc.fill = GridBagConstraints.CENTER;
 		
 		//Settings label
@@ -349,7 +356,8 @@ public class GUI extends JFrame {
       	gbc.gridwidth = 2;
       	gbc.gridheight = 2;
       	
-        JButton button = new JButton(Config.GUI.ok);
+        JButton button = new JButton(Config.GUI.ButtonTexts.ok);
+        button.setActionCommand(Config.GUI.CardIDs.gameBoard);
         gbl.setConstraints(button, gbc);
         
         button.addActionListener(new ActionListener() { 
@@ -373,12 +381,12 @@ public class GUI extends JFrame {
         
         // Back to menu button
         gbc.gridy+=2;  
-    	setButtonGrid(Config.GUI.mainmenu, card, switchCardAction, gbc);
+    	setButtonGrid(Config.GUI.ButtonTexts.mainMenu, Config.GUI.CardIDs.mainMenu, card, switchCardAction, gbc);
         
         
         // Exit button
     	gbc.gridy+=4;
-        setButtonGrid(Config.GUI.exit, card, exitAction, gbc);
+        setButtonGrid(Config.GUI.ButtonTexts.exit, null, card, exitAction, gbc);
  
         return card;
     }
@@ -400,7 +408,7 @@ public class GUI extends JFrame {
     }
     
     /**
-     * Creates a new GameBoard JPanel and adds it to the main JPanel (cards).
+     * Starts a new server and joins to it.
      * This function runs at the host player.
      */
     private void SetupNewGame() {
@@ -426,14 +434,15 @@ public class GUI extends JFrame {
 		gameState=controller.getGameState();
     }
     
+    
     private void DrawBoard() {
     	gameState = controller.getGameState();
     	
     	// Update the settings, and draw a new board.
-		gameBoard = new GameBoard(gameState); //TODO: a GUI-nak továbbítani a controllert, hogy tudjon action-t feladni
+		gameBoard = new GameBoard(gameState);
    		cards.remove(card_GameBoard);
    		card_GameBoard = createCard_GameBoard();
-   		cards.add(card_GameBoard, Config.GUI.ok);
+   		cards.add(card_GameBoard, Config.GUI.CardIDs.gameBoard);
     }
     
     

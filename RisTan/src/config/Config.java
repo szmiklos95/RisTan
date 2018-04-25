@@ -239,25 +239,38 @@ public abstract class Config {
 	 */
 	public static class GUI{
 		public static final String title = "Welcome to RisTan!";
-		public static final String mainmenu = "Main Menu";
-		public static final String newgame = "New Game";
-		public static final String exit = "Exit";
-		public static final String ok= "OK";
 		
-		public static final int default_textfield_columnCount = 5;
 		public static final String playerCount = "Number of players: ";
 		
+		// Spinner settings
 		public static final int default_playerCount = 3;
 		public static final int min_playerCount = 2;
 		public static final int max_playerCount = 4;
 		
-		public static class MainMenu {
+		// Settings for the GridBagLayout
+		public static class GridSettings {
 			public static final int startingGridX = 0;
 			public static final int startingGridY = 0;
 			public static final Insets defaultInsets = new Insets(10,10,10,10);
 			public static final int defaultGridWidth = 1;
 			public static final int defaultGridHeight = 2;
 		}
+		
+		// The text displayed on the buttons
+		public static class ButtonTexts{
+			public static final String mainMenu = "Main Menu";
+			public static final String newGame = "New Game";
+			public static final String exit = "Exit";
+			public static final String ok= "OK";
+		}
+		
+		// The IDs for the cards, and also the actionCommand for buttons which are responsible for card switches
+		public static class CardIDs{
+			public static final String mainMenu = "MainMenu";
+			public static final String settings = "Settings";
+			public static final String gameBoard = "Board";
+		}
+		
 	}
 	
 	
