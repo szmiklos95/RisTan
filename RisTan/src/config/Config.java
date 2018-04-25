@@ -238,6 +238,9 @@ public abstract class Config {
 	 * @author Miklós
 	 */
 	public static class GUI{
+		public static final int frameMinimumWidth = 300;
+		public static final int frameMinimumHeight = 300;
+		
 		public static final String title = "Welcome to RisTan!";
 		
 		public static final String playerCount = "Number of players: ";

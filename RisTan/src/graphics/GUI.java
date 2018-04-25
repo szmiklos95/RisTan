@@ -60,21 +60,9 @@ public class GUI extends JFrame {
 
 	public GUI() {
 		frame = new JFrame(Config.GUI.title);
+		frame.setMinimumSize(new Dimension(Config.GUI.frameMinimumWidth,Config.GUI.frameMinimumHeight));
 		settings = new NewGameSettings();
 		gameBoard = new GameBoard();
-		client = new SerialClient();
-		controller = client.getController();
-	}
-
-	public GUI(gameLogic.GameState gameState) {
-		// Create and set up the window.
-		frame = new JFrame(Config.GUI.title);
-		frame.setSize(Config.GameBoard.width, Config.GameBoard.height);
-
-		settings = new NewGameSettings();
-		this.gameState = gameState;
-		gameBoard = new GameBoard(this.gameState);
-
 		client = new SerialClient();
 		controller = client.getController();
 	}
@@ -90,7 +78,7 @@ public class GUI extends JFrame {
 		// Create the "cards".
 
 		JPanel card_MainMenu = createCard_MainMenu();
-		card_GameBoard = gameBoard; // Add an empty board to the cards for the JFrame to be set to optimal size
+		card_GameBoard = new JPanel(); // Add an empty panel, otherwise the frame will be resized at the beginning to fit the board
 		card_GameSettings = createCard_GameSettings();
 		card_JoinWindow = createCard_JoinWindow();
 
@@ -523,6 +511,7 @@ public class GUI extends JFrame {
 		cards.remove(card_GameBoard);
 		card_GameBoard = createCard_GameBoard();
 		cards.add(card_GameBoard, Config.GUI.CardIDs.gameBoard);
+		frame.pack(); //Resizes the window to fit the board
 	}
 
 	// *********** Interface functions ***********//
