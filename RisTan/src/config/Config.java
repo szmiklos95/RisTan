@@ -262,6 +262,7 @@ public abstract class Config {
 			public static final String newGame = "New Game";
 			public static final String exit = "Exit";
 			public static final String ok= "OK";
+			public static final String join = "Join";
 		}
 		
 		// The IDs for the cards, and also the actionCommand for buttons which are responsible for card switches
@@ -269,6 +270,7 @@ public abstract class Config {
 			public static final String mainMenu = "MainMenu";
 			public static final String settings = "Settings";
 			public static final String gameBoard = "Board";
+			public static final String joinWindow = "JoinWindow";
 		}
 		
 	}
