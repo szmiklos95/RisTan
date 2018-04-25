@@ -4,7 +4,7 @@ import config.Config;
 
 public class NewGameSettings {
 	private int playerCount;
-	private String serverPlayerName;
+	private String playerName;
 	
 	public NewGameSettings() {
 		playerCount = Config.GUI.default_playerCount;
@@ -18,11 +18,11 @@ public class NewGameSettings {
 		return playerCount;
 	}
 	
-	public void setServerPlayerName(String serverPlayerName) {
-		this.serverPlayerName = serverPlayerName;
+	public void setPlayerName(String serverPlayerName) {
+		this.playerName = serverPlayerName;
 	}
 	
-	public String getServerPlayerName() {
-		return serverPlayerName;
+	public String getPlayerName() {
+		return playerName;
 	}
 }

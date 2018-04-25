@@ -3,7 +3,6 @@ package graphics;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
@@ -11,7 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JPanel;
 
 import config.Config;
@@ -25,13 +23,12 @@ public class GameBoard extends JPanel{
  
 	 private static final long serialVersionUID = 1L;
 	 
-
-	    private FontMetrics metrics;
 	    private gameLogic.GameState gameState;
-	    private ArrayList<Hexagon> hexagons;
-	    private NewGameSettings initialSettings;
-	    
-	    
+
+	    private ArrayList<HexaTile> hexaTiles;
+	    private Point origin; 
+	    private boolean tilesInitialized = false; //Necessary because the board (thus the tiles) are generated later
+
 	    public GameBoard() {
 	    	setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
 	    }
@@ -41,25 +38,26 @@ public class GameBoard extends JPanel{
 	     * Constructor that sets the game state and the panel size
 	     * @param gameState
 	     */
-	    public GameBoard(gameLogic.GameState gameState, NewGameSettings initialSettings) {
+	    public GameBoard(gameLogic.GameState gameState) {
 	        setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
 	        
-	        this.initialSettings = initialSettings;
+	        //The center point
+	       origin = new Point(Config.GameBoard.width / 2, Config.GameBoard.height / 2);
 	        
-	        hexagons = new ArrayList<Hexagon>();
+	        hexaTiles = new ArrayList<HexaTile>();
+	        
 	        this.gameState = gameState;
-	        
 	        
 		    addMouseListener(new MouseAdapter() {
 	            @Override
 	            public void mousePressed(MouseEvent me) {
 	                super.mousePressed(me);
-	                for (Hexagon h : hexagons) {
+	                for (HexaTile t : hexaTiles) {
 
-	                    if (h.contains(me.getPoint())) {//check if mouse is clicked within shape
+	                    if (t.getHexagon().contains(me.getPoint())) {//check if mouse is clicked within shape
 
-	                        System.out.println("Clicked a "+h.getClass().getName()+" at coordinates: ("+h.getCenter().getX()+":"+h.getCenter().getY()+")");
-	                        h.toggleSelected();
+	                        System.out.println("Clicked a "+t.getClass().getName()+" at coordinates: ("+t.getHexagon().getCenter().getX()+":"+t.getHexagon().getCenter().getY()+")");
+	                        t.toggleSelected();
 	                        repaint();
 
 	                    }
@@ -69,13 +67,14 @@ public class GameBoard extends JPanel{
 	        
 	    }
 	    
+	    
 	    /**
 	     * Gets the Board from the gameState, necessary because the board is only created at the start of the game which is later than the GameBoard instantiation.
 	     * @return Board from gameState
 	     */
 	    private gameLogic.Board getBoard(){
 	    	return gameState.getBoard();
-	    }
+	    }   
 	    
 	    /*
 	     * (non-Javadoc)
@@ -87,90 +86,59 @@ public class GameBoard extends JPanel{
 	    public void paintComponent(Graphics g) {
 	        Graphics2D g2d = (Graphics2D) g;
 	        
-	        //The center point
-	        Point origin = new Point(Config.GameBoard.width / 2, Config.GameBoard.height / 2);
-
 	        g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
 	        g2d.setFont(Config.GameBoard.font);
-	        metrics = g.getFontMetrics();
 
 	        drawCircle(g2d, origin, Config.Circle.radius, true, true, Config.Circle.color, Config.Circle.lineThickness);
 	        
+	        drawTiles(g2d, origin);
+	        //drawHexGridFromPoints(g2d, origin, Config.Hexagon.radius, Config.Hexagon.padding, points);
+	        
 	        gameLogic.Board board=getBoard();
 	        if(board!=null) {
-		        ArrayList<gameLogic.Point> points = new ArrayList<gameLogic.Point>(board.getTiles().keySet());
-		        drawHexGridFromPoints(g2d, origin, Config.Hexagon.radius, Config.Hexagon.padding, points);
+	        	if(!tilesInitialized) {
+			        ArrayList<gameLogic.Point> points = new ArrayList<gameLogic.Point>(board.getTiles().keySet());
+			        initTiles(origin, Config.Hexagon.radius, Config.Hexagon.padding, points);
+			        tilesInitialized = true;
+	        	}
+	        	drawTiles(g2d, origin);
 	        }
 	    }
 	    
 
-	    
-	    
 	    /**
-	     * Draws the hexagonal map around the given origin point from points
-	     * @param g Graphics object
-	     * @param origin The center hexa tile
-	     * @param radius The radius of each hexagon
-	     * @param padding The distance between hexagons
+	     * 
+	     * @param origin
+	     * @param radius
+	     * @param padding
+	     * @param points
 	     */
-	    private void drawHexGridFromPoints(Graphics g, Point origin, int radius, int padding, List<gameLogic.Point> points) {
-	        
+	    private void initTiles(Point origin, int radius, int padding, List<gameLogic.Point> points) {
 	        int pointNum = points.size();
 	        
 	        for(int i=0; i<pointNum; ++i) {
 	        	gameLogic.Point pointi = points.get(i);
 		        double xOff = pointi.getDescartesX()*(radius+padding)*2;
 		        double yOff = pointi.getDescartesY()*(radius+padding)*2;
-	        	int xLbl = pointi.getJ();
-                int yLbl = pointi.getI();
                 int x = (int) (origin.getX() + xOff);
                 int y = (int) (origin.getY() + yOff);
                 
-                drawHex(g, xLbl, yLbl, x, y, radius, i);
+                hexaTiles.add(new HexaTile(x,y,radius, getBoard().getResourceAt(pointi)));
 	        }
-
-	    }
-	    
-	    
-	    
-	    /**
-	     * Draws a hexagon to the given position with the given radius
-	     * @param g Graphics object
-	     * @param posX The x coordinate of the text
-	     * @param posY The y coordinate of the text
-	     * @param x The x coordinate of the hexagon
-	     * @param y The y coordinate of the hexagon
-	     * @param r The radius of the hexagon
-	     * @param i The i-th element in the hexagon list
-	     */
-	    private void drawHex(Graphics g, int posX, int posY, int x, int y, int r, int i) {
-	        Graphics2D g2d = (Graphics2D) g;
-
-	        hexagons.add(new Hexagon(x, y, r));
-	        String text = String.format("%s : %s", coord(posX), coord(posY));
-	        int w = metrics.stringWidth(text);
-	        int h = metrics.getHeight();
-	        
-	        Hexagon hexagon = hexagons.get(i);
-	        
-	        int outerColor = Config.Hexagon.outerColor;
-	        if(hexagon.isSelected()) outerColor = Config.Hexagon.selectedOuterColor;
-	        
-	        hexagon.draw(g2d, x, y, Config.Hexagon.innerLineThickness, Config.Hexagon.innerColor, true);
-	        hexagon.draw(g2d, x, y, Config.Hexagon.outerLineThickness, outerColor, false);
-
-	        g.setColor(new Color(Config.Hexagon.textColor));
-	        g.drawString(text, x - w/2, y + h/2);
 	    }
 	    
 	    /**
-	     * Returns the coordinates in string format
-	     * @param value
-	     * @return
+	     * 
+	     * @param g
+	     * @param origin
 	     */
-	    private String coord(int value) {
-	        return (value > 0 ? "+" : "") + Integer.toString(value);
+	    private void drawTiles(Graphics g, Point origin) {
+	    	Graphics2D g2d = (Graphics2D) g;
+	    	for (HexaTile t : hexaTiles) {
+	    		t.draw(g2d);
+	    	}
 	    }
+	  
 
 	    /**
 	     * Draws a circle with the given parameters.
@@ -182,7 +150,7 @@ public class GameBoard extends JPanel{
 	     * @param colorValue
 	     * @param lineThickness
 	     */
-	    public void drawCircle(Graphics2D g, Point origin, int radius,
+	    private void drawCircle(Graphics2D g, Point origin, int radius,
 	            boolean centered, boolean filled, int colorValue, int lineThickness) {
 	        // Store before changing.
 	        Stroke tmpS = g.getStroke();
