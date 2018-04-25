@@ -488,8 +488,6 @@ public class GUI extends JFrame {
 		// This is localhost IP address, connects the local client to the server
 		ConnectTo("127.0.0.1");
 
-		controller.executeAction(controller.getLocalPlayerID(), new InitGameAction());
-
 	}
 
 	private void ConnectTo(String IPstring) {

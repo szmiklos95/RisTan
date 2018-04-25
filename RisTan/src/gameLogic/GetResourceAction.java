@@ -17,6 +17,12 @@ public class GetResourceAction extends InGameAction {
 	 */
 	private final int amount;
 	
+	/**
+	 * Constructor.
+	 * @param playerID the ID of the player which gets the resource.
+	 * @param resource the got resource.
+	 * @param amount the amount of the got resource.
+	 */
 	public GetResourceAction(int playerID,Resource resource,int amount){
 		super(playerID);
 		this.resource=resource;
