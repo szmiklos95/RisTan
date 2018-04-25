@@ -13,7 +13,6 @@ public class Hexagon extends Polygon {
     private Point center = new Point(0, 0);
     private int radius;
     private int rotation = 90;
-    private boolean selected = false;
 
     public Hexagon(Point center, int radius) {
         npoints = SIDES;
@@ -25,9 +24,9 @@ public class Hexagon extends Polygon {
 
         updatePoints();
     }
-
+    
     public Hexagon(int x, int y, int radius) {
-        this(new Point(x, y), radius);
+    	this(new Point(x, y), radius);
     }
 
     public int getRadius() {
@@ -62,14 +61,6 @@ public class Hexagon extends Polygon {
     
     public Point getCenter() {
     	return center;
-    }
-    
-    public void toggleSelected() {
-    	selected = !selected;
-    }
-    
-    public boolean isSelected() {
-    	return selected;
     }
 
     private double findAngle(double fraction) {

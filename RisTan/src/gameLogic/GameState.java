@@ -77,7 +77,7 @@ public class GameState {
 		over=false;
 	}
 	
-	StartGameAction getStartGameAction() {
+	public StartGameAction getStartGameAction() {
 		String boardGenerator=board.getGeneratorString();
 		String playerShuffleOrder=playerOrder.getShuffleOrder();
 		String turnOrderGenerator=turnOrder.getGeneratorString();
