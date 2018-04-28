@@ -1,6 +1,7 @@
 package config;
 
 import java.util.Map;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Insets;
 import java.util.ArrayList;
@@ -306,6 +307,10 @@ public abstract class Config {
 		
 	}
 	
+	public static class GameWindow{
+		public static final Color background = Color.darkGray;
+	}
+	
 	/**
 	 * GameBoard config
 	 * @author Miklós
@@ -333,8 +338,19 @@ public abstract class Config {
 	 *
 	 */
 	public static class Chat{
-		public static final int textAreaColoums = 10;
-		public static final int textAreaRows = 20;
+		public static final int textAreaColoumns = 25;
+		public static final int textAreaRows = 10;
 	}
 	
+	public static class Timer{
+		public static final int gameStartTimerDelay = 100; //ms
+		public static final int periodicUpdateInterval = 100;
+	}
+	
+	public static class SystemMessage{
+		public static final String defaultMsg = "System Messages";
+		public static final String waitingForPlayers = "Waiting for other players to join";
+		public static final String boardDrawn = "The board has been drawn";
+	}
+
 }

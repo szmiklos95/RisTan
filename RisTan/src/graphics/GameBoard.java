@@ -6,13 +6,20 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import config.Config;
+import gameLogic.GameState;
 
 /**
  *  The panel where the game is played
@@ -23,14 +30,18 @@ public class GameBoard extends JPanel{
  
 	 private static final long serialVersionUID = 1L;
 	 
-	    private gameLogic.GameState gameState;
+	    private GameState gameState;
+	    private boolean boardDrawn = false;
 
 	    private ArrayList<HexaTile> hexaTiles;
 	    private Point origin; 
 	    private boolean tilesInitialized = false; //Necessary because the board (thus the tiles) are generated later
+	    
+	    private String systemMessage = null;
 
 	    public GameBoard() {
 	    	setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
+	    	systemMessage = Config.SystemMessage.defaultMsg;
 	    }
 	    
 	    
@@ -40,6 +51,7 @@ public class GameBoard extends JPanel{
 	     */
 	    public GameBoard(gameLogic.GameState gameState) {
 	        setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
+	        systemMessage = Config.SystemMessage.waitingForPlayers;
 	        
 	        //The center point
 	       origin = new Point(Config.GameBoard.width / 2, Config.GameBoard.height / 2);
@@ -58,12 +70,17 @@ public class GameBoard extends JPanel{
 
 	                        System.out.println("Clicked a "+t.getClass().getName()+" at coordinates: ("+t.getHexagon().getCenter().getX()+":"+t.getHexagon().getCenter().getY()+")");
 	                        t.toggleSelected();
+	                        revalidate();
 	                        repaint();
-
+	                        
 	                    }
 	                }
 	            }
 		    });
+		    
+
+		    gameStartRepaintTimer();
+		    periodicUpdate();
 	        
 	    }
 	    
@@ -174,6 +191,70 @@ public class GameBoard extends JPanel{
 	        g.setStroke(tmpS);
 	    }
 	    
-	
+	    
+	    /**
+	     * A timer that is only active before the game starts.
+	     * When every player joined draw the board if it hasn't been drawn yet. 
+	     * (Otherwise only the client that joined last gets a board.)
+	     */
+	    private void gameStartRepaintTimer() {
+	    	
+	    	int delay = Config.Timer.gameStartTimerDelay; //milliseconds
+	    	final Timer timer = new Timer(delay, null);
+	    	timer.addActionListener(new ActionListener() {
+	    	    public void actionPerformed(ActionEvent e) {
+	    	    	
+	    	    	//If over = false ---> the game is running --> stop the timer because the game already started
+					//If the game is already running but we haven't drawn the board yet repaint it
+					//(Happens at every client opened except the last one)
+	    	    	if(!boardDrawn && !gameState.isOver()) {
+	    	    		timer.stop();
+						revalidate();
+						repaint();
+						boardDrawn = true;
+						systemMessage = Config.SystemMessage.boardDrawn;
+					}
+	    	    	
+	    	    	//Stop the timer
+	    	    	if(boardDrawn) timer.stop();
+	    	    	
+	    	    }
+	    	});
+	    	timer.start();
+	    	
+	    }
+	    
+	    /**
+	     * Displays the system message stored in the "systemMessage" variable
+	     * Place: Menubar
+	     */
+	    private void writeSysMsg() {
+			JMenuBar menubar = CardSync.frame.getJMenuBar();			
+			
+			//Get the last menu item
+			JMenu textItem = menubar.getMenu(menubar.getMenuCount()-1);
+			
+			//Change text
+			textItem.setText(systemMessage);
+			
+			CardSync.frame.setJMenuBar(menubar);
+	    }
+	    
+	    
+	    private void periodicUpdate() {
+	    	int delay = Config.Timer.periodicUpdateInterval; //milliseconds
+	    	final Timer timer = new Timer(delay, null);
+	    	timer.addActionListener(new ActionListener() {
+	    	    public void actionPerformed(ActionEvent e) {
+	    	    	
+	    	    	writeSysMsg();
+					
+					revalidate();
+					repaint();
+	    	    }
+	    	});
+	    	timer.start();
+	    }
+	    	    
+	    
 }
-	
