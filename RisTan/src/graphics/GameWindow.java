@@ -1,11 +1,10 @@
 package graphics;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import config.Config;
 
@@ -21,6 +20,7 @@ public class GameWindow extends JPanel{
 	
 	public void Create(){
 		this.removeAll(); //In case this function gets called multiple times
+		this.setBackground(Config.GameWindow.background);
 		
 		GridBagLayout gbl = new GridBagLayout();
 		this.setLayout(gbl);

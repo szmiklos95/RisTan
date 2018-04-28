@@ -12,13 +12,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import config.Config;
 import gameLogic.GameState;
-import network.Message;
-import network.Message.eMsgType;
 
 /**
  *  The panel where the game is played
@@ -35,9 +36,12 @@ public class GameBoard extends JPanel{
 	    private ArrayList<HexaTile> hexaTiles;
 	    private Point origin; 
 	    private boolean tilesInitialized = false; //Necessary because the board (thus the tiles) are generated later
+	    
+	    private String systemMessage = null;
 
 	    public GameBoard() {
 	    	setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
+	    	systemMessage = Config.SystemMessage.defaultMsg;
 	    }
 	    
 	    
@@ -47,6 +51,7 @@ public class GameBoard extends JPanel{
 	     */
 	    public GameBoard(gameLogic.GameState gameState) {
 	        setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
+	        systemMessage = Config.SystemMessage.waitingForPlayers;
 	        
 	        //The center point
 	       origin = new Point(Config.GameBoard.width / 2, Config.GameBoard.height / 2);
@@ -75,6 +80,7 @@ public class GameBoard extends JPanel{
 		    
 
 		    gameStartRepaintTimer();
+		    periodicUpdate();
 	        
 	    }
 	    
@@ -206,13 +212,11 @@ public class GameBoard extends JPanel{
 						revalidate();
 						repaint();
 						boardDrawn = true;
-						gameStartMessage();
+						systemMessage = Config.SystemMessage.boardDrawn;
 					}
 	    	    	
 	    	    	//Stop the timer
 	    	    	if(boardDrawn) timer.stop();
-					
-	    	    	System.out.print("Timer");
 	    	    	
 	    	    }
 	    	});
@@ -220,13 +224,37 @@ public class GameBoard extends JPanel{
 	    	
 	    }
 	    
-	    
-	    private void gameStartMessage() {
-	    	if(boardDrawn) {
-	    		System.out.println("The board has been drawn");
-	    		CardSync.client.Send(new Message(eMsgType.Text,"The board has been drawn"));
-	    	}
+	    /**
+	     * Displays the system message stored in the "systemMessage" variable
+	     * Place: Menubar
+	     */
+	    private void writeSysMsg() {
+			JMenuBar menubar = CardSync.frame.getJMenuBar();			
+			
+			//Get the last menu item
+			JMenu textItem = menubar.getMenu(menubar.getMenuCount()-1);
+			
+			//Change text
+			textItem.setText(systemMessage);
+			
+			CardSync.frame.setJMenuBar(menubar);
 	    }
 	    
+	    
+	    private void periodicUpdate() {
+	    	int delay = Config.Timer.periodicUpdateInterval; //milliseconds
+	    	final Timer timer = new Timer(delay, null);
+	    	timer.addActionListener(new ActionListener() {
+	    	    public void actionPerformed(ActionEvent e) {
+	    	    	
+	    	    	writeSysMsg();
+					
+					revalidate();
+					repaint();
+	    	    }
+	    	});
+	    	timer.start();
+	    }
+	    	    
+	    
 }
-	
