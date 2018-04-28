@@ -241,7 +241,10 @@ public abstract class Config {
 		public static final int frameMinimumWidth = 300;
 		public static final int frameMinimumHeight = 300;
 		
+		//The frame title of the main menu
 		public static final String title = "Welcome to RisTan!";
+		//The title after someone types his/her name
+		public static final String nameTitle = "Ristan Beta - ";
 		
 		public static final String playerCount = "Number of players: ";
 		
@@ -322,6 +325,16 @@ public abstract class Config {
 		public static final int radius = 380;
 		public static final int color = 0x4488FF;
 		public static final int lineThickness = 0;
+	}
+	
+	/**
+	 * The embedded chat window
+	 * @author Miklós
+	 *
+	 */
+	public static class Chat{
+		public static final int textAreaColoums = 10;
+		public static final int textAreaRows = 20;
 	}
 	
 }
