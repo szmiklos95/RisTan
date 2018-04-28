@@ -42,9 +42,7 @@ public class Board {
 				return new Tile(resource);
 			}else{
 				rnd-=res_prob.get(resource);
-
 			}
-
 		}
 		return null;
 	}

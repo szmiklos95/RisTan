@@ -97,7 +97,7 @@ public class GameBoard extends JPanel{
 	        gameLogic.Board board=getBoard();
 	        if(board!=null) {
 	        	if(!tilesInitialized) {
-			        ArrayList<gameLogic.Point> points = new ArrayList<gameLogic.Point>(board.getTiles().keySet());
+			        ArrayList<gameLogic.Point> points = new ArrayList<gameLogic.Point>(board.getTileCoordinates());
 			        initTiles(origin, Config.Hexagon.radius, Config.Hexagon.padding, points);
 			        tilesInitialized = true;
 	        	}
