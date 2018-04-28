@@ -4,6 +4,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import config.Config;
 
@@ -29,13 +31,16 @@ public class GameWindow extends JPanel{
 		gbc.insets = Config.GUI.GridSettings.defaultInsets;
 		gbc.fill = GridBagConstraints.CENTER;
 
+		// Chat
+		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+		
 		JPanel chatPanel = new Chat(CardSync.client, CardSync.settings.getPlayerName());
 		this.add(chatPanel, gbc);
 		
-		gbc.gridwidth = Config.Chat.textAreaColoumns;
-		gbc.gridheight = Config.Chat.textAreaRows;
-		
+		// Game Board
+		gbc.anchor = GridBagConstraints.CENTER;
 		this.add(CardSync.gameBoard,gbc);
+		
 		
 		CardSync.card_GameWindow = this;
 	}

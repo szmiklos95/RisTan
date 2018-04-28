@@ -17,7 +17,8 @@ import javax.swing.Timer;
 
 import config.Config;
 import gameLogic.GameState;
-import gameLogic.Turn;
+import network.Message;
+import network.Message.eMsgType;
 
 /**
  *  The panel where the game is played
@@ -28,7 +29,7 @@ public class GameBoard extends JPanel{
  
 	 private static final long serialVersionUID = 1L;
 	 
-	    private gameLogic.GameState gameState;
+	    private GameState gameState;
 	    private boolean boardDrawn = false;
 
 	    private ArrayList<HexaTile> hexaTiles;
@@ -74,7 +75,6 @@ public class GameBoard extends JPanel{
 		    
 
 		    gameStartRepaintTimer();
-		    
 	        
 	    }
 	    
@@ -185,14 +185,6 @@ public class GameBoard extends JPanel{
 	        g.setStroke(tmpS);
 	    }
 	    
-	    /**
-	     * Returns true of game state changed
-	     * @return
-	     */
-	    private boolean readyForRefresh(){
-	    	return false;
-	    }
-	    
 	    
 	    /**
 	     * A timer that is only active before the game starts.
@@ -205,18 +197,22 @@ public class GameBoard extends JPanel{
 	    	final Timer timer = new Timer(delay, null);
 	    	timer.addActionListener(new ActionListener() {
 	    	    public void actionPerformed(ActionEvent e) {
-					
-					//If over = false ---> the game is running --> stop the timer because the game already started
-					if(!gameState.isOver()) {
-						timer.stop();
-						
-						//If the game is already running but we haven't drawn the board yet
-						//Happens at every client opened except the last one
-						if(!boardDrawn) {
-							revalidate();
-							repaint();
-						}
+	    	    	
+	    	    	//If over = false ---> the game is running --> stop the timer because the game already started
+					//If the game is already running but we haven't drawn the board yet repaint it
+					//(Happens at every client opened except the last one)
+	    	    	if(!boardDrawn && !gameState.isOver()) {
+	    	    		timer.stop();
+						revalidate();
+						repaint();
+						boardDrawn = true;
+						gameStartMessage();
 					}
+	    	    	
+	    	    	//Stop the timer
+	    	    	if(boardDrawn) timer.stop();
+					
+	    	    	System.out.print("Timer");
 	    	    	
 	    	    }
 	    	});
@@ -225,6 +221,12 @@ public class GameBoard extends JPanel{
 	    }
 	    
 	    
+	    private void gameStartMessage() {
+	    	if(boardDrawn) {
+	    		System.out.println("The board has been drawn");
+	    		CardSync.client.Send(new Message(eMsgType.Text,"The board has been drawn"));
+	    	}
+	    }
 	    
 }
 	

@@ -341,4 +341,10 @@ public abstract class Config {
 		public static final int gameStartTimerDelay = 100; //ms
 	}
 	
+	public static class SystemMessage{
+		public static final int timerDelay = 100; //ms
+		public static final int col = 20;
+		public static final int row = 3;
+	}
+	
 }

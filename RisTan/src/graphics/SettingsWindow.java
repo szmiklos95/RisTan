@@ -91,7 +91,7 @@ public class SettingsWindow extends JPanel{
 
 				CardLayout cl = (CardLayout) (CardSync.cards.getLayout());
 				cl.show(CardSync.cards, e.getActionCommand());
-				System.out.print("Starting the game.\n");
+				System.out.print("Switching to " + e.getActionCommand() + " panel.\n");
 			}
 		});
 
@@ -135,6 +135,7 @@ public class SettingsWindow extends JPanel{
 
 		// This is localhost IP address, connects the local client to the server
 		ConnectTo("127.0.0.1");  //TODO This should be editable or...?
+		System.out.println("Setting up the server.");
 
 	}
 
