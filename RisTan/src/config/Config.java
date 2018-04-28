@@ -333,8 +333,12 @@ public abstract class Config {
 	 *
 	 */
 	public static class Chat{
-		public static final int textAreaColoums = 10;
-		public static final int textAreaRows = 20;
+		public static final int textAreaColoumns = 25;
+		public static final int textAreaRows = 10;
+	}
+	
+	public static class Timer{
+		public static final int gameStartTimerDelay = 100; //ms
 	}
 	
 }

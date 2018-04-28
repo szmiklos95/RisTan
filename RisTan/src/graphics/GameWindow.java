@@ -32,7 +32,7 @@ public class GameWindow extends JPanel{
 		JPanel chatPanel = new Chat(CardSync.client, CardSync.settings.getPlayerName());
 		this.add(chatPanel, gbc);
 		
-		gbc.gridwidth = Config.Chat.textAreaColoums;
+		gbc.gridwidth = Config.Chat.textAreaColoumns;
 		gbc.gridheight = Config.Chat.textAreaRows;
 		
 		this.add(CardSync.gameBoard,gbc);

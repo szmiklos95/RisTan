@@ -56,7 +56,7 @@ public class Chat extends JPanel{
 		GBC_display.fill = GridBagConstraints.WEST;
 		GBC_display.insets = new Insets(10,10,10,10);
 		
-		display = new TextArea(Config.Chat.textAreaColoums,Config.Chat.textAreaRows);
+		display = new TextArea(Config.Chat.textAreaRows,Config.Chat.textAreaColoumns);
 		display.setEditable(false);
 		display.setText("Welcome and good luck!");
 		gbl.setConstraints(display, GBC_display);

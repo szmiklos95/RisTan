@@ -6,13 +6,18 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import config.Config;
+import gameLogic.GameState;
+import gameLogic.Turn;
 
 /**
  *  The panel where the game is played
@@ -24,6 +29,7 @@ public class GameBoard extends JPanel{
 	 private static final long serialVersionUID = 1L;
 	 
 	    private gameLogic.GameState gameState;
+	    private boolean boardDrawn = false;
 
 	    private ArrayList<HexaTile> hexaTiles;
 	    private Point origin; 
@@ -58,12 +64,17 @@ public class GameBoard extends JPanel{
 
 	                        System.out.println("Clicked a "+t.getClass().getName()+" at coordinates: ("+t.getHexagon().getCenter().getX()+":"+t.getHexagon().getCenter().getY()+")");
 	                        t.toggleSelected();
+	                        revalidate();
 	                        repaint();
-
+	                        
 	                    }
 	                }
 	            }
 		    });
+		    
+
+		    gameStartRepaintTimer();
+		    
 	        
 	    }
 	    
@@ -174,6 +185,46 @@ public class GameBoard extends JPanel{
 	        g.setStroke(tmpS);
 	    }
 	    
-	
+	    /**
+	     * Returns true of game state changed
+	     * @return
+	     */
+	    private boolean readyForRefresh(){
+	    	return false;
+	    }
+	    
+	    
+	    /**
+	     * A timer that is only active before the game starts.
+	     * When every player joined draw the board if it hasn't been drawn yet. 
+	     * (Otherwise only the client that joined last gets a board.)
+	     */
+	    private void gameStartRepaintTimer() {
+	    	
+	    	int delay = Config.Timer.gameStartTimerDelay; //milliseconds
+	    	final Timer timer = new Timer(delay, null);
+	    	timer.addActionListener(new ActionListener() {
+	    	    public void actionPerformed(ActionEvent e) {
+					
+					//If over = false ---> the game is running --> stop the timer because the game already started
+					if(!gameState.isOver()) {
+						timer.stop();
+						
+						//If the game is already running but we haven't drawn the board yet
+						//Happens at every client opened except the last one
+						if(!boardDrawn) {
+							revalidate();
+							repaint();
+						}
+					}
+	    	    	
+	    	    }
+	    	});
+	    	timer.start();
+	    	
+	    }
+	    
+	    
+	    
 }
 	
