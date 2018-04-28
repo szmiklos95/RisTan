@@ -65,6 +65,18 @@ public class GUI extends JFrame {
 		gameBoard = new GameBoard();
 		client = new SerialClient();
 		controller = client.getController();
+		
+		
+		// Set menubar for frame
+		// TODO: Move to a new method
+		// TODO: Confirmation if game started and player wants to return to main menu
+		JMenuBar menubar = new JMenuBar();
+		JMenu file = new JMenu("File");
+		addMenuItem(Config.GUI.ButtonTexts.mainMenu, Config.GUI.CardIDs.mainMenu, file, switchCardAction);
+		addMenuItem(Config.GUI.ButtonTexts.exit, null, file, exitAction);
+		menubar.add(file);
+		
+		frame.setJMenuBar(menubar);
 	}
 
 	/**
@@ -189,17 +201,26 @@ public class GUI extends JFrame {
 	 * @return
 	 */
 	private JPanel createCard_GameBoard() {
-
+//TODO gridbaglayout
 		JPanel card = new JPanel();
+		
+		GridBagLayout gbl = new GridBagLayout();
+		card.setLayout(gbl);
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = Config.GUI.GridSettings.startingGridX;
+		gbc.gridy = Config.GUI.GridSettings.startingGridY;
+		gbc.insets = Config.GUI.GridSettings.defaultInsets;
+		gbc.fill = GridBagConstraints.CENTER;
 
-		gameBoard.setLayout(new FlowLayout(FlowLayout.LEFT));
-		JMenuBar menubar = new JMenuBar();
-		JMenu file = new JMenu("File");
-		addMenuItem(Config.GUI.ButtonTexts.mainMenu, Config.GUI.CardIDs.mainMenu, file, switchCardAction);
-		addMenuItem(Config.GUI.ButtonTexts.exit, null, file, exitAction);
-		menubar.add(file);
-		gameBoard.add(menubar);
-		card.add(gameBoard);
+		JPanel chatPanel = new Chat(client, settings.getPlayerName()); //TODO integrated chat panel
+		card.add(chatPanel, gbc);
+		
+		gbc.gridwidth = Config.Chat.textAreaColoums;
+		gbc.gridheight = Config.Chat.textAreaRows;
+		
+		card.add(gameBoard,gbc);
+		
 		return card;
 	}
 
@@ -213,7 +234,6 @@ public class GUI extends JFrame {
 
 		GridBagLayout gbl = new GridBagLayout();
 		card.setLayout(gbl);
-		;
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = Config.GUI.GridSettings.startingGridX;
@@ -256,6 +276,8 @@ public class GUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				settings.setPlayerName(new String(name.getText()));
+				
+				frame.setTitle(Config.GUI.nameTitle + name.getText());
 
 				// Need to update card
 				cards.remove(card_GameSettings);
@@ -281,6 +303,8 @@ public class GUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				settings.setPlayerName(new String(name.getText()));
+				
+				frame.setTitle(Config.GUI.nameTitle + name.getText());
 
 				// Need to update card
 				cards.remove(card_JoinWindow);
@@ -448,8 +472,8 @@ public class GUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ConnectTo(ipField.getText());// TODO: connect to selected address, move this to connection window, open here
-										// connection window
+				
+				ConnectTo(ipField.getText());
 
 				DrawBoard();
 
@@ -486,15 +510,19 @@ public class GUI extends JFrame {
 		server.Connect(settings.getPlayerCount());
 
 		// This is localhost IP address, connects the local client to the server
-		ConnectTo("127.0.0.1");
+		ConnectTo("127.0.0.1");  //TODO This should be editable or...?
 
 	}
 
 	private void ConnectTo(String IPstring) {
 		// network.SerialClient client=new SerialClient();
 		client.Connect(IPstring);
-
-		new network.Chat(client, settings.getPlayerName());
+		
+		// Update game board card because we now know the player's name for the chat window
+		cards.remove(card_GameBoard);
+		card_GameBoard = createCard_GameBoard();
+		cards.add(card_GameBoard, Config.GUI.CardIDs.gameBoard);
+		
 		client.Send(new Message(eMsgType.Name, settings.getPlayerName()));
 
 		// gameLogic.ClientController controller=client.getController();
