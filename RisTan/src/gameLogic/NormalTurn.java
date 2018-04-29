@@ -28,7 +28,7 @@ public class NormalTurn extends Turn {
 	}
 	
 	@Override
-	List<Action> getPossibleTileActions(GameState gameState){
+	public List<Action> getPossibleTileActions(GameState gameState){
 		List<Action> ret=new ArrayList<Action>();
 		Player player=gameState.getActivePlayer();
 		Board board=gameState.getBoard();

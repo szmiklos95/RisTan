@@ -21,7 +21,7 @@ public class BuildVillageTurn extends Turn {
 	}
 	
 	@Override
-	List<Action> getPossibleTileActions(GameState gameState) {
+	public List<Action> getPossibleTileActions(GameState gameState) {
 		List<Action> ret=new ArrayList<Action>();
 		if(getObligatoryEvents().size()>0) {
 			int activePlayerID=gameState.getActivePlayer().getID();

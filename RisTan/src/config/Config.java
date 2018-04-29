@@ -344,7 +344,7 @@ public abstract class Config {
 	
 	public static class Timer{
 		public static final int gameStartTimerDelay = 100; //ms
-		public static final int periodicUpdateInterval = 100;
+		public static final int periodicUpdateInterval = 50;
 	}
 	
 	public static class SystemMessage{

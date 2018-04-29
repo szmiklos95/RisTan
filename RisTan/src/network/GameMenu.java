@@ -40,7 +40,7 @@ public class GameMenu extends JFrame{
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	private SerialServer server = null;
+	//private SerialServer server = null;
 	
 	// Constructor
 	GameMenu(){
@@ -97,7 +97,7 @@ public class GameMenu extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			    server = new SerialServer();
+			    //server = new SerialServer();
 				//server.Connect();
 
 				// Close the window

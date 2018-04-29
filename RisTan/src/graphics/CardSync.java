@@ -3,7 +3,6 @@ package graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 
 import gameLogic.ClientController;
 import gameLogic.GameState;
