@@ -250,7 +250,7 @@ public abstract class Config {
 		public static final String playerCount = "Number of players: ";
 		
 		// Spinner settings
-		public static final int default_playerCount = 3;
+		public static final int default_playerCount = 2;
 		public static final int min_playerCount = 2;
 		public static final int max_playerCount = 4;
 		
@@ -344,13 +344,18 @@ public abstract class Config {
 	
 	public static class Timer{
 		public static final int gameStartTimerDelay = 100; //ms
-		public static final int periodicUpdateInterval = 100;
+		public static final int periodicUpdateInterval = 50;
 	}
 	
-	public static class SystemMessage{
+	public static class SystemMessages{
 		public static final String defaultMsg = "System Messages";
 		public static final String waitingForPlayers = "Waiting for other players to join";
-		public static final String boardDrawn = "The board has been drawn";
+		public static final String boardDrawn = "The board has been drawn.";
+		public static final String yourTurn = "It is your turn!";
+		public static final String error_tooLong = "The string is too long.";
+		
+		public static final int dotAnimationMaxDots = 5;
+		public static final int maxSysMsgLength = 50;
 	}
 
 }

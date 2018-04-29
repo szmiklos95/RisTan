@@ -13,13 +13,13 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import config.Config;
+import gameLogic.Action;
 import gameLogic.GameState;
+import gameLogic.Turn;
 
 /**
  *  The panel where the game is played
@@ -36,12 +36,10 @@ public class GameBoard extends JPanel{
 	    private ArrayList<HexaTile> hexaTiles;
 	    private Point origin; 
 	    private boolean tilesInitialized = false; //Necessary because the board (thus the tiles) are generated later
-	    
-	    private String systemMessage = null;
 
 	    public GameBoard() {
 	    	setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
-	    	systemMessage = Config.SystemMessage.defaultMsg;
+	    	SystemMessage.setSystemMessage(Config.SystemMessages.defaultMsg);
 	    }
 	    
 	    
@@ -51,7 +49,7 @@ public class GameBoard extends JPanel{
 	     */
 	    public GameBoard(gameLogic.GameState gameState) {
 	        setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
-	        systemMessage = Config.SystemMessage.waitingForPlayers;
+	        SystemMessage.setSystemMessage(Config.SystemMessages.waitingForPlayers);
 	        
 	        //The center point
 	       origin = new Point(Config.GameBoard.width / 2, Config.GameBoard.height / 2);
@@ -67,11 +65,17 @@ public class GameBoard extends JPanel{
 	                for (HexaTile t : hexaTiles) {
 
 	                    if (t.getHexagon().contains(me.getPoint())) {//check if mouse is clicked within shape
+	                    	
+	                    	// Get the current turn
+	                    	Turn turn = gameState.getTurn();
+	                    	// Get all the possible tile actions
+	                    	List<Action> possibleTileActions = turn.getPossibleTileActions(gameState);
+	                    	//TODO do something with this
 
 	                        System.out.println("Clicked a "+t.getClass().getName()+" at coordinates: ("+t.getHexagon().getCenter().getX()+":"+t.getHexagon().getCenter().getY()+")");
 	                        t.toggleSelected();
-	                        revalidate();
-	                        repaint();
+	                        
+	                        rePaint();
 	                        
 	                    }
 	                }
@@ -204,16 +208,20 @@ public class GameBoard extends JPanel{
 	    	timer.addActionListener(new ActionListener() {
 	    	    public void actionPerformed(ActionEvent e) {
 	    	    	
+	    	    	SystemMessage.dotAnimation();
+	    	    	
 	    	    	//If over = false ---> the game is running --> stop the timer because the game already started
 					//If the game is already running but we haven't drawn the board yet repaint it
 					//(Happens at every client opened except the last one)
 	    	    	if(!boardDrawn && !gameState.isOver()) {
 	    	    		timer.stop();
-						revalidate();
-						repaint();
 						boardDrawn = true;
-						systemMessage = Config.SystemMessage.boardDrawn;
+						SystemMessage.setSystemMessage(Config.SystemMessages.boardDrawn);
+						
+						rePaint();
+						
 					}
+	    	    	
 	    	    	
 	    	    	//Stop the timer
 	    	    	if(boardDrawn) timer.stop();
@@ -224,37 +232,42 @@ public class GameBoard extends JPanel{
 	    	
 	    }
 	    
-	    /**
-	     * Displays the system message stored in the "systemMessage" variable
-	     * Place: Menubar
-	     */
-	    private void writeSysMsg() {
-			JMenuBar menubar = CardSync.frame.getJMenuBar();			
-			
-			//Get the last menu item
-			JMenu textItem = menubar.getMenu(menubar.getMenuCount()-1);
-			
-			//Change text
-			textItem.setText(systemMessage);
-			
-			CardSync.frame.setJMenuBar(menubar);
-	    }
-	    
-	    
 	    private void periodicUpdate() {
 	    	int delay = Config.Timer.periodicUpdateInterval; //milliseconds
 	    	final Timer timer = new Timer(delay, null);
 	    	timer.addActionListener(new ActionListener() {
 	    	    public void actionPerformed(ActionEvent e) {
 	    	    	
-	    	    	writeSysMsg();
-					
-					revalidate();
-					repaint();
+	    	    	if(isActivePlayer()) {
+	    	    		SystemMessage.setSystemMessage(Config.SystemMessages.yourTurn);
+	    	    	}
+	    	    	
+	    	    	rePaint();
 	    	    }
 	    	});
 	    	timer.start();
 	    }
-	    	    
 	    
+	    /**
+	     * Sometimes (for certain actions) a menu bar appears in the background.
+	     * Temporary solution: Reset the menu bar every time an action would trigger this.
+	     * (The SystemMessage.write does just that) 
+	     */
+	    private void fixMenuBarBug() {
+	    	SystemMessage.write();
+	    }
+	    
+	    /**
+	     * Call this everytime something has changed to redraw the game board
+	     */
+	    private void rePaint() {
+	    	fixMenuBarBug();
+			revalidate();
+			repaint();
+	    }
+	    
+	    private boolean isActivePlayer() {
+	    	if(gameState.isOver()) return false;
+	    	return gameState.getActivePlayer().getID() == CardSync.controller.getLocalPlayerID();
+	    }
 }

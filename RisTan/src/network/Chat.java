@@ -16,7 +16,7 @@ public class Chat extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private SerialClient client = null;
 	private TextArea display = null;
-	private String name;
+	//private String name;
 	
 	private class displayUpdateThread extends Thread implements Runnable{
 		private String text = "";
@@ -44,7 +44,7 @@ public class Chat extends JFrame{
 		GridBagLayout gbl = new GridBagLayout();
 		this.setLayout(gbl);
 		
-		this.name = name;
+		//this.name = name;
 		this.client=client;
 		
 		// Display messages
