@@ -149,7 +149,7 @@ public class GameBoard extends JPanel{
                 int x = (int) (origin.getX() + xOff);
                 int y = (int) (origin.getY() + yOff);
                 
-                hexaTiles.add(new HexaTile(x,y,radius, getBoard().getResourceAt(pointi)));
+                hexaTiles.add(new HexaTile(x,y,radius, getBoard().getTileAt(pointi)));
 	        }
 	    }
 	    

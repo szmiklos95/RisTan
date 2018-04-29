@@ -6,10 +6,13 @@ import java.awt.Graphics2D;
 
 import config.Config;
 import gameLogic.Resource;
+import gameLogic.Tile;
 
 public class HexaTile {
 	private Hexagon hexagon;
 	private Resource resource;
+	private Tile tile = null;
+	
 	private boolean selected = false;
     private Point point;
     private int radius;
@@ -17,17 +20,19 @@ public class HexaTile {
     private int innerColor = Config.Hexagon.innerColor_default;
     private int outerColor = Config.Hexagon.outerColor_default;
 	
-	public HexaTile(Point point, int r, Resource resource) {
+	public HexaTile(Point point, int r, Tile tile) {
 		this.point = point;
 		this.radius = r;
-		this.resource = resource;
+		this.setTile(tile);
+		this.resource = tile.getResource();
 		hexagon = new Hexagon(point, radius);
 	}
 	
-	public HexaTile(int x, int y, int r, Resource resource) {
+	public HexaTile(int x, int y, int r, Tile tile) {
 		this.point = new Point(x,y);
 		this.radius = r;
-		this.resource = resource;
+		this.setTile(tile);
+		this.resource = tile.getResource();
 		hexagon = new Hexagon(x,y,r);
 	}
 	
@@ -80,4 +85,12 @@ public class HexaTile {
     		default: innerColor = Config.Hexagon.innerColor_default; break;
     	}
     }
+
+	public Tile getTile() {
+		return tile;
+	}
+
+	public void setTile(Tile tile) {
+		this.tile = tile;
+	}
 }
