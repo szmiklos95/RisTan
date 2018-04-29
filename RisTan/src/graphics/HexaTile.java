@@ -13,6 +13,9 @@ public class HexaTile {
 	private boolean selected = false;
     private Point point;
     private int radius;
+    
+    private int innerColor = Config.Hexagon.innerColor_default;
+    private int outerColor = Config.Hexagon.outerColor_default;
 	
 	public HexaTile(Point point, int r, Resource resource) {
 		this.point = point;
@@ -37,13 +40,13 @@ public class HexaTile {
         int w = metrics.stringWidth(text);
         int h = metrics.getHeight();
         
-        int outerColor = Config.Hexagon.outerColor;
-        if(isSelected()) outerColor = Config.Hexagon.selectedOuterColor;
+        setOuterColor();
+        setInnerColor();
         
 		int x = point.getX();
 		int y = point.getY();
         
-        hexagon.draw(g, x, y, Config.Hexagon.innerLineThickness, Config.Hexagon.innerColor, true);
+        hexagon.draw(g, x, y, Config.Hexagon.innerLineThickness, innerColor, true);
         hexagon.draw(g, x, y, Config.Hexagon.outerLineThickness, outerColor, false);
 
         g.setColor(new Color(Config.Hexagon.textColor));
@@ -62,4 +65,19 @@ public class HexaTile {
     	return selected;
     }
 	
+    private void setOuterColor() {
+        outerColor = Config.Hexagon.outerColor_default;
+        //Change outer color of the tile is selected
+        if(isSelected()) outerColor = Config.Hexagon.outerColor_selected;
+    }
+    
+    private void setInnerColor() {
+    	innerColor = Config.Hexagon.innerColor_default;
+    	switch(resource) {
+    		case Stone: innerColor = Config.Hexagon.innerColor_stone; break;
+    		case Wood: innerColor = Config.Hexagon.innerColor_wood; break;
+    		case Wheat: innerColor = Config.Hexagon.innerColor_wheat; break;
+    		default: innerColor = Config.Hexagon.innerColor_default; break;
+    	}
+    }
 }

@@ -2,6 +2,7 @@ package graphics;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -47,6 +48,7 @@ public class GUI extends JFrame {
 		menubar.add(file);
 		menubar.add(Box.createHorizontalGlue());
 		JMenu textItem = new JMenu();
+		textItem.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); 
 		
 		menubar.add(textItem);
 		

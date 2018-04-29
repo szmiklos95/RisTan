@@ -297,14 +297,19 @@ public abstract class Config {
 		// The thickness of the outer hexagon line
 		public static final int outerLineThickness = 4;
 		// The color of the inner "main" hexagon
-		public static final int innerColor = 0x008844;
+		public static final int innerColor_default = 0x008844;
 		// The color of the outer "frame" hexagon
-		public static final int outerColor = 0xFFDD88;
+		public static final int outerColor_default = 0x000000;
 		// Hexagon text color
 		public static final int textColor = 0xFFFFFF;
 		// The color of the inner hexagon when it is selected
-		public static final int selectedOuterColor = 0xDA6F25;
-		
+		public static final int outerColor_selected = 0xDA6F25;
+		// 
+		public static final int innerColor_stone = 0xb8b09b;
+		//
+		public static final int innerColor_wood = 0x913D02;
+		//
+		public static final int innerColor_wheat = 0xE6b800;
 	}
 	
 	public static class GameWindow{
@@ -328,7 +333,7 @@ public abstract class Config {
 	 */
 	public static class Circle{
 		public static final int radius = 380;
-		public static final int color = 0x4488FF;
+		public static final int color = 0x006600;
 		public static final int lineThickness = 0;
 	}
 	
@@ -344,17 +349,27 @@ public abstract class Config {
 	
 	public static class Timer{
 		public static final int gameStartTimerDelay = 100; //ms
-		public static final int periodicUpdateInterval = 50;
+		public static final int periodicUpdateInterval = 500;
 	}
 	
 	public static class SystemMessages{
+		
 		public static final String defaultMsg = "System Messages";
 		public static final String waitingForPlayers = "Waiting for other players to join";
 		public static final String boardDrawn = "The board has been drawn.";
-		public static final String yourTurn = "It is your turn!";
-		public static final String error_tooLong = "The string is too long.";
 		
-		public static final int dotAnimationMaxDots = 5;
+		public static class YourTurn{
+			public static final String SysMsg = "It is your turn!";
+			public static final String SubMsg1 = "Choose starting tile!";
+		}
+		
+		public static final String notYourTurn = "It is not your turn!";
+
+		public static final String error_tooLong = "The string is too long.";
+		public static final String error = "ERROR: ";
+		public static final int defaultErrorTimeSeconds = 2;
+		
+		public static final int dotAnimationMaxDots = 4;
 		public static final int maxSysMsgLength = 50;
 	}
 
