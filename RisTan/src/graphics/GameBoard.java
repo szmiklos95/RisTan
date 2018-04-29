@@ -17,9 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import config.Config;
-import gameLogic.Action;
 import gameLogic.GameState;
-import gameLogic.Turn;
+import gameLogic.TileAction;
 
 /**
  *  The panel where the game is played
@@ -70,10 +69,8 @@ public class GameBoard extends JPanel{
 	                    		SystemMessage.setErrorMessage(Config.SystemMessages.notYourTurn);
 	                    	}
 	                    	else {
-		                    	// Get the current turn
-		                    	Turn turn = gameState.getTurn();
 		                    	// Get all the possible tile actions
-		                    	List<Action> possibleTileActions = turn.getPossibleTileActions(gameState);
+		                    	List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
 		                    	//TODO do something with this
 
 		                        System.out.println("Clicked a "+t.getClass().getName()+" at coordinates: ("+t.getHexagon().getCenter().getX()+":"+t.getHexagon().getCenter().getY()+")");

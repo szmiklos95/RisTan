@@ -26,8 +26,8 @@ public class OccupyFreeTileTurn extends Turn {
 	}
 	
 	@Override
-	public List<Action> getPossibleTileActions(GameState gameState) {
-		List<Action> ret=new ArrayList<Action>();
+	public List<TileAction> getPossibleTileActions(GameState gameState) {
+		List<TileAction> ret=new ArrayList<TileAction>();
 		if(getObligatoryEvents().size()>0) {
 			int activePlayerID=gameState.getActivePlayer().getID();
 			List<Point> points=gameState.getBoard().getFreeNeighbourTileCoordinates(activePlayerID);
