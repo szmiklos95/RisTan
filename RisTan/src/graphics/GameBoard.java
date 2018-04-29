@@ -39,7 +39,7 @@ public class GameBoard extends JPanel{
 
 	    public GameBoard() {
 	    	setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
-	    	SystemMessage.setSystemMessage(Config.SystemMessage.defaultMsg);
+	    	SystemMessage.setSystemMessage(Config.SystemMessages.defaultMsg);
 	    }
 	    
 	    
@@ -49,7 +49,7 @@ public class GameBoard extends JPanel{
 	     */
 	    public GameBoard(gameLogic.GameState gameState) {
 	        setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
-	        SystemMessage.setSystemMessage(Config.SystemMessage.waitingForPlayers);
+	        SystemMessage.setSystemMessage(Config.SystemMessages.waitingForPlayers);
 	        
 	        //The center point
 	       origin = new Point(Config.GameBoard.width / 2, Config.GameBoard.height / 2);
@@ -208,17 +208,20 @@ public class GameBoard extends JPanel{
 	    	timer.addActionListener(new ActionListener() {
 	    	    public void actionPerformed(ActionEvent e) {
 	    	    	
+	    	    	SystemMessage.dotAnimation();
+	    	    	
 	    	    	//If over = false ---> the game is running --> stop the timer because the game already started
 					//If the game is already running but we haven't drawn the board yet repaint it
 					//(Happens at every client opened except the last one)
 	    	    	if(!boardDrawn && !gameState.isOver()) {
 	    	    		timer.stop();
 						boardDrawn = true;
-						SystemMessage.setSystemMessage(Config.SystemMessage.boardDrawn);
+						SystemMessage.setSystemMessage(Config.SystemMessages.boardDrawn);
 						
 						rePaint();
 						
 					}
+	    	    	
 	    	    	
 	    	    	//Stop the timer
 	    	    	if(boardDrawn) timer.stop();
@@ -235,10 +238,11 @@ public class GameBoard extends JPanel{
 	    	timer.addActionListener(new ActionListener() {
 	    	    public void actionPerformed(ActionEvent e) {
 	    	    	
-	    	    	SystemMessage.write();
-					
-					revalidate();
-					repaint();
+	    	    	if(isActivePlayer()) {
+	    	    		SystemMessage.setSystemMessage(Config.SystemMessages.yourTurn);
+	    	    	}
+	    	    	
+	    	    	rePaint();
 	    	    }
 	    	});
 	    	timer.start();
@@ -254,11 +258,16 @@ public class GameBoard extends JPanel{
 	    }
 	    
 	    /**
-	     * Call this everytime something has changed
+	     * Call this everytime something has changed to redraw the game board
 	     */
 	    private void rePaint() {
 	    	fixMenuBarBug();
 			revalidate();
 			repaint();
+	    }
+	    
+	    private boolean isActivePlayer() {
+	    	if(gameState.isOver()) return false;
+	    	return gameState.getActivePlayer().getID() == CardSync.controller.getLocalPlayerID();
 	    }
 }
