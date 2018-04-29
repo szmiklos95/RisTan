@@ -36,7 +36,7 @@ public abstract class TileAction extends InGameAction {
 	 * Gets the coordinates of the target tile (in board coordinate system).
 	 * @return the coordinates of the target tile (in board coordinate system).
 	 */
-	Point getPoint() {
+	public Point getPoint() {
 		return point;
 	}
 	
