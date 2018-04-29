@@ -309,7 +309,7 @@ public abstract class Config {
 		//
 		public static final int innerColor_wood = 0x913D02;
 		//
-		public static final int innerColor_wheat = 0xFFC000;
+		public static final int innerColor_wheat = 0xE6b800;
 	}
 	
 	public static class GameWindow{
@@ -356,7 +356,13 @@ public abstract class Config {
 		public static final String defaultMsg = "System Messages";
 		public static final String waitingForPlayers = "Waiting for other players to join";
 		public static final String boardDrawn = "The board has been drawn.";
-		public static final String yourTurn = "It is your turn!";
+		
+		public static class YourTurn{
+			public static final String SysMsg = "It is your turn!";
+			public static final String SubMsg1 = "Choose starting tile!";
+		}
+		
+
 		public static final String error_tooLong = "The string is too long.";
 		
 		public static final int dotAnimationMaxDots = 5;

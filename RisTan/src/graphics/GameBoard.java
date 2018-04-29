@@ -239,7 +239,8 @@ public class GameBoard extends JPanel{
 	    	    public void actionPerformed(ActionEvent e) {
 	    	    	
 	    	    	if(isActivePlayer()) {
-	    	    		SystemMessage.setSystemMessage(Config.SystemMessages.yourTurn);
+	    	    		SystemMessage.setSystemMessage(Config.SystemMessages.YourTurn.SysMsg);
+	    	    		SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.SubMsg1);
 	    	    	}
 	    	    	
 	    	    	rePaint();

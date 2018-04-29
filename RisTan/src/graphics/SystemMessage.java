@@ -1,7 +1,11 @@
 package graphics;
 
+import java.util.ArrayList;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.SwingConstants;
 
 import config.Config;
 
@@ -13,25 +17,38 @@ import config.Config;
 class SystemMessage {
     
 	static private String systemMessage = null;
+	static private ArrayList<String> subMessages = null;
 	
+	// Variables for the dot animation
 	static private String previousSysMsg = null;
 	static private int dotCount = 0;
 	static private boolean dotAnimationRanOnce = false;
     
     SystemMessage(){
     	setSystemMessage(Config.SystemMessages.defaultMsg);
+    	subMessages = new ArrayList<String>();
     }
 
-	public static String getSystemMessage() {
+	static String getSystemMessage() {
 		return systemMessage;
 	}
 
-	public static void setSystemMessage(String systemMessage) {
+	static void setSystemMessage(String systemMessage) {
 		if(systemMessage.length() > Config.SystemMessages.maxSysMsgLength) SystemMessage.systemMessage = Config.SystemMessages.error_tooLong;
 		else {
 			SystemMessage.systemMessage = systemMessage;
 		}
+		
+		//reset the animation
 		dotAnimationRanOnce = false;
+		
+		// When setting a new system message clear all sub messages
+		if(subMessages!=null) subMessages.clear();
+	}
+	
+	static void addSubMessage(String subMessage) {
+		if(subMessages==null) subMessages = new ArrayList<String>();
+		subMessages.add(subMessage);
 	}
 	
     /**
@@ -42,10 +59,21 @@ class SystemMessage {
 		JMenuBar menubar = CardSync.frame.getJMenuBar();			
 		
 		//Get the last menu item
-		JMenu textItem = menubar.getMenu(menubar.getMenuCount()-1);
+		JMenu sysMsgItem = menubar.getMenu(menubar.getMenuCount()-1);
 		
-		//Change text
-		textItem.setText(systemMessage);
+		// Change text
+		sysMsgItem.setText(systemMessage);
+		// Remove all menu items
+		sysMsgItem.removeAll();
+		
+		// Iterate through the sub messages string list and add items
+		if(subMessages!=null) {
+			for(String s:subMessages) {
+				JMenuItem item = new JMenuItem(s);
+				item.setHorizontalAlignment(SwingConstants.RIGHT);
+				sysMsgItem.add(item);
+			}
+		}
 		
 		CardSync.frame.setJMenuBar(menubar);
     }
@@ -82,4 +110,6 @@ class SystemMessage {
     	
     	dotAnimationRanOnce = true;
     }
+    
+    
 }
