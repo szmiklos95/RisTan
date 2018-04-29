@@ -70,6 +70,7 @@ public class GameBoard extends JPanel{
 	                    		SystemMessage.setErrorMessage(Config.SystemMessages.notYourTurn);
 	                    	}
 	                    	else {
+	                    		
 		                    	// Get the current turn
 		                    	Turn turn = gameState.getTurn();
 		                    	// Get all the possible tile actions
