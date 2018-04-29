@@ -1,7 +1,7 @@
 package gameLogic;
 
 //A tile of the board
-class Tile {
+public class Tile {
 	private Resource resource;
 	private BuildingLevel buildingLevel;
 	private Player owner;
