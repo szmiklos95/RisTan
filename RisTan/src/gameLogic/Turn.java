@@ -80,7 +80,7 @@ public abstract class Turn {
 		}
 	}
 	
-	List<Action> getPossibleTileActions(GameState gameState){
+	public List<Action> getPossibleTileActions(GameState gameState){
 		return new ArrayList<Action>();
 	}
 	

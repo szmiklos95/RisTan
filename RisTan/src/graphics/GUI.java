@@ -2,10 +2,13 @@ package graphics;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -43,6 +46,11 @@ public class GUI extends JFrame {
 		addMenuItem(Config.GUI.ButtonTexts.mainMenu, Config.GUI.CardIDs.mainMenu, file, switchCardAction);
 		addMenuItem(Config.GUI.ButtonTexts.exit, null, file, exitAction);
 		menubar.add(file);
+		menubar.add(Box.createHorizontalGlue());
+		JMenu textItem = new JMenu();
+		textItem.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); 
+		
+		menubar.add(textItem);
 		
 		CardSync.frame.setJMenuBar(menubar);
 	}

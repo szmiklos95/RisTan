@@ -111,7 +111,7 @@ public class MainMenu extends JPanel{
 
 				// Need to update card
 				CardSync.cards.remove(CardSync.card_JoinWindow);
-				//card_JoinWindow = createCard_JoinWindow(); //TODO generate new join window
+				CardSync.card_JoinWindow.Create();
 				CardSync.cards.add(CardSync.card_JoinWindow, Config.GUI.CardIDs.joinWindow);
 
 				CardLayout cl = (CardLayout) (CardSync.cards.getLayout());
