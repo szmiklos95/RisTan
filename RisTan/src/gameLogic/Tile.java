@@ -1,7 +1,7 @@
 package gameLogic;
 
 //A tile of the board
-class Tile {
+public class Tile {
 	private Resource resource;
 	private BuildingLevel buildingLevel;
 	private Player owner;
@@ -23,7 +23,7 @@ class Tile {
 		owner=null;
 	}
 	
-	Player getOwner() {
+	public Player getOwner() {
 		return owner;
 	}
 	
@@ -39,7 +39,7 @@ class Tile {
 		}
 	}
 	
-	BuildingLevel getBuildingLevel() {
+	public BuildingLevel getBuildingLevel() {
 		return buildingLevel;
 	}
 	
