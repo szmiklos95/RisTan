@@ -48,7 +48,7 @@ public abstract class BuildVillageAction extends TileAction {
 	
 	/**
 	 * Tries to execute the action on a game state.
-	 * If the execution is unsuccessful, the game state remains unchanged and throws a GameLogicException of the cause.<br>
+	 * If the execution is invalid, the game state remains unchanged and throws a GameLogicException of the cause.<br>
 	 * If the game is over, throws a GameOverException.<br>
 	 * If the executing player is not the active, throws a PlayerOutOfTurnException.<br>
 	 * If the executing player does not have enough time, throws a NotEnoughTimeException. <br>

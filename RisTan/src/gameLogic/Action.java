@@ -22,7 +22,7 @@ public abstract class Action implements Serializable{
 	
 	/**
 	 * Tries to execute the action on a game state.
-	 * If the execution is unsuccessful, the game state remains unchanged and throws a GameLogicException of the cause.
+	 * If the execution is invalid, the game state remains unchanged and throws a GameLogicException of the cause.
 	 * @param gameState the game state for executing the action.
 	 * @throws GameLogicException if the action cannot be executed, an according GameLogicException is thrown.
 	 */
