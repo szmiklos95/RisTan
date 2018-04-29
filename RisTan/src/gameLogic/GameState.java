@@ -69,6 +69,10 @@ public class GameState {
 		return market;
 	}
 	
+	public List<TileAction> getPossibleTileActions(){
+		return getTurn().getPossibleTileActions(this);
+	}
+	
 	void initGame() {
 		board=new Board();
 		board.generate(Config.Board.res_prob);

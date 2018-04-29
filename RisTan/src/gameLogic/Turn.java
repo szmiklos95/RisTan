@@ -80,8 +80,8 @@ public abstract class Turn {
 		}
 	}
 	
-	public List<Action> getPossibleTileActions(GameState gameState){
-		return new ArrayList<Action>();
+	List<TileAction> getPossibleTileActions(GameState gameState){
+		return new ArrayList<TileAction>();
 	}
 	
 	boolean isTradeEnabled() {
