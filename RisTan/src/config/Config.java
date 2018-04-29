@@ -349,10 +349,11 @@ public abstract class Config {
 	
 	public static class Timer{
 		public static final int gameStartTimerDelay = 100; //ms
-		public static final int periodicUpdateInterval = 50;
+		public static final int periodicUpdateInterval = 500;
 	}
 	
 	public static class SystemMessages{
+		
 		public static final String defaultMsg = "System Messages";
 		public static final String waitingForPlayers = "Waiting for other players to join";
 		public static final String boardDrawn = "The board has been drawn.";
@@ -362,10 +363,13 @@ public abstract class Config {
 			public static final String SubMsg1 = "Choose starting tile!";
 		}
 		
+		public static final String notYourTurn = "It is not your turn!";
 
 		public static final String error_tooLong = "The string is too long.";
+		public static final String error = "ERROR: ";
+		public static final int defaultErrorTimeSeconds = 2;
 		
-		public static final int dotAnimationMaxDots = 5;
+		public static final int dotAnimationMaxDots = 4;
 		public static final int maxSysMsgLength = 50;
 	}
 

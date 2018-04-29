@@ -1,11 +1,14 @@
 package graphics;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
 import config.Config;
 
@@ -23,6 +26,11 @@ class SystemMessage {
 	static private String previousSysMsg = null;
 	static private int dotCount = 0;
 	static private boolean dotAnimationRanOnce = false;
+	
+	// Variables for timed, blocking setter function
+	static private int elapsedSeconds = 0;
+	static private int timeGoalSeconds = 0;
+	static private boolean setBlocked = false;
     
     SystemMessage(){
     	setSystemMessage(Config.SystemMessages.defaultMsg);
@@ -34,6 +42,9 @@ class SystemMessage {
 	}
 
 	static void setSystemMessage(String systemMessage) {
+		
+		if(setBlocked) return;
+		
 		if(systemMessage.length() > Config.SystemMessages.maxSysMsgLength) SystemMessage.systemMessage = Config.SystemMessages.error_tooLong;
 		else {
 			SystemMessage.systemMessage = systemMessage;
@@ -44,6 +55,46 @@ class SystemMessage {
 		
 		// When setting a new system message clear all sub messages
 		if(subMessages!=null) subMessages.clear();
+	}
+	
+	/**
+	 * Sets a system message for the given time.
+	 * This function blocks all setter functions until the given time elapsed.
+	 * @param systemMessage
+	 * @param s
+	 */
+	static void setSystemMessage(String systemMessage, int seconds) {
+		
+		if(setBlocked) return;
+		
+		setSystemMessage(systemMessage);
+		timeGoalSeconds = seconds;
+		
+		setBlocked = true;
+		
+    	int delay = 1000; //milliseconds
+    	final Timer timer = new Timer(delay, null);
+    	timer.addActionListener(new ActionListener() {
+    	    public void actionPerformed(ActionEvent e) {
+    	    	elapsedSeconds++;
+    	    	if(elapsedSeconds >= timeGoalSeconds) {
+    	    		timer.stop();
+    	    		elapsedSeconds = 0;
+    	    		setBlocked = false;
+    	    	}
+    	    }
+    	});
+    	
+    	timer.start();
+		
+	}
+	
+	/**
+	 * Appends error word for the given string and keeps it on the menu bar for the default time
+	 * @param systemMessage
+	 */
+	static void setErrorMessage(String systemMessage) {
+		setSystemMessage(Config.SystemMessages.error+systemMessage, Config.SystemMessages.defaultErrorTimeSeconds);
 	}
 	
 	static void addSubMessage(String subMessage) {

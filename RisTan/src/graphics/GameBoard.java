@@ -66,16 +66,23 @@ public class GameBoard extends JPanel{
 
 	                    if (t.getHexagon().contains(me.getPoint())) {//check if mouse is clicked within shape
 	                    	
-	                    	// Get the current turn
-	                    	Turn turn = gameState.getTurn();
-	                    	// Get all the possible tile actions
-	                    	List<Action> possibleTileActions = turn.getPossibleTileActions(gameState);
-	                    	//TODO do something with this
+	                    	if(!isActivePlayer()) {
+	                    		SystemMessage.setErrorMessage(Config.SystemMessages.notYourTurn);
+	                    	}
+	                    	else {
+		                    	// Get the current turn
+		                    	Turn turn = gameState.getTurn();
+		                    	// Get all the possible tile actions
+		                    	List<Action> possibleTileActions = turn.getPossibleTileActions(gameState);
+		                    	//TODO do something with this
 
-	                        System.out.println("Clicked a "+t.getClass().getName()+" at coordinates: ("+t.getHexagon().getCenter().getX()+":"+t.getHexagon().getCenter().getY()+")");
-	                        t.toggleSelected();
-	                        
+		                        System.out.println("Clicked a "+t.getClass().getName()+" at coordinates: ("+t.getHexagon().getCenter().getX()+":"+t.getHexagon().getCenter().getY()+")");
+		                        t.toggleSelected();
+		                        
+	                    	}
+	                    	
 	                        rePaint();
+	                    	
 	                        
 	                    }
 	                }
@@ -207,7 +214,7 @@ public class GameBoard extends JPanel{
 	    	final Timer timer = new Timer(delay, null);
 	    	timer.addActionListener(new ActionListener() {
 	    	    public void actionPerformed(ActionEvent e) {
-	    	    	
+
 	    	    	SystemMessage.dotAnimation();
 	    	    	
 	    	    	//If over = false ---> the game is running --> stop the timer because the game already started
@@ -241,6 +248,9 @@ public class GameBoard extends JPanel{
 	    	    	if(isActivePlayer()) {
 	    	    		SystemMessage.setSystemMessage(Config.SystemMessages.YourTurn.SysMsg);
 	    	    		SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.SubMsg1);
+	    	    	}
+	    	    	else if(!gameState.isOver()){
+	    	    		SystemMessage.setSystemMessage("It is "+gameState.getActivePlayer().getName()+"'s turn.");
 	    	    	}
 	    	    	
 	    	    	rePaint();
