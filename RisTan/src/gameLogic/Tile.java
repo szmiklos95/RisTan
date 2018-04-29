@@ -23,7 +23,7 @@ public class Tile {
 		owner=null;
 	}
 	
-	Player getOwner() {
+	public Player getOwner() {
 		return owner;
 	}
 	
@@ -39,7 +39,7 @@ public class Tile {
 		}
 	}
 	
-	BuildingLevel getBuildingLevel() {
+	public BuildingLevel getBuildingLevel() {
 		return buildingLevel;
 	}
 	
