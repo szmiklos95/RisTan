@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import gameLogic.BuildVillageTurn;
 import gameLogic.GetResourceTurn;
 import gameLogic.NormalTurn;
 import gameLogic.OccupyFreeTileTurn;
@@ -230,9 +231,10 @@ public abstract class Config {
 		private static List<Turn> createTurns(){
 			List<Turn> ret=new ArrayList<Turn>();
 			ret.add(new StartTileChoiceTurn());
-			for(int i=0;i<5;++i) {
+			for(int i=0;i<4;++i) {
 				ret.add(new OccupyFreeTileTurn(1));
 			}
+			ret.add(new BuildVillageTurn());
 			ret.add(new GetResourceTurn(createStartingResources()));
 			for(int i=0;i<10;++i) {
 				ret.add(new NormalTurn(7));
