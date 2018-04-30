@@ -357,7 +357,7 @@ public abstract class Config {
 	 */
 	public static class GameBoard{
 		public static final int width = 1200;
-		public static final int height = 800;
+		public static final int height = 700;
 		public static final Font font = new Font("Arial", Font.BOLD, 18);
 	}
 	
@@ -425,6 +425,18 @@ public abstract class Config {
 		
 		public static final int dotAnimationMaxDots = 4;
 		public static final int maxSysMsgLength = 50;
+	}
+	
+	/* *****************************************************************************
+	 *  @@@@@@@@@@@@@@@@@@@@@@@@@@ Network configurations @@@@@@@@@@@@@@@@@@@@@@@@@@
+	 * *****************************************************************************/
+	public static class Server{
+		public static final int port = 605;
+		public static final int UdpPeriodicSendTime = 1000;
+	}
+	public static class Udp{
+		public static final int ServerPort = 4550;
+		public static final int ClientPort = 4555;
 	}
 
 }
