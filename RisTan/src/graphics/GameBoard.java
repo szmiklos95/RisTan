@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.Timer;
 
 import config.Config;
@@ -35,6 +36,8 @@ public class GameBoard extends JPanel{
 	    private ArrayList<HexaTile> hexaTiles;
 	    private Point origin; 
 	    private boolean tilesInitialized = false; //Necessary because the board (thus the tiles) are generated later
+	    
+	    private boolean aTileIsSelected = false;
 
 	    public GameBoard() {
 	    	setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
@@ -61,20 +64,56 @@ public class GameBoard extends JPanel{
 	            @Override
 	            public void mousePressed(MouseEvent me) {
 	                super.mousePressed(me);
-	                for (HexaTile t : hexaTiles) {
+	                for (HexaTile clickedHexaTile : hexaTiles) {
 
-	                    if (t.getHexagon().contains(me.getPoint())) {//check if mouse is clicked within shape
+	                    if (clickedHexaTile.getHexagon().contains(me.getPoint())) {//check if mouse is clicked within shape
 	                    	
 	                    	if(!isActivePlayer()) {
 	                    		SystemMessage.setErrorMessage(Config.SystemMessages.notYourTurn);
 	                    	}
 	                    	else {
+	                    		
+		                        //System.out.println("Clicked a "+clickedHexaTile.getClass().getName()+" at coordinates: ("+clickedHexaTile.getPoint().getI()+":"+clickedHexaTile.getPoint().getJ()+")");
+		                        
 		                    	// Get all the possible tile actions
 		                    	List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
-		                    	//TODO do something with this
+		                    	
+		                    	
+		                    	final JPopupMenu menu = new JPopupMenu("Menu");
+		                        
+		                      //If we haven't selected any tile yet
+		                        if(!aTileIsSelected) {
+		                        	clickedHexaTile.toggleSelected();
+			                        aTileIsSelected = true;
+			                        
+			                        System.out.println("Clicked a "+clickedHexaTile.getClass().getName()+" at coordinates: ("+clickedHexaTile.getPoint().getI()+":"+clickedHexaTile.getPoint().getJ()+")");
+			                    	System.out.print("Available actions: ");
+			                    	
+			                    	//Iterate through all the tile actions
+			                    	for(TileAction tileAction : possibleTileActions) {
+			                    		if(tileAction.getPoint().equals(clickedHexaTile.getPoint())) {
+			                    			System.out.print(tileAction.toString()+" ");
+			                                 menu.add(tileAction.toString());
+			                                 int popUpX = (int) clickedHexaTile.getGraphicsPoint().getX()+Config.Hexagon.radius;
+			                                 int popUpY = (int) clickedHexaTile.getGraphicsPoint().getY();
+			                                 menu.show(CardSync.card_GameWindow, popUpX, popUpY);
+			                    		}
+			                    	}
+			                    	System.out.print("\n");
+			                        
+		                        }
+		                        else if(clickedHexaTile.isSelected()) { 
+		                        	 //If the clicked tile is already selected
+		                        	clickedHexaTile.toggleSelected();
+		                        	aTileIsSelected = false;
+		                        	
+		                        	//clear the popup menu
+		                        	menu.removeAll();
+		                        	menu.setVisible(false);
+		                        }
 
-		                        System.out.println("Clicked a "+t.getClass().getName()+" at coordinates: ("+t.getHexagon().getCenter().getX()+":"+t.getHexagon().getCenter().getY()+")");
-		                        t.toggleSelected();
+		                
+		                    	
 		                        
 	                    	}
 	                    	
@@ -123,7 +162,7 @@ public class GameBoard extends JPanel{
 	        if(board!=null) {
 	        	if(!tilesInitialized) {
 			        ArrayList<gameLogic.Point> points = new ArrayList<gameLogic.Point>(board.getTileCoordinates());
-			        initTiles(origin, Config.Hexagon.radius, Config.Hexagon.padding, points);
+			        initTiles(origin, points);
 			        tilesInitialized = true;
 	        	}
 	        	drawTiles(g2d, origin);
@@ -138,8 +177,10 @@ public class GameBoard extends JPanel{
 	     * @param padding
 	     * @param points
 	     */
-	    private void initTiles(Point origin, int radius, int padding, List<gameLogic.Point> points) {
+	    private void initTiles(Point origin, List<gameLogic.Point> points) {
 	        int pointNum = points.size();
+	        int radius = Config.Hexagon.radius;
+	        int padding = Config.Hexagon.padding;
 	        
 	        for(int i=0; i<pointNum; ++i) {
 	        	gameLogic.Point pointi = points.get(i);
@@ -148,7 +189,7 @@ public class GameBoard extends JPanel{
                 int x = (int) (origin.getX() + xOff);
                 int y = (int) (origin.getY() + yOff);
                 
-                hexaTiles.add(new HexaTile(x,y,radius, getBoard().getResourceAt(pointi)));
+                hexaTiles.add(new HexaTile(origin, pointi, getBoard().getTileAt(pointi)));
 	        }
 	    }
 	    
