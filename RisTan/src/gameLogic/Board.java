@@ -204,7 +204,7 @@ public class Board {
 			for(int j=0;j<neighbours.size();++j) {
 				Point neighbour=neighbours.get(j);
 				Tile tile=tiles.get(neighbour);
-				if(tile.getOwner().getID()==playerID) {
+				if((tile.getOwner()!=null)&&(tile.getOwner().getID()==playerID)) {
 					ret.add(point);
 					break;
 				}
