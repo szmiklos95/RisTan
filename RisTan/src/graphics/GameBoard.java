@@ -335,6 +335,7 @@ public class GameBoard extends JPanel {
 				}
 
 				gameState = CardSync.controller.getGameState();
+				highlightAvailableTiles();
 				rePaint();
 			}
 		});
@@ -364,4 +365,28 @@ public class GameBoard extends JPanel {
 			return false;
 		return gameState.getActivePlayer().getID() == CardSync.controller.getLocalPlayerID();
 	}
+	
+	private void highlightAvailableTiles() {
+		
+		for(HexaTile t : hexaTiles) {
+			// Get all the possible tile actions
+			List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
+			
+			if(isActivePlayer()) {
+				// Iterate through all the tile actions
+				for (TileAction tileAction : possibleTileActions) {
+					if (tileAction.getPoint().equals(t.getPoint())) {
+						t.setAvailableForAction(true);
+						break; //Exit this loop as we only need to have 1 action to mark the tile available
+					}
+				}
+			}
+			else {
+				t.setAvailableForAction(false);
+			}
+
+			
+		}
+	}
+	
 }

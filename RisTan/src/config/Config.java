@@ -323,6 +323,8 @@ public abstract class Config {
 		// The color of the inner hexagon when it is selected
 		public static final int outerColor_selected = 0xDA6F25;
 		// 
+		public static final int outerColor_availableForAction = 0x06FFFF;
+		//
 		public static final int innerColor_stone = 0xb8b09b;
 		//
 		public static final int innerColor_wood = 0x913D02;
