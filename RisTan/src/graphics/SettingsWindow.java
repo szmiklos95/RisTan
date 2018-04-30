@@ -20,6 +20,7 @@ import javax.swing.SpinnerNumberModel;
 import config.Config;
 import network.Message;
 import network.SerialServer;
+import network.UdpServer;
 import network.Message.eMsgType;
 
 //TODO comment
@@ -132,9 +133,12 @@ public class SettingsWindow extends JPanel{
 	private void SetupNewGame() {
 		network.SerialServer server = new SerialServer();
 		server.Connect(CardSync.settings.getPlayerCount());
+		
+		UdpServer udpServer = new UdpServer();
+		udpServer.connect();
 
 		// This is localhost IP address, connects the local client to the server
-		ConnectTo("127.0.0.1");  //TODO This should be editable or...?
+		ConnectTo(udpServer.getServerAddress().getHostAddress());  //TODO This should be editable or...?
 		System.out.println("Setting up the server.");
 
 	}
