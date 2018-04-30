@@ -2,7 +2,6 @@ package gameLogic;
 
 import java.io.Serializable;
 
-//describes an action in or before the game
 /**
  * Describes an action in or before the game. Everything which can modify the game state is an action.
  * @author Andras
