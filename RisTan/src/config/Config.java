@@ -373,10 +373,13 @@ public abstract class Config {
 	}
 	
 	public static class PlayerCircle{
-		public static final int radius = Hexagon.radius/2;
+		public static final int radius = Hexagon.radius / 3;
 		public static final int defaultColor = Circle.color;
 		public static final int lineThickness = 0;
-		
+	}
+	
+	public static class PlayerColor{
+		public static final int color_default = 0x000000;
 		public static final int color_player0 = 0xD007EC; //D007EC pink
 		public static final int color_player1 = 0xF80000; //F80000 red
 		public static final int color_player2 = 0x01FB17; //01FB17 green
@@ -405,7 +408,7 @@ public abstract class Config {
 		public static final String waitingForPlayers = "Waiting for other players to join";
 		public static final String boardDrawn = "The board has been drawn.";
 		
-		public static final String defaultSubMsgAddition = " (Click for details)";
+		public static final String defaultSubMsgAddition = " (Click here for details)";
 		
 		public static class YourTurn{
 			public static final String sysMsg = "It is your turn!"+defaultSubMsgAddition;
@@ -425,6 +428,22 @@ public abstract class Config {
 		
 		public static final int dotAnimationMaxDots = 4;
 		public static final int maxSysMsgLength = 50;
+	}
+	
+	public static class Rectangle{
+		public static final int width = 10;
+		public static final int height = 30;
+		public static final int lineThickness = 0;
+		public static final int xOff = Hexagon.radius/2;
+		public static final int yOff = -(Hexagon.radius/2-height/3);
+		
+		public static class Square{
+			public static final int width = Rectangle.width;
+			public static final int height = Rectangle.width;
+			public static final int lineThickness = Rectangle.lineThickness;	
+			public static final int xOff = Rectangle.xOff;
+			public static final int yOff = -Rectangle.yOff-Rectangle.height;
+		}
 	}
 
 }
