@@ -22,6 +22,7 @@ import config.Config;
 import gameLogic.GameState;
 import gameLogic.OccupyFreeTile;
 import gameLogic.OccupyFreeTileAction;
+import gameLogic.OccupyFreeTileFree;
 import gameLogic.TileAction;
 
 /**
@@ -130,7 +131,7 @@ public class GameBoard extends JPanel {
 
 					menuItem.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent ae) {
-							executeAction(tileAction.toString(), clickedHexaTile);
+							executeAction(tileAction.getClass().getCanonicalName(), clickedHexaTile);
 						}
 					});
 
@@ -159,13 +160,8 @@ public class GameBoard extends JPanel {
 	 * @param actionString
 	 */
 	private void executeAction(String actionString, HexaTile clickedHexaTile) {
-		switch (actionString) {
-		case Config.Action.OccupyFreeTile.name:
-			CardSync.controller.executeAction(gameState.getActivePlayer().getID(),
-					new OccupyFreeTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
-			break;
-		default:
-			break;
+		if(actionString.equals(OccupyFreeTileFree.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyFreeTileFree(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
 	}
 

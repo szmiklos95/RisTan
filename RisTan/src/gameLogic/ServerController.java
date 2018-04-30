@@ -15,7 +15,7 @@ public class ServerController extends Controller {
 	public void executeAction(int playerID, Action action) {
 		try {
 			getGameState().executeAction(action);
-			//the following line runs if and only if the action executed proprely on the server
+			//the following line runs if and only if the action executed properly on the server
 			server.SendtoAll(new Message(Message.eMsgType.Action,action));
 		}catch(GameLogicException e) {
 			server.Send(new Message(e.getMessage()),playerID);
@@ -25,7 +25,11 @@ public class ServerController extends Controller {
 	//init the gameState before game start
 	//returns the StartGameAction to execute at the clients
 	public Action initGame() {
-		getGameState().initGame();
+		try {
+			getGameState().initGame();
+		}catch(GameLogicException e) {
+			e.printStackTrace();
+		}
 		return getGameState().getStartGameAction();
 	}
 }

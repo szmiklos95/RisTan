@@ -59,4 +59,9 @@ public abstract class OccupyFreeTileAction extends TileAction {
 		super.execute(gameState);
 		gameState.getBoard().getTileAt(getPoint()).occupy(gameState.getActivePlayer());
 	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.OccupyFreeTile.name;
+	}
 }
