@@ -360,6 +360,7 @@ public abstract class Config {
 	public static class Chat{
 		public static final int textAreaColoumns = 25;
 		public static final int textAreaRows = 10;
+		public static final int sleepTime = 100; //ms
 	}
 	
 	public static class Timer{
