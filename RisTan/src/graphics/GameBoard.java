@@ -16,7 +16,6 @@ import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
 import javax.swing.Timer;
 
 import config.Config;
@@ -160,12 +159,16 @@ public class GameBoard extends JPanel {
 	/**
 	 * 
 	 * @param actionString
+	 * @param clickedHexaTile
 	 */
 	private void executeAction(String actionString, HexaTile clickedHexaTile) {
-
+		
 		if(actionString.equals(OccupyFreeTileFree.class.getCanonicalName())) {
 			CardSync.controller.sendAction(new OccupyFreeTileFree(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
+		
+		clickedHexaTile.clearSelected();
+		aTileIsSelected = false;
 	}
 
 	/**
@@ -326,10 +329,12 @@ public class GameBoard extends JPanel {
 					int remainingTime = gameState.getTurn().getRemainingTime();
 					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.RemainingTime + remainingTime);
 					
+					
 				} else if (!gameState.isOver()) {
 					SystemMessage.setSystemMessage("It is " + gameState.getActivePlayer().getName() + "'s turn.");
 				}
 
+				gameState = CardSync.controller.getGameState();
 				rePaint();
 			}
 		});

@@ -41,7 +41,7 @@ public class HexaTile {
 	
 	public void draw(Graphics2D g) {
 		
-		String text=tile.getOwner()!=null?tile.getOwner().getName():"free";
+		String text=tile.getOwner()!=null?tile.getOwner().getName():Config.Hexagon.freeTileString;
         //String text = resource.name();
         
         FontMetrics metrics = g.getFontMetrics();

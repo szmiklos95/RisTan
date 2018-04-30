@@ -328,7 +328,11 @@ public abstract class Config {
 		public static final int innerColor_wood = 0x913D02;
 		//
 		public static final int innerColor_wheat = 0xE6b800;
+		//
+		public static final String freeTileString = "Free";
 	}
+	
+
 	
 	public static class GameWindow{
 		public static final Color background = Color.darkGray;
