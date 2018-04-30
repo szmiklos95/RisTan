@@ -64,4 +64,9 @@ public class BuildTown extends TileAction {
 		super.execute(gameState);
 		gameState.getBoard().getTileAt(getPoint()).setBuildingLevel(BuildingLevel.Town);
 	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.BuildTown.name;
+	}
 }

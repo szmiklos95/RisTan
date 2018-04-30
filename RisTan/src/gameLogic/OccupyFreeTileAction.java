@@ -2,6 +2,8 @@ package gameLogic;
 
 import java.util.Map;
 
+import config.Config;
+
 public abstract class OccupyFreeTileAction extends TileAction {
 	private static final long serialVersionUID = 1L;
 	
@@ -21,5 +23,10 @@ public abstract class OccupyFreeTileAction extends TileAction {
 	void execute(GameState gameState)throws GameLogicException{
 		super.execute(gameState);
 		gameState.getBoard().getTileAt(getPoint()).occupy(gameState.getActivePlayer());
+	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.OccupyFreeTile.name;
 	}
 }

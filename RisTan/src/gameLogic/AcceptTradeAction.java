@@ -49,4 +49,9 @@ public class AcceptTradeAction extends TradeAction {
 		player.takeResource(take,take_amount);
 		offerer.giveResource(take,take_amount);
 	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.AcceptTradeAction.name;
+	}
 }

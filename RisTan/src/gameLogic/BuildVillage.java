@@ -11,4 +11,9 @@ public class BuildVillage extends BuildVillageAction {
 				point,
 				Config.Action.BuildVillage.cost);
 	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.BuildVillage.name;
+	}
 }

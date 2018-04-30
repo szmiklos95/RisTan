@@ -2,6 +2,8 @@ package gameLogic;
 
 import java.util.Map;
 
+import config.Config;
+
 public abstract class OccupyEnemyTileAction extends ProbabilisticTileAction{
 	private static final long serialVersionUID = 1L;
 	
@@ -24,5 +26,10 @@ public abstract class OccupyEnemyTileAction extends ProbabilisticTileAction{
 		if(isSuccessful()) {
 			gameState.getBoard().getTileAt(getPoint()).occupy(gameState.getActivePlayer());
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.OccupyEnemyTile.name;
 	}
 }

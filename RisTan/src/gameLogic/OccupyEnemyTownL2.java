@@ -12,4 +12,9 @@ public class OccupyEnemyTownL2 extends OccupyEnemyTownAction {
 				Config.Action.OccupyEnemyTownL2.cost,
 				Config.Action.OccupyEnemyTownL2.probability);
 	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.OccupyEnemyTownL2.name;
+	}
 }
