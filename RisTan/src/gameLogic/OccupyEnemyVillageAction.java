@@ -2,6 +2,8 @@ package gameLogic;
 
 import java.util.Map;
 
+import config.Config;
+
 public abstract class OccupyEnemyVillageAction extends OccupyEnemyTileAction{
 	private static final long serialVersionUID = 1L;
 	
@@ -16,5 +18,10 @@ public abstract class OccupyEnemyVillageAction extends OccupyEnemyTileAction{
 		if(tile.getBuildingLevel()!=BuildingLevel.Village) {
 			throw new TileIsNotVillageException();
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.OccupyEnemyVillage.name;
 	}
 }

@@ -8,4 +8,9 @@ public class OccupyFreeTile extends OccupyFreeTileAction {
 	public OccupyFreeTile(int playerID,Point point){
 		super(playerID,Config.Action.OccupyFreeTile.time,point,Config.Action.OccupyFreeTile.cost);
 	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.OccupyFreeTile.name;
+	}
 }

@@ -20,8 +20,12 @@ import gameLogic.Turn;
 public abstract class Config {
 	//Actions config
 	public static class Action{
+		
+		public static final String name = "Default Action";
+		
 		public static class AcceptTradeAction{
 			public static final int time=1;
+			public static final String name = "Accept trade";
 		}
 		public static class BuildTown{
 			public static final int time=3;
@@ -33,6 +37,7 @@ public abstract class Config {
 				ret.put(Resource.Wood,1);
 				return ret;
 			}
+			public static final String name = "Build town";
 		}
 		public static class BuildVillage{
 			public static final int time=2;
@@ -44,6 +49,7 @@ public abstract class Config {
 				ret.put(Resource.Wood,1);
 				return ret;
 			}
+			public static final String name = "Build village";
 		}
 		public static class OccupyEnemyTile{
 			public static final int time=2;
@@ -54,6 +60,7 @@ public abstract class Config {
 				return ret;
 			}
 			public static final double probability=0.5;
+			public static final String name = "Occupy enemy tile";
 		}
 		public static class OccupyEnemyTileL2{
 			public static final int time=2;
@@ -65,6 +72,7 @@ public abstract class Config {
 				return ret;
 			}
 			public static final double probability=0.75;
+			public static final String name = "Occupy enemy tile L2";
 		}
 		public static class OccupyEnemyTown{
 			public static final int time=4;
@@ -77,6 +85,7 @@ public abstract class Config {
 				return ret;
 			}
 			public static final double probability=0.5;
+			public static final String name = "Occupy enemy town";
 		}
 		public static class OccupyEnemyTownL2{
 			public static final int time=4;
@@ -89,6 +98,7 @@ public abstract class Config {
 				return ret;
 			}
 			public static final double probability=0.75;
+			public static final String name = "Occupy enemy town L2";
 		}
 		public static class OccupyEnemyVillage{
 			public static final int time=3;
@@ -100,6 +110,7 @@ public abstract class Config {
 				return ret;
 			}
 			public static final double probability=0.5;
+			public static final String name = "Occupy enemy village";
 		}
 		public static class OccupyEnemyVillageL2{
 			public static final int time=3;
@@ -111,19 +122,23 @@ public abstract class Config {
 				return ret;
 			}
 			public static final double probability=0.75;
+			public static final String name = "Occupy enemy village L2";
 		}
 		public static class OccupyFreeTile{
 			public static final int time=2;
 			public static final Map<Resource,Integer> cost=new HashMap<Resource,Integer>();
+			public static final String name = "Occupy free tile";
 		}
 		public static class OfferTradeAction{
 			public static final int time=1;
+			public static final String name = "Offer trade";
 		}
 		public static class TradeWithGameAction{
 			public static final int time=1;
 			//change ratio: for every given ratio_D, the player gets ratio_N
 			public static final int ratio_N=1;
 			public static final int ratio_D=3;
+			public static final String name = "Trade with game";
 		}
 	}
 	
