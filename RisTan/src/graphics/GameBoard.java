@@ -358,6 +358,9 @@ public class GameBoard extends JPanel {
 				if (!boardDrawn && !gameState.isOver()) {
 					timer.stop();
 					boardDrawn = true;
+					
+					new GameMenubar(); //To open the market
+					
 					SystemMessage.setSystemMessage(Config.SystemMessages.boardDrawn);
 
 					rePaint();

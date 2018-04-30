@@ -85,7 +85,7 @@ public class GUI extends JFrame {
 	 *            The current game state
 	 */
 	public void refreshGameState(gameLogic.GameState gameState) {
-		CardSync.gameState = gameState;
+		CardSync.setGameState(gameState);
 	}
 
 }

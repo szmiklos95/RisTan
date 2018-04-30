@@ -17,7 +17,7 @@ import network.SerialClient;
  */
 class CardSync {
 	static GameBoard gameBoard;
-	static GameState gameState;
+	private static GameState gameState;
 	static JFrame frame;
 	static NewGameSettings settings;
 
@@ -43,5 +43,15 @@ class CardSync {
 		client = new SerialClient();
 		controller = new ClientController(client);
 		
+	}
+
+	public static GameState getGameState() {
+		//Always update when getting a game state
+		setGameState(controller.getGameState());
+		return gameState;
+	}
+
+	public static void setGameState(GameState gameState) {
+		CardSync.gameState = gameState;
 	}
 }

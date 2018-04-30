@@ -7,34 +7,68 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Box;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import config.Config;
 
+
 public class GameMenubar {
 	
+	JMenuBar bar = null;
+	
+	// Set menubar for frame
+	// TODO: Move to a new method
+	// TODO: Confirmation if game started and player wants to return to main menu
 	public GameMenubar() {
-		// Set menubar for frame
-		// TODO: Move to a new method
-		// TODO: Confirmation if game started and player wants to return to main menu
-		JMenuBar menubar = new JMenuBar();
 		
+		//If we already had a menubar disable it in case this function gets called multiple times
+		if(CardSync.frame.getJMenuBar()!=null) CardSync.frame.getJMenuBar().setEnabled(false);
+				
+		bar = new JMenuBar();
+		
+		// File
 		JMenu file = new JMenu("File");
 		addMenuItem(Config.GUI.ButtonTexts.mainMenu, Config.GUI.CardIDs.mainMenu, file, switchCardAction);
 		addMenuItem(Config.GUI.ButtonTexts.exit, null, file, exitAction);
-		menubar.add(file);	
+		bar.add(file);	
+		
+		// Market
+		JMenu market = new JMenu("Market");
+		
+		if(CardSync.getGameState().isOver()) {
+			JLabel over = new JLabel("The market is closed :( ");
+			market.add(over);
+		}
+		else {
+			JMenuItem offer = new JMenuItem("Make new offer");
+			offer.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					MarketPopups.makeNewOffer(market);
+				}
+			});
+			market.add(offer);
+			
+			JMenuItem accept = new JMenuItem("View offers");
+			market.add(accept);
+			
+			JMenuItem gameTrade = new JMenuItem("Trade with game");
+			market.add(gameTrade);
+		}
+		
+		bar.add(market);
 		
 		// Conventional menubar ends here
-		menubar.add(Box.createHorizontalGlue());
+		bar.add(Box.createHorizontalGlue());
 		// System messages
 		JMenu textItem = new JMenu();
 		textItem.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); 
 		
-		menubar.add(textItem);
+		bar.add(textItem);
 		
-		CardSync.frame.setJMenuBar(menubar);
+		CardSync.frame.setJMenuBar(bar);
 	}
 	
 	
@@ -89,4 +123,5 @@ public class GameMenubar {
 			System.out.print("Switching to " + e.getActionCommand() + " panel.\n");
 		}
 	};
+	
 }
