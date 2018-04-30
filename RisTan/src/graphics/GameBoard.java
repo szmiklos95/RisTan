@@ -108,8 +108,6 @@ public class GameBoard extends JPanel {
 		// coordinates:
 		// ("+clickedHexaTile.getPoint().getI()+":"+clickedHexaTile.getPoint().getJ()+")");
 
-		// Get all the possible tile actions
-		List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
 
 		final JPopupMenu menu = new JPopupMenu("Menu");
 
@@ -122,40 +120,67 @@ public class GameBoard extends JPanel {
 					+ clickedHexaTile.getPoint().getI() + ":" + clickedHexaTile.getPoint().getJ() + ")");
 			System.out.print("Available actions: ");
 
-			// Iterate through all the tile actions
-			for (TileAction tileAction : possibleTileActions) {
-				if (tileAction.getPoint().equals(clickedHexaTile.getPoint())) {
-					System.out.print(tileAction.toString() + " ");
-
-					JMenuItem menuItem = new JMenuItem(tileAction.toString());
-
-					menuItem.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent ae) {
-							executeAction(tileAction.getClass().getCanonicalName(), clickedHexaTile);
-						}
-					});
-
-					menu.add(menuItem);
-					int popUpX = (int) clickedHexaTile.getGraphicsPoint().getX() + Config.Hexagon.radius;
-					int popUpY = (int) clickedHexaTile.getGraphicsPoint().getY();
-					menu.show(CardSync.card_GameWindow, popUpX, popUpY);
-					
-				}
-			}
+			drawPopupMenuWithActions(menu,clickedHexaTile);
+			
 			System.out.print("\n");
 
-		} else if (clickedHexaTile.isSelected()) {
-			// If the clicked tile is already selected
-			clickedHexaTile.toggleSelected();
-			aTileIsSelected = false;
+		} else { //We already have a selected tile
+			if (clickedHexaTile.isSelected()) { //If the clicked is the selected, remove selection
+				// If the clicked tile is already selected
+				clickedHexaTile.toggleSelected();
+				aTileIsSelected = false;
 
-			// clear the popup menu
-			menu.removeAll();
-			menu.setVisible(false);
+				// clear the popup menu
+				menu.removeAll();
+				menu.setVisible(false);
+			}
+			else { //Find the already selected, and remove it's selection
+				for(HexaTile ht : hexaTiles) {
+					if(ht.isSelected()) ht.clearSelected();
+					
+					// clear the popup menu
+					menu.removeAll();
+					menu.setVisible(false);
+				}
+				clickedHexaTile.toggleSelected();
+				drawPopupMenuWithActions(menu,clickedHexaTile);
+			}
 		}
 
 	}
 
+	/**
+	 * Sets and draws the given popup menu
+	 * @param menu
+	 * @param clickedHexaTile
+	 */
+	private void drawPopupMenuWithActions(JPopupMenu menu, HexaTile clickedHexaTile) {
+		// Get all the possible tile actions
+		List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
+		
+		// Iterate through all the tile actions
+		for (TileAction tileAction : possibleTileActions) {
+			if (tileAction.getPoint().equals(clickedHexaTile.getPoint())) {
+				System.out.print(tileAction.toString() + " ");
+
+				JMenuItem menuItem = new JMenuItem(tileAction.toString());
+
+				menuItem.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent ae) {
+						executeAction(tileAction.getClass().getCanonicalName(), clickedHexaTile);
+					}
+				});
+
+				menu.add(menuItem);
+				int popUpX = (int) clickedHexaTile.getGraphicsPoint().getX() + Config.Hexagon.radius;
+				int popUpY = (int) clickedHexaTile.getGraphicsPoint().getY();
+				menu.show(CardSync.card_GameWindow, popUpX, popUpY);
+				
+			}
+		}
+	}
+	
+	
 	/**
 	 * 
 	 * @param actionString
@@ -366,6 +391,9 @@ public class GameBoard extends JPanel {
 		return gameState.getActivePlayer().getID() == CardSync.controller.getLocalPlayerID();
 	}
 	
+	/**
+	 * 
+	 */
 	private void highlightAvailableTiles() {
 		
 		for(HexaTile t : hexaTiles) {
