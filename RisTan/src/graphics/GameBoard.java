@@ -19,6 +19,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.Timer;
 
 import config.Config;
+import gameLogic.BuildTown;
+import gameLogic.BuildVillage;
+import gameLogic.BuildVillageFree;
 import gameLogic.GameState;
 import gameLogic.OccupyFreeTile;
 import gameLogic.OccupyFreeTileAction;
@@ -104,10 +107,6 @@ public class GameBoard extends JPanel {
 	 * @param clickedHexaTile
 	 */
 	private void handleValidMouseAction(HexaTile clickedHexaTile) {
-		// System.out.println("Clicked a "+clickedHexaTile.getClass().getName()+" at
-		// coordinates:
-		// ("+clickedHexaTile.getPoint().getI()+":"+clickedHexaTile.getPoint().getJ()+")");
-
 
 		final JPopupMenu menu = new JPopupMenu("Menu");
 
@@ -115,14 +114,7 @@ public class GameBoard extends JPanel {
 		if (!aTileIsSelected) {
 			clickedHexaTile.toggleSelected();
 			aTileIsSelected = true;
-
-			System.out.println("Clicked a " + clickedHexaTile.getClass().getName() + " at coordinates: ("
-					+ clickedHexaTile.getPoint().getI() + ":" + clickedHexaTile.getPoint().getJ() + ")");
-			System.out.print("Available actions: ");
-
 			drawPopupMenuWithActions(menu,clickedHexaTile);
-			
-			System.out.print("\n");
 
 		} else { //We already have a selected tile
 			if (clickedHexaTile.isSelected()) { //If the clicked is the selected, remove selection
@@ -161,7 +153,6 @@ public class GameBoard extends JPanel {
 		// Iterate through all the tile actions
 		for (TileAction tileAction : possibleTileActions) {
 			if (tileAction.getPoint().equals(clickedHexaTile.getPoint())) {
-				System.out.print(tileAction.toString() + " ");
 
 				JMenuItem menuItem = new JMenuItem(tileAction.toString());
 
@@ -190,6 +181,14 @@ public class GameBoard extends JPanel {
 		
 		if(actionString.equals(OccupyFreeTileFree.class.getCanonicalName())) {
 			CardSync.controller.sendAction(new OccupyFreeTileFree(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(BuildVillageFree.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new BuildVillageFree(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(BuildTown.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new BuildTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
 		
 		clickedHexaTile.clearSelected();

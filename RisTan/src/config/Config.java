@@ -363,6 +363,17 @@ public abstract class Config {
 		public static final int lineThickness = 0;
 	}
 	
+	public static class PlayerCircle{
+		public static final int radius = Hexagon.radius/2;
+		public static final int defaultColor = Circle.color;
+		public static final int lineThickness = 0;
+		
+		public static final int color_player0 = 0xD007EC; //D007EC pink
+		public static final int color_player1 = 0xF80000; //F80000 red
+		public static final int color_player2 = 0x01FB17; //01FB17 green
+		public static final int color_player3 = 0x0017FF; //0017FF blue
+	}
+	
 	/**
 	 * The embedded chat window
 	 * @author Miklós
