@@ -3,6 +3,8 @@ package gameLogic;
 import java.util.List;
 import java.util.Map;
 
+import config.Config;
+
 public class GetResourceTurn extends Turn {
 	private Map<Resource,Integer> resources;
 	
@@ -32,5 +34,10 @@ public class GetResourceTurn extends Turn {
 		for(Map.Entry<Resource,Integer> e:resources.entrySet()) {
 			actions.add(new GetResourceAction(activePlayerID,e.getKey(),e.getValue()));
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return Config.TurnNames.getResource;
 	}
 }

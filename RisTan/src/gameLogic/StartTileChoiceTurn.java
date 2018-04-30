@@ -3,6 +3,8 @@ package gameLogic;
 import java.util.ArrayList;
 import java.util.List;
 
+import config.Config;
+
 public class StartTileChoiceTurn extends Turn {
 	public StartTileChoiceTurn(){
 		super(false);
@@ -38,5 +40,10 @@ public class StartTileChoiceTurn extends Turn {
 	boolean isTileActionPossible(GameState gameState,TileAction action) {
 		return (getObligatoryEvents().size()>0)&&
 				(action instanceof OccupyFreeTileFree);
+	}
+	
+	@Override
+	public String toString() {
+		return Config.TurnNames.startTileChoice;
 	}
 }

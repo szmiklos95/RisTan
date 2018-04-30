@@ -90,4 +90,14 @@ public class Player extends ObjectWithID{
 			takeResource(e.getKey(),e.getValue());
 		}
 	}
+	
+	/**
+	 * 
+	 * @param resource
+	 * @return
+	 * @author Miklós
+	 */
+	public int getResourceAmount(Resource resource) {
+		return resources.get(resource);
+	}
 }

@@ -26,6 +26,7 @@ import gameLogic.GameState;
 import gameLogic.OccupyFreeTile;
 import gameLogic.OccupyFreeTileAction;
 import gameLogic.OccupyFreeTileFree;
+import gameLogic.Resource;
 import gameLogic.TileAction;
 
 /**
@@ -347,11 +348,22 @@ public class GameBoard extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 
 				if (isActivePlayer()) {
-					SystemMessage.setSystemMessage(Config.SystemMessages.YourTurn.SysMsg);
-					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.SubMsg1);
-					
+					SystemMessage.setSystemMessage(Config.SystemMessages.YourTurn.sysMsg);
+					//Turn name
+					SystemMessage.addSubMessage(gameState.getTurn().toString());
+					//Remaining time
 					int remainingTime = gameState.getTurn().getRemainingTime();
-					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.RemainingTime + remainingTime);
+					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.remainingTime + remainingTime);
+					//Score
+					int score = gameState.getActivePlayer().getScore();
+					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.score + score);
+					//Resources
+					int wood = gameState.getActivePlayer().getResourceAmount(Resource.Wood);
+					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.wood + wood);
+					int stone = gameState.getActivePlayer().getResourceAmount(Resource.Stone);
+					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.stone + stone);
+					int wheat = gameState.getActivePlayer().getResourceAmount(Resource.Wheat);
+					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.wheat + wheat);
 					
 					
 				} else if (!gameState.isOver()) {
