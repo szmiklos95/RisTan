@@ -34,7 +34,6 @@ public class SerialClient {
 						isTextReceived = true;
 						break;
 					case Action:
-						System.out.println("C "+controller.getLocalPlayerID()+" "+msg.GetData());
 						controller.executeAction(controller.getLocalPlayerID(),(Action)msg.GetData());
 						break;
 					default:

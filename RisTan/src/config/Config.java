@@ -189,6 +189,9 @@ public abstract class Config {
 		public static class InvalidTileAction{
 			public static final String errorMessage="Ez az akció nem hajtható végre ezen a mezõn.";
 		}
+		public static class NoSuchTradeOffer{
+			public static final String errorMessage="Az akció nem hajtható végre, mert nincs ilyen kereskedelmi ajánlat.";
+		}
 		public static class NotEnoughTime{
 			public static final String errorMessage="Az akció nem hajtható végre, mert nincs hozzá elég idõd.";
 		}

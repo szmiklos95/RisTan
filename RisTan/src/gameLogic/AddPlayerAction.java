@@ -1,12 +1,26 @@
 package gameLogic;
 
-//to add a player to the game, instantiate a Player, get this action with that player, and execute the action on the server and the clients - before the initGameAction
+/**
+ * Describes an action of adding a player to the game - before initialization.
+ * @author Andras
+ * 
+ */
 public class AddPlayerAction extends ManagementAction {
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * The ID of the added player.
+	 */
 	private int ID;
+	/**
+	 * The name of the added player.
+	 */
 	private String name;
 	
+	/**
+	 * Constructor.
+	 * @param player the player from the data is got.
+	 */
 	public AddPlayerAction(Player player) {
 		ID=player.getID();
 		name=player.getName();
