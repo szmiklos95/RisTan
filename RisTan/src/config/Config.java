@@ -22,7 +22,7 @@ public abstract class Config {
 	//Actions config
 	public static class Action{
 		
-		public static final String name = "Default Action";
+		public static final String name = "Default Action String";
 		
 		public static class AcceptTradeAction{
 			public static final int time=1;
@@ -250,6 +250,15 @@ public abstract class Config {
 		}
 	}
 	
+	public static class TurnNames{
+		public static final String defaultName = "Default Turn String";
+		public static final String buildVillage = "Build village turn";
+		public static final String getResource = "Get resource turn";
+		public static final String normal = "Normal turn";
+		public static final String occupyFreeTile = "Occupy free tile turn";
+		public static final String startTileChoice = "Start tile choice turn";
+	}
+	
 	/* *****************************************************************************
 	 *  @@@@@@@@@@@@@@@@@@@@@@@@@@ Graphic configurations @@@@@@@@@@@@@@@@@@@@@@@@@@
 	 * *****************************************************************************/
@@ -399,9 +408,13 @@ public abstract class Config {
 		public static final String defaultSubMsgAddition = " (Click for details)";
 		
 		public static class YourTurn{
-			public static final String SysMsg = "It is your turn!"+defaultSubMsgAddition;
-			public static final String SubMsg1 = "Choose starting tile!";
-			public static final String RemainingTime = "Remaining time: ";
+			public static final String sysMsg = "It is your turn!"+defaultSubMsgAddition;
+			//public static final String startingTile = "Choose starting tile!";
+			public static final String remainingTime = "Remaining time: ";
+			public static final String score = "Your score: ";
+			public static final String wood = "Wood = ";
+			public static final String stone = "Stone = ";
+			public static final String wheat = "Wheat = ";
 		}
 		
 		public static final String notYourTurn = "It is not your turn!";
