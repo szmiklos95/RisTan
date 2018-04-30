@@ -373,9 +373,12 @@ public abstract class Config {
 		public static final String waitingForPlayers = "Waiting for other players to join";
 		public static final String boardDrawn = "The board has been drawn.";
 		
+		public static final String defaultSubMsgAddition = " (Click for details)";
+		
 		public static class YourTurn{
-			public static final String SysMsg = "It is your turn!";
+			public static final String SysMsg = "It is your turn!"+defaultSubMsgAddition;
 			public static final String SubMsg1 = "Choose starting tile!";
+			public static final String RemainingTime = "Remaining time: ";
 		}
 		
 		public static final String notYourTurn = "It is not your turn!";

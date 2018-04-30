@@ -112,19 +112,21 @@ class SystemMessage {
 		//Get the last menu item
 		JMenu sysMsgItem = menubar.getMenu(menubar.getMenuCount()-1);
 		
-		// Change text
-		sysMsgItem.setText(systemMessage);
 		// Remove all menu items
 		sysMsgItem.removeAll();
 		
 		// Iterate through the sub messages string list and add items
 		if(subMessages!=null) {
+			
 			for(String s:subMessages) {
 				JMenuItem item = new JMenuItem(s);
 				item.setHorizontalAlignment(SwingConstants.RIGHT);
 				sysMsgItem.add(item);
 			}
 		}
+		
+		// Change text
+		sysMsgItem.setText(systemMessage);
 		
 		CardSync.frame.setJMenuBar(menubar);
     }

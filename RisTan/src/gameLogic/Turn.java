@@ -47,7 +47,7 @@ public abstract class Turn {
 	
 	abstract void reset(GameState gameState);
 	
-	int getRemainingTime() {
+	public int getRemainingTime() {
 		return remainingTime;
 	}
 	

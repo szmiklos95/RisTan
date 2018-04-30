@@ -16,6 +16,7 @@ import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 import javax.swing.Timer;
 
 import config.Config;
@@ -138,6 +139,7 @@ public class GameBoard extends JPanel {
 					int popUpX = (int) clickedHexaTile.getGraphicsPoint().getX() + Config.Hexagon.radius;
 					int popUpY = (int) clickedHexaTile.getGraphicsPoint().getY();
 					menu.show(CardSync.card_GameWindow, popUpX, popUpY);
+					
 				}
 			}
 			System.out.print("\n");
@@ -161,8 +163,7 @@ public class GameBoard extends JPanel {
 	private void executeAction(String actionString, HexaTile clickedHexaTile) {
 		switch (actionString) {
 		case Config.Action.OccupyFreeTile.name:
-			CardSync.controller.executeAction(gameState.getActivePlayer().getID(),
-					new OccupyFreeTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+			CardSync.controller.sendAction(new OccupyFreeTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 			break;
 		default:
 			break;
@@ -323,6 +324,10 @@ public class GameBoard extends JPanel {
 				if (isActivePlayer()) {
 					SystemMessage.setSystemMessage(Config.SystemMessages.YourTurn.SysMsg);
 					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.SubMsg1);
+					
+					int remainingTime = gameState.getTurn().getRemainingTime();
+					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.RemainingTime + remainingTime);
+					
 				} else if (!gameState.isOver()) {
 					SystemMessage.setSystemMessage("It is " + gameState.getActivePlayer().getName() + "'s turn.");
 				}
