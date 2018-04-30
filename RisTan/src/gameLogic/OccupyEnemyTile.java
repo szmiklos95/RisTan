@@ -22,4 +22,9 @@ public class OccupyEnemyTile extends OccupyEnemyEmptyTileAction {
 				Config.Action.OccupyEnemyTile.cost,
 				Config.Action.OccupyEnemyTile.probability);
 	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.OccupyEnemyTile.name;
+	}
 }

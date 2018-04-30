@@ -22,4 +22,9 @@ public class OccupyEnemyVillage extends OccupyEnemyVillageAction {
 				Config.Action.OccupyEnemyVillage.cost,
 				Config.Action.OccupyEnemyVillage.probability);
 	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.OccupyEnemyVillage.name;
+	}
 }

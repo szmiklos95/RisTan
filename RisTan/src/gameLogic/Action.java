@@ -2,6 +2,8 @@ package gameLogic;
 
 import java.io.Serializable;
 
+import config.Config;
+
 /**
  * Describes an action in or before the game. Everything which can modify the game state is an action.
  * @author Andras
@@ -27,5 +29,10 @@ public abstract class Action implements Serializable{
 	 */
 	void execute(final GameState gameState)throws GameLogicException{
 		check(gameState);
+	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.name;
 	}
 }

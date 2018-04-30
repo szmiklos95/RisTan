@@ -71,4 +71,9 @@ public class TradeWithGameAction extends TradeAction{
 		int take_amount=give_amount*Config.Action.TradeWithGameAction.ratio_N/Config.Action.TradeWithGameAction.ratio_D;
 		player.giveResource(take,take_amount);
 	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.TradeWithGameAction.name;
+	}
 }

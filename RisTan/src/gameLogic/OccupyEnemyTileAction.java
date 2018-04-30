@@ -2,6 +2,8 @@ package gameLogic;
 
 import java.util.Map;
 
+import config.Config;
+
 /**
  * Describes an action of occupying an enemy tile. This action is probabilistic. This action has some variants in time and resource cost depending on the building level of the target tile and the probability of the success.
  * @author Andras
@@ -60,5 +62,10 @@ public abstract class OccupyEnemyTileAction extends ProbabilisticTileAction{
 		if(isSuccessful()) {
 			gameState.getBoard().getTileAt(getPoint()).occupy(gameState.getActivePlayer());
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.OccupyEnemyTile.name;
 	}
 }

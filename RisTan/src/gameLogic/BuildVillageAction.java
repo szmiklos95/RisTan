@@ -2,6 +2,8 @@ package gameLogic;
 
 import java.util.Map;
 
+import config.Config;
+
 /**
  * Describes an action of building a village. This action has some variants in time and resource cost.
  * @author Andras
@@ -62,5 +64,10 @@ public abstract class BuildVillageAction extends TileAction {
 	void execute(GameState gameState)throws GameLogicException{
 		super.execute(gameState);
 		gameState.getBoard().getTileAt(getPoint()).setBuildingLevel(BuildingLevel.Village);
+	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.BuildVillage.name;
 	}
 }

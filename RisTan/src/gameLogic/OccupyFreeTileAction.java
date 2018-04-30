@@ -2,6 +2,8 @@ package gameLogic;
 
 import java.util.Map;
 
+import config.Config;
+
 /**
  * Describes an action of occupying a free tile. This action has some variants in time and resource cost.
  * @author Andras

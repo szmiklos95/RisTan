@@ -21,4 +21,9 @@ public class OccupyFreeTile extends OccupyFreeTileAction {
 				point,
 				Config.Action.OccupyFreeTile.cost);
 	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.OccupyFreeTile.name;
+	}
 }

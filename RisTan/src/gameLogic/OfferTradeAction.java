@@ -79,4 +79,9 @@ public class OfferTradeAction extends TradeAction {
 		TradeOffer tradeOffer=new TradeOffer(offerID,player.getID(),give,give_amount,take,take_amount);
 		gameState.getMarket().putOffer(tradeOffer);
 	}
+	
+	@Override
+	public String toString() {
+		return Config.Action.OfferTradeAction.name;
+	}
 }
