@@ -31,8 +31,8 @@ public class Chat extends JPanel{
 						text = text.concat(newtext);
 						display.setText(text);
 						}
-					//Sleep the thread for 100ms
-					sleep(100);
+
+					sleep(Config.Chat.sleepTime);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

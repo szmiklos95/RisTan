@@ -139,6 +139,7 @@ public class GameBoard extends JPanel {
 					int popUpX = (int) clickedHexaTile.getGraphicsPoint().getX() + Config.Hexagon.radius;
 					int popUpY = (int) clickedHexaTile.getGraphicsPoint().getY();
 					menu.show(CardSync.card_GameWindow, popUpX, popUpY);
+					
 				}
 			}
 			System.out.print("\n");
@@ -158,11 +159,16 @@ public class GameBoard extends JPanel {
 	/**
 	 * 
 	 * @param actionString
+	 * @param clickedHexaTile
 	 */
 	private void executeAction(String actionString, HexaTile clickedHexaTile) {
+		
 		if(actionString.equals(OccupyFreeTileFree.class.getCanonicalName())) {
 			CardSync.controller.sendAction(new OccupyFreeTileFree(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
+		
+		clickedHexaTile.clearSelected();
+		aTileIsSelected = false;
 	}
 
 	/**
@@ -319,10 +325,17 @@ public class GameBoard extends JPanel {
 				if (isActivePlayer()) {
 					SystemMessage.setSystemMessage(Config.SystemMessages.YourTurn.SysMsg);
 					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.SubMsg1);
+					
+					int remainingTime = gameState.getTurn().getRemainingTime();
+					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.RemainingTime + remainingTime);
+					
+					
 				} else if (!gameState.isOver()) {
 					SystemMessage.setSystemMessage("It is " + gameState.getActivePlayer().getName() + "'s turn.");
 				}
 
+				gameState = CardSync.controller.getGameState();
+				highlightAvailableTiles();
 				rePaint();
 			}
 		});
@@ -352,4 +365,28 @@ public class GameBoard extends JPanel {
 			return false;
 		return gameState.getActivePlayer().getID() == CardSync.controller.getLocalPlayerID();
 	}
+	
+	private void highlightAvailableTiles() {
+		
+		for(HexaTile t : hexaTiles) {
+			// Get all the possible tile actions
+			List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
+			
+			if(isActivePlayer()) {
+				// Iterate through all the tile actions
+				for (TileAction tileAction : possibleTileActions) {
+					if (tileAction.getPoint().equals(t.getPoint())) {
+						t.setAvailableForAction(true);
+						break; //Exit this loop as we only need to have 1 action to mark the tile available
+					}
+				}
+			}
+			else {
+				t.setAvailableForAction(false);
+			}
+
+			
+		}
+	}
+	
 }

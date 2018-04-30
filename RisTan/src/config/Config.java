@@ -323,12 +323,18 @@ public abstract class Config {
 		// The color of the inner hexagon when it is selected
 		public static final int outerColor_selected = 0xDA6F25;
 		// 
+		public static final int outerColor_availableForAction = 0x06FFFF;
+		//
 		public static final int innerColor_stone = 0xb8b09b;
 		//
 		public static final int innerColor_wood = 0x913D02;
 		//
 		public static final int innerColor_wheat = 0xE6b800;
+		//
+		public static final String freeTileString = "Free";
 	}
+	
+
 	
 	public static class GameWindow{
 		public static final Color background = Color.darkGray;
@@ -363,6 +369,7 @@ public abstract class Config {
 	public static class Chat{
 		public static final int textAreaColoumns = 25;
 		public static final int textAreaRows = 10;
+		public static final int sleepTime = 100; //ms
 	}
 	
 	public static class Timer{
@@ -376,9 +383,12 @@ public abstract class Config {
 		public static final String waitingForPlayers = "Waiting for other players to join";
 		public static final String boardDrawn = "The board has been drawn.";
 		
+		public static final String defaultSubMsgAddition = " (Click for details)";
+		
 		public static class YourTurn{
-			public static final String SysMsg = "It is your turn!";
+			public static final String SysMsg = "It is your turn!"+defaultSubMsgAddition;
 			public static final String SubMsg1 = "Choose starting tile!";
+			public static final String RemainingTime = "Remaining time: ";
 		}
 		
 		public static final String notYourTurn = "It is not your turn!";

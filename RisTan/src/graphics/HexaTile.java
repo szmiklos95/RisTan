@@ -14,6 +14,8 @@ public class HexaTile {
 	private Tile tile = null;
 	
 	private boolean selected = false;
+	private boolean availableForAction = false;
+	
 	private gameLogic.Point point;
 	private graphics.Point graphicsPoint;
     
@@ -41,7 +43,7 @@ public class HexaTile {
 	
 	public void draw(Graphics2D g) {
 		
-		String text=tile.getOwner()!=null?tile.getOwner().getName():"free";
+		String text=tile.getOwner()!=null?tile.getOwner().getName():Config.Hexagon.freeTileString;
         //String text = resource.name();
         
         FontMetrics metrics = g.getFontMetrics();
@@ -84,6 +86,9 @@ public class HexaTile {
 	
     private void setOuterColor() {
         outerColor = Config.Hexagon.outerColor_default;
+        
+        if(availableForAction) outerColor = Config.Hexagon.outerColor_availableForAction;
+        
         //Change outer color of the tile is selected
         if(isSelected()) outerColor = Config.Hexagon.outerColor_selected;
     }
@@ -118,5 +123,13 @@ public class HexaTile {
 	
 	public graphics.Point getGraphicsPoint(){
 		return graphicsPoint;
+	}
+	
+	public void setAvailableForAction(boolean available) {
+		availableForAction = available;
+	}
+	
+	public boolean getAvailableForAction(){
+		return availableForAction;
 	}
 }
