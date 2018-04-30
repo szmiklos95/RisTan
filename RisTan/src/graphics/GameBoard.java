@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.LayoutManager;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,8 +24,11 @@ import gameLogic.BuildTown;
 import gameLogic.BuildVillage;
 import gameLogic.BuildVillageFree;
 import gameLogic.GameState;
+import gameLogic.OccupyEnemyTile;
+import gameLogic.OccupyEnemyTileL2;
+import gameLogic.OccupyEnemyTown;
+import gameLogic.OccupyEnemyTownL2;
 import gameLogic.OccupyFreeTile;
-import gameLogic.OccupyFreeTileAction;
 import gameLogic.OccupyFreeTileFree;
 import gameLogic.Resource;
 import gameLogic.TileAction;
@@ -195,8 +197,32 @@ public class GameBoard extends JPanel {
 			CardSync.controller.sendAction(new BuildVillageFree(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
 		
+		if(actionString.equals(BuildVillage.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new BuildVillage(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
 		if(actionString.equals(BuildTown.class.getCanonicalName())) {
 			CardSync.controller.sendAction(new BuildTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyEnemyTile.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyEnemyTileL2.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyTileL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyEnemyTown.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyEnemyTownL2.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyTownL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyFreeTile.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyFreeTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
 		
 		clickedHexaTile.clearSelected();
@@ -419,6 +445,10 @@ public class GameBoard extends JPanel {
 			List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
 			
 			if(isActivePlayer()) {
+				
+				//Make the highlight disappear (in case it was highlighted before)
+				t.setAvailableForAction(false);
+				
 				// Iterate through all the tile actions
 				for (TileAction tileAction : possibleTileActions) {
 					if (tileAction.getPoint().equals(t.getPoint())) {
@@ -426,6 +456,7 @@ public class GameBoard extends JPanel {
 						break; //Exit this loop as we only need to have 1 action to mark the tile available
 					}
 				}
+
 			}
 			else {
 				t.setAvailableForAction(false);

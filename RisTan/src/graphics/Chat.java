@@ -30,8 +30,9 @@ public class Chat extends JPanel{
 						String newtext = new String((String)client.getMsg().GetData());
 						text = text.concat(newtext);
 						display.setText(text);
-						}
 
+						}
+					
 					sleep(Config.Chat.sleepTime);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
