@@ -73,12 +73,14 @@ public class GameState {
 		return getTurn().getPossibleTileActions(this);
 	}
 	
-	void initGame() {
+	void initGame() throws GameLogicException {
 		board=new Board();
 		board.generate(Config.Board.res_prob);
 		playerOrder=new PlayerOrder(players);
 		turnOrder=new TurnOrder(Config.TurnOrder.turns);
 		over=false;
+		//effectively starting the game
+		activePlayerStart();
 	}
 	
 	public StartGameAction getStartGameAction() {
@@ -101,8 +103,8 @@ public class GameState {
 	}
 	
 	void activePlayerStart()throws GameLogicException{
-		getTurn().reset(this);
 		System.out.println("Player turn begins: "+getActivePlayer().getID());
+		getTurn().reset(this);
 		automaticActionsExecuted=false;
 		List<Action> automaticActions=getTurn().getAutomaticActions();
 		for(int i=0;i<automaticActions.size();++i) {

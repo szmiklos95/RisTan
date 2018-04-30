@@ -16,6 +16,12 @@ public class SwitchToNextPlayerAction extends InGameAction {
 		super(playerID);
 	}
 	
+	/**
+	 * Tries to execute the action on a game state.
+	 * If the execution is invalid, the game state remains unchanged and throws a GameLogicException of the cause.<br>
+	 * If the game is over, throws a GameOverException.<br>
+	 * If the executing player is not the active, throws a PlayerOutOfTurnException.
+	 */
 	@Override
 	void execute(GameState gameState) throws GameLogicException {
 		super.execute(gameState);
