@@ -3,8 +3,10 @@ package graphics;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.LayoutManager;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -61,6 +63,11 @@ public class GameBoard extends JPanel {
 	public GameBoard(gameLogic.GameState gameState) {
 		setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
 		SystemMessage.setSystemMessage(Config.SystemMessages.waitingForPlayers);
+		
+		// Set chat window
+		JPanel chatPanel = new Chat(CardSync.client, CardSync.settings.getPlayerName());
+		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.add(chatPanel);
 
 		// The center point
 		origin = new Point(Config.GameBoard.width / 2, Config.GameBoard.height / 2);

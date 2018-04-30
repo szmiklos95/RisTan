@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import config.Config;
 
 //TODO comment
+//Became obsolete as the chat window was moved to GameBoard (due to some text not displaying)
+//It only functions as a wrapper for GameBoard (GameBoard-->Card wrapper)
 public class GameWindow extends JPanel{
 	
 	
@@ -33,8 +35,8 @@ public class GameWindow extends JPanel{
 		// Chat
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		
-		JPanel chatPanel = new Chat(CardSync.client, CardSync.settings.getPlayerName());
-		this.add(chatPanel, gbc);
+		//JPanel chatPanel = new Chat(CardSync.client, CardSync.settings.getPlayerName());
+		//this.add(chatPanel, gbc);
 		
 		// Game Board
 		gbc.anchor = GridBagConstraints.CENTER;
