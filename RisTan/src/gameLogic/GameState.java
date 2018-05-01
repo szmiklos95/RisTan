@@ -8,6 +8,7 @@ import config.Config;
 //stores the state of the game
 public class GameState {
 	private boolean over;
+	private boolean finished;
 	private Board board;
 	private List<Player> players;
 	private PlayerOrder playerOrder;
@@ -23,6 +24,7 @@ public class GameState {
 		turnOrder=null;
 		market=new Market();
 		automaticActionsExecuted=false;
+		finished=false;
 	}
 	
 	public void executeAction(Action action)throws GameLogicException{
@@ -37,6 +39,10 @@ public class GameState {
 	
 	public boolean isOver() {
 		return over;
+	}
+	
+	public boolean isFinished() {
+		return finished;
 	}
 	
 	public Board getBoard() {
@@ -82,6 +88,7 @@ public class GameState {
 		playerOrder=new PlayerOrder(players);
 		turnOrder=new TurnOrder(Config.TurnOrder.turns);
 		over=false;
+		finished=false;
 		//effectively starting the game
 		activePlayerStart();
 	}
@@ -100,6 +107,7 @@ public class GameState {
 			playerOrder=new PlayerOrder(players,playerShuffleOrder);
 			turnOrder=new TurnOrder(turnOrderGenerator);
 			over=false;
+			finished=false;
 		}
 		//effectively starting the game
 		activePlayerStart();
@@ -143,7 +151,9 @@ public class GameState {
 		if(toNextTurn) {
 			over=turnOrder.next();
 		}
-		if(!over) {
+		if(over) {
+			finished=true;
+		}else{
 			activePlayerStart();
 		}
 	}
