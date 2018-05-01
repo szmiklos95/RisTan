@@ -60,7 +60,7 @@ public class GameMenubar {
 		if (CardSync.getGameState().isOver()) {
 			JLabel over = new JLabel(" The market is closed :( ");
 			market.add(over);
-		} else if (!isActivePlayer()) {
+		} else if (!CardSync.controller.isActivePlayer()) {
 			JLabel notYourTurn = new JLabel(
 					" It is " + CardSync.getGameState().getActivePlayer().getName() + "'s turn. ");
 			market.add(notYourTurn);
@@ -116,9 +116,10 @@ public class GameMenubar {
 			}
 
 		});
-		endTurn.setEnabled(false);
-		//if(isActivePlayer()) endTurn.setEnabled(true);
-		//else if(!CardSync.getGameState().getTurn().toString().equals(Config.TurnNames.normal)) endTurn.setEnabled(false);
+		
+		if(CardSync.getGameState().isOver()) endTurn.setEnabled(false);
+		else if(!CardSync.controller.isActivePlayer()) endTurn.setEnabled(false);
+		else if(!CardSync.getGameState().getTurn().toString().equals(Config.TurnNames.normal)) endTurn.setEnabled(false);
 		
 		bar.add(endTurn);
 
@@ -185,9 +186,5 @@ public class GameMenubar {
 		}
 	};
 
-	private boolean isActivePlayer() {
-		if (CardSync.getGameState().isOver())
-			return false;
-		return CardSync.getGameState().getActivePlayer().getID() == CardSync.controller.getLocalPlayerID();
-	}
+
 }
