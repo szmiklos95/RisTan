@@ -164,5 +164,4 @@ class SystemMessage {
     	dotAnimationRanOnce = true;
     }
     
-    
 }

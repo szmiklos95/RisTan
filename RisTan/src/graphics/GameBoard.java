@@ -421,6 +421,8 @@ public class GameBoard extends JPanel {
 	 */
 	private void fixMenuBarBug() {
 		SystemMessage.write();
+		//CardSync.frame.getJMenuBar().revalidate();
+		//CardSync.frame.getJMenuBar().repaint();
 	}
 
 	/**

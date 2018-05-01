@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import gameLogic.ClientController;
 import gameLogic.GameState;
 import network.SerialClient;
+import network.SerialServer;
 
 /**
  * Synchronisation class that contains all the necessary variables for
@@ -28,6 +29,7 @@ class CardSync {
 	static SettingsWindow card_GameSettings;
 	static JoinWindow card_JoinWindow;
 
+	static SerialServer server = null;
 	static SerialClient client = null;
 	static ClientController controller = null;
 	
