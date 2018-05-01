@@ -149,4 +149,9 @@ public class NormalTurn extends Turn {
 		//checked all possible tile actions - if not exited, the action is not possible
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return Config.TurnNames.normal;
+	}
 }

@@ -3,6 +3,8 @@ package gameLogic;
 import java.util.ArrayList;
 import java.util.List;
 
+import config.Config;
+
 public class OccupyFreeTileTurn extends Turn {
 	private int amount;
 	
@@ -56,5 +58,10 @@ public class OccupyFreeTileTurn extends Turn {
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return Config.TurnNames.occupyFreeTile;
 	}
 }

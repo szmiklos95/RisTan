@@ -110,4 +110,9 @@ public abstract class Turn {
 	boolean isTileActionPossible(GameState gameState,TileAction action) {
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return Config.TurnNames.defaultName;
+	}
 }

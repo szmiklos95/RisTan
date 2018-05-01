@@ -1,8 +1,10 @@
 package graphics;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 
 import config.Config;
 import gameLogic.Resource;
@@ -57,11 +59,26 @@ public class HexaTile {
 		int x = graphicsPoint.getX();
 		int y = graphicsPoint.getY();
         
+		//Draw inner hexagon
         hexagon.draw(g, x, y, Config.Hexagon.innerLineThickness, innerColor, true);
+        //Draw outer hexagon
         hexagon.draw(g, x, y, Config.Hexagon.outerLineThickness, outerColor, false);
-
+        
+        //Draw player circle
+        int playerColor = getPlayerColor();
+        
+        if(tile.getOwner()!=null) {
+        	drawCircle(g, graphicsPoint, Config.PlayerCircle.radius, true, true, playerColor, Config.PlayerCircle.lineThickness);
+        }
+        
+        //Draw buildings
+        drawBuildings(g, playerColor);
+      
+        //Draw text
         g.setColor(new Color(Config.Hexagon.textColor));
         g.drawString(text, x - w/2, y + h/2);
+        
+        
 	}
 	
 	public Hexagon getHexagon() {
@@ -102,6 +119,21 @@ public class HexaTile {
     		default: innerColor = Config.Hexagon.innerColor_default; break;
     	}
     }
+    
+    private int getPlayerColor() {
+    	int color = Config.PlayerColor.color_default;
+    	if(tile.getOwner()!=null) {
+        	int playerID = tile.getOwner().getID();
+        	switch(playerID) {
+        		case 0: color = Config.PlayerColor.color_player0; break;
+        		case 1: color = Config.PlayerColor.color_player1; break;
+        		case 2: color = Config.PlayerColor.color_player2; break;
+        		case 3: color = Config.PlayerColor.color_player3; break;
+        		default: color = Config.PlayerColor.color_default; break;
+        	}
+    	}
+    	return color;
+    }
 
 	public Tile getTile() {
 		return tile;
@@ -132,4 +164,68 @@ public class HexaTile {
 	public boolean getAvailableForAction(){
 		return availableForAction;
 	}
+	
+	/**
+	 * Draws a circle with the given parameters.
+	 * 
+	 * @param g
+	 *            Graphics object
+	 * @param origin
+	 *            The center of the circle
+	 * @param radius
+	 *            The radius of the circle
+	 * @param centered
+	 *            Should be true
+	 * @param filled
+	 * @param colorValue
+	 * @param lineThickness
+	 */
+	private void drawCircle(Graphics2D g, Point origin, int radius, boolean centered, boolean filled, int colorValue,
+			int lineThickness) {
+		// Store before changing.
+		Stroke tmpS = g.getStroke();
+		Color tmpC = g.getColor();
+
+		g.setColor(new Color(colorValue));
+		g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+
+		int diameter = radius * 2;
+		int x2 = centered ? origin.getX() - radius : origin.getX();
+		int y2 = centered ? origin.getY() - radius : origin.getY();
+
+		if (filled)
+			g.fillOval(x2, y2, diameter, diameter);
+		else
+			g.drawOval(x2, y2, diameter, diameter);
+
+		// Set values to previous when done.
+		g.setColor(tmpC);
+		g.setStroke(tmpS);
+	}
+	
+	private void drawRectangle(Graphics2D g, Point origin, int xOff, int yOff, int a, int b, int colorValue, int lineThickness) {
+		Stroke tmpS = g.getStroke();
+		Color tmpC = g.getColor();
+		
+		g.setColor(new Color(colorValue));
+		g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+
+		g.fillRect(origin.getX()+xOff, origin.getY()+yOff, a, b);
+
+		// Set values to previous when done.
+		g.setColor(tmpC);
+		g.setStroke(tmpS);
+	}
+	
+	private void drawBuildings(Graphics2D g, int color) {
+		
+		switch(tile.getBuildingLevel()) {
+			case None: break;
+			case Village: drawRectangle(g, graphicsPoint, Config.Rectangle.Square.xOff, Config.Rectangle.Square.yOff, Config.Rectangle.Square.width, Config.Rectangle.Square.height, color, Config.Rectangle.Square.lineThickness); break;
+			case Town: drawRectangle(g, graphicsPoint, Config.Rectangle.xOff, Config.Rectangle.yOff, Config.Rectangle.width, Config.Rectangle.height, color, Config.Rectangle.lineThickness); break;
+			default: break;
+		}
+        
+	}
+	
 }
