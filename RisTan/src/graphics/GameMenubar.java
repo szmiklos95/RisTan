@@ -61,6 +61,11 @@ public class GameMenubar {
 			market.add(accept);
 			
 			JMenuItem gameTrade = new JMenuItem("Trade with game");
+			gameTrade.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					MarketPopups.tradeWithGame(market);
+				}
+			});
 			market.add(gameTrade);
 		}
 		

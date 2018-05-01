@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import config.Config;
 import gameLogic.AcceptTradeAction;
@@ -22,8 +24,13 @@ import gameLogic.Market;
 import gameLogic.OfferTradeAction;
 import gameLogic.Resource;
 import gameLogic.TradeOffer;
+import gameLogic.TradeWithGameAction;
 
 public class MarketPopups {
+	
+	// Received resource amount spinner for tradeWithGame
+	// Needs to be editable withint a stateChanged listener
+	static private JSpinner received_resource_amount = null;
 
 	MarketPopups(){
 		
@@ -244,6 +251,119 @@ public class MarketPopups {
 		gbc.insets = Config.GUI.GridSettings.defaultInsets;
 		gbc.fill = GridBagConstraints.CENTER;
 		
+		JLabel label;
+		
+		// Given resource type label
+		label = new JLabel("Offered resource type: ");
+		gbl.setConstraints(label, gbc);
+		popupPanel.add(label,gbc);
+		
+		// Given resource type
+		gbc.gridx=1;
+		
+		String[] resourceStrings = Config.ResourceNames.resourceStrings;
+
+		JComboBox<String> given_resource = new JComboBox<String>(resourceStrings);
+		given_resource.setSelectedIndex(0);
+		popupPanel.add(given_resource,gbc);
+
+		
+		// Given resource amount label
+		gbc.gridx=0;
+		gbc.gridy=1;
+		
+		label = new JLabel("Offered resource amount: ");
+		gbl.setConstraints(label, gbc);
+		popupPanel.add(label,gbc);
+		
+		// Given resource amount spinner
+		
+		gbc.gridx=1;
+		JSpinner given_resource_amount = new JSpinner(new SpinnerNumberModel(1, 1, 99, 1));
+		given_resource_amount.addChangeListener(new ChangeListener() {      
+			  @Override
+			  public void stateChanged(ChangeEvent e) {
+				  
+				  if(received_resource_amount != null) popupPanel.remove(received_resource_amount);
+				  
+				  int receivedSpinnerValue = getSpinnerValue(given_resource_amount)/Config.Action.TradeWithGameAction.ratio_D;
+				  
+				// Received resource amount spinner
+				  gbc.gridx=1;
+				  gbc.gridy=3;
+				  received_resource_amount = new JSpinner(new SpinnerNumberModel(receivedSpinnerValue, 0, 99, 1));
+				  received_resource_amount.setEnabled(false); //not editable
+				  popupPanel.add(received_resource_amount, gbc);
+				  
+				  //popupPanel.revalidate();
+				 // popupPanel.repaint();
+			  }
+			});
+		popupPanel.add(given_resource_amount, gbc);
+		
+		// Desired resource type label
+		gbc.gridx=0;
+		gbc.gridy=2;
+		
+		label = new JLabel("Desired resource type: ");
+		gbl.setConstraints(label, gbc);
+		popupPanel.add(label,gbc);
+		
+		// Desired resource type
+		gbc.gridx=1;
+
+		JComboBox<String> desired_resource = new JComboBox<String>(resourceStrings);
+		desired_resource.setSelectedIndex(0);
+		popupPanel.add(desired_resource,gbc);
+		
+		// Received resource amount label
+		gbc.gridx=0;
+		gbc.gridy=3;
+		
+		label = new JLabel("Received resource amount: ");
+		gbl.setConstraints(label, gbc);
+		popupPanel.add(label,gbc);
+		
+		  int receivedSpinnerValue = getSpinnerValue(given_resource_amount)/Config.Action.TradeWithGameAction.ratio_D;
+		  
+		// Received resource amount spinner
+		  gbc.gridx=1;
+		  gbc.gridy=3;
+		  received_resource_amount = new JSpinner(new SpinnerNumberModel(receivedSpinnerValue, 0, 99, 1));
+		  received_resource_amount.setEnabled(false); //not editable
+		  popupPanel.add(received_resource_amount, gbc);
+		  
+		
+		// Ok button
+		gbc.gridx = 0;
+		gbc.gridy=4;
+		
+		JButton ok = new JButton("Ok");
+		ok.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int offererID = CardSync.getGameState().getActivePlayer().getID();
+				Resource give = getResource((String) given_resource.getSelectedItem());
+				int give_amount = getSpinnerValue(given_resource_amount);
+				Resource take = getResource((String) desired_resource.getSelectedItem());
+
+				CardSync.controller.sendAction(new TradeWithGameAction(offererID,give,give_amount,take));
+				
+				popup.setVisible(false);
+			}
+		});
+		popupPanel.add(ok, gbc);
+		
+		// Cancel button
+		gbc.gridx = 0;
+		gbc.gridy++;
+		
+		JButton cancel = new JButton("Cancel");
+		cancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				popup.setVisible(false);
+			}
+		});
+		popupPanel.add(cancel, gbc);
 		
 		popup.add(popupPanel);
 		popup.show(container, 20, 20);
