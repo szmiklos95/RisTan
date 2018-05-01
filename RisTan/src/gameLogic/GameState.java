@@ -118,6 +118,12 @@ public class GameState {
 	}
 	
 	private boolean checkForSwitchToNextPlayer() {
+		boolean can=canSwitchToNextPlayer();
+		Turn turn=getTurn();
+		return can&&(!turn.canDoAnything(this));
+	}
+	
+	boolean canSwitchToNextPlayer() {
 		if(!automaticActionsExecuted) {
 			return false;
 		}
@@ -125,7 +131,7 @@ public class GameState {
 		if(turn.getObligatoryEvents().size()>0) {
 			return false;
 		}
-		return !turn.canDoAnything(this);
+		return true;
 	}
 	
 	void activePlayerEnd() throws GameLogicException {
