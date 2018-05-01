@@ -259,6 +259,10 @@ public abstract class Config {
 		public static final String startTileChoice = "Start tile choice turn";
 	}
 	
+	public static class ResourceNames{
+		public static final String[] resourceStrings = {"Stone", "Wheat", "Wood"};
+	}
+	
 	/* *****************************************************************************
 	 *  @@@@@@@@@@@@@@@@@@@@@@@@@@ Graphic configurations @@@@@@@@@@@@@@@@@@@@@@@@@@
 	 * *****************************************************************************/

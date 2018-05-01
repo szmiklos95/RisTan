@@ -38,6 +38,7 @@ public class GameMenubar {
 		// Market
 		JMenu market = new JMenu("Market");
 		
+		//TODO check for  || !CardSync.getGameState().getTurn().isTradeEnabled()
 		if(CardSync.getGameState().isOver()) {
 			JLabel over = new JLabel("The market is closed :( ");
 			market.add(over);
@@ -52,6 +53,11 @@ public class GameMenubar {
 			market.add(offer);
 			
 			JMenuItem accept = new JMenuItem("View offers");
+			accept.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					MarketPopups.viewOffers(market);
+				}
+			});
 			market.add(accept);
 			
 			JMenuItem gameTrade = new JMenuItem("Trade with game");

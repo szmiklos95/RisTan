@@ -43,7 +43,7 @@ public class GameState {
 		return board;
 	}
 	
-	List<Player> getPlayers(){
+	public List<Player> getPlayers(){
 		return players;
 	}
 	

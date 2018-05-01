@@ -5,16 +5,20 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import config.Config;
+import gameLogic.AcceptTradeAction;
+import gameLogic.Market;
 import gameLogic.OfferTradeAction;
 import gameLogic.Resource;
 import gameLogic.TradeOffer;
@@ -49,9 +53,9 @@ public class MarketPopups {
 		// Given resource type
 		gbc.gridx++;
 		
-		String[] resourceStrings = { "Stone", "Wood", "Wheat" };
+		String[] resourceStrings = Config.ResourceNames.resourceStrings;
 
-		JComboBox given_resource = new JComboBox(resourceStrings);
+		JComboBox<String> given_resource = new JComboBox<String>(resourceStrings);
 		given_resource.setSelectedIndex(0);
 		popupPanel.add(given_resource,gbc);
 
@@ -80,7 +84,7 @@ public class MarketPopups {
 		// Desired resource type
 		gbc.gridx++;
 
-		JComboBox desired_resource = new JComboBox(resourceStrings);
+		JComboBox<String> desired_resource = new JComboBox<String>(resourceStrings);
 		desired_resource.setSelectedIndex(0);
 		popupPanel.add(desired_resource,gbc);
 		
@@ -122,6 +126,87 @@ public class MarketPopups {
 		gbc.gridy++;
 		
 		JButton cancel = new JButton("Cancel");
+		cancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				popup.setVisible(false);
+			}
+		});
+		popupPanel.add(cancel, gbc);
+		
+		popup.add(popupPanel);
+		popup.show(container, 20, 20);
+	}
+	
+	
+	
+	static void viewOffers(Container container) {
+		JPopupMenu popup = new JPopupMenu("Popup menu");
+		
+		JPanel popupPanel = new JPanel();
+		
+		GridBagLayout gbl = new GridBagLayout();
+		popupPanel.setLayout(gbl);
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = Config.GUI.GridSettings.startingGridX;
+		gbc.gridy = Config.GUI.GridSettings.startingGridY;
+		gbc.insets = Config.GUI.GridSettings.defaultInsets;
+		gbc.fill = GridBagConstraints.CENTER;
+		
+		//
+		Market market = CardSync.getGameState().getMarket();
+		List<TradeOffer> tradeOffers = market.getOffers();
+		
+		JLabel label;
+		
+		// Label
+		
+		label = new JLabel("Available trade offers");
+		gbl.setConstraints(label, gbc);
+		popupPanel.add(label,gbc);
+		
+		//Iterate through all the trade offers
+		for(TradeOffer tradeOffer : tradeOffers) {
+			gbc.gridy++;
+			gbc.gridx=0;
+			
+			String text = new String();
+			
+			int offererID = tradeOffer.getOffererID();
+			String offererName = CardSync.getGameState().getPlayers().get(offererID).getName();
+			
+			Resource give = tradeOffer.getGive();
+			String giveString = give.toString();
+			
+			int give_amount = tradeOffer.getGive_amount();
+			String give_amountString = Integer.toString(give_amount);
+			
+			Resource take = tradeOffer.getTake();
+			String takeString = take.toString();
+			
+			int take_amount = tradeOffer.getTake_amount();
+			String take_amountString = Integer.toString(take_amount);
+			
+			text = offererName+" | Give: "+giveString+" ("+give_amountString+") | Take: "+takeString+" ("+take_amountString+")";
+			
+			JMenuItem menuItem = new JMenuItem(text);
+			popupPanel.add(menuItem,gbc);
+			
+			gbc.gridx++;
+			JButton accept = new JButton("Accept");
+			accept.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardSync.controller.sendAction(new AcceptTradeAction(CardSync.getGameState().getActivePlayer().getID(),offererID));
+				}
+			});
+			popupPanel.add(accept, gbc);
+		}
+		
+		// Close button
+		gbc.gridx = 0;
+		gbc.gridy++;
+		
+		JButton cancel = new JButton("Close");
 		cancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				popup.setVisible(false);
