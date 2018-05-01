@@ -48,6 +48,9 @@ public class GameState {
 	}
 	
 	public Player getActivePlayer() {
+		if(playerOrder==null) {
+			return null;
+		}
 		return playerOrder.getActive();
 	}
 	
