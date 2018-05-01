@@ -178,6 +178,9 @@ public abstract class Config {
 	
 	//GameLogicExceptions config
 	public static class Exception{
+		public static class CantSwitchToNextPlayer{
+			public static final String errorMessage="Can't switch to next player because there are automatic actions or obligatory events which haven't happened yet."
+		}
 		public static class GameLogic{
 			public static final String errorMessage="Az akció nem hajtható végre, mert érvénytelen.";
 		}
