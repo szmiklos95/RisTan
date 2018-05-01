@@ -22,7 +22,7 @@ public abstract class Config {
 	//Actions config
 	public static class Action{
 		
-		public static final String name = "Default Action";
+		public static final String name = "Default Action String";
 		
 		public static class AcceptTradeAction{
 			public static final int time=1;
@@ -253,6 +253,15 @@ public abstract class Config {
 		}
 	}
 	
+	public static class TurnNames{
+		public static final String defaultName = "Default Turn String";
+		public static final String buildVillage = "Build village turn";
+		public static final String getResource = "Get resource turn";
+		public static final String normal = "Normal turn";
+		public static final String occupyFreeTile = "Occupy free tile turn";
+		public static final String startTileChoice = "Start tile choice turn";
+	}
+	
 	/* *****************************************************************************
 	 *  @@@@@@@@@@@@@@@@@@@@@@@@@@ Graphic configurations @@@@@@@@@@@@@@@@@@@@@@@@@@
 	 * *****************************************************************************/
@@ -366,6 +375,20 @@ public abstract class Config {
 		public static final int lineThickness = 0;
 	}
 	
+	public static class PlayerCircle{
+		public static final int radius = Hexagon.radius / 3;
+		public static final int defaultColor = Circle.color;
+		public static final int lineThickness = 0;
+	}
+	
+	public static class PlayerColor{
+		public static final int color_default = 0x000000;
+		public static final int color_player0 = 0xD007EC; //D007EC pink
+		public static final int color_player1 = 0xF80000; //F80000 red
+		public static final int color_player2 = 0x01FB17; //01FB17 green
+		public static final int color_player3 = 0x0017FF; //0017FF blue
+	}
+	
 	/**
 	 * The embedded chat window
 	 * @author Miklós
@@ -388,12 +411,16 @@ public abstract class Config {
 		public static final String waitingForPlayers = "Waiting for other players to join";
 		public static final String boardDrawn = "The board has been drawn.";
 		
-		public static final String defaultSubMsgAddition = " (Click for details)";
+		public static final String defaultSubMsgAddition = " (Click here for details)";
 		
 		public static class YourTurn{
-			public static final String SysMsg = "It is your turn!"+defaultSubMsgAddition;
-			public static final String SubMsg1 = "Choose starting tile!";
-			public static final String RemainingTime = "Remaining time: ";
+			public static final String sysMsg = "It is your turn!"+defaultSubMsgAddition;
+			//public static final String startingTile = "Choose starting tile!";
+			public static final String remainingTime = "Remaining time: ";
+			public static final String score = "Your score: ";
+			public static final String wood = "Wood = ";
+			public static final String stone = "Stone = ";
+			public static final String wheat = "Wheat = ";
 		}
 		
 		public static final String notYourTurn = "It is not your turn!";
@@ -404,6 +431,22 @@ public abstract class Config {
 		
 		public static final int dotAnimationMaxDots = 4;
 		public static final int maxSysMsgLength = 50;
+	}
+	
+	public static class Rectangle{
+		public static final int width = 10;
+		public static final int height = 30;
+		public static final int lineThickness = 0;
+		public static final int xOff = Hexagon.radius/2;
+		public static final int yOff = -(Hexagon.radius/2-height/3);
+		
+		public static class Square{
+			public static final int width = Rectangle.width;
+			public static final int height = Rectangle.width;
+			public static final int lineThickness = Rectangle.lineThickness;	
+			public static final int xOff = Rectangle.xOff;
+			public static final int yOff = -Rectangle.yOff-Rectangle.height;
+		}
 	}
 
 }

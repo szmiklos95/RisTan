@@ -3,6 +3,7 @@ package graphics;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
@@ -19,10 +20,17 @@ import javax.swing.JPopupMenu;
 import javax.swing.Timer;
 
 import config.Config;
+import gameLogic.BuildTown;
+import gameLogic.BuildVillage;
+import gameLogic.BuildVillageFree;
 import gameLogic.GameState;
+import gameLogic.OccupyEnemyTile;
+import gameLogic.OccupyEnemyTileL2;
+import gameLogic.OccupyEnemyTown;
+import gameLogic.OccupyEnemyTownL2;
 import gameLogic.OccupyFreeTile;
-import gameLogic.OccupyFreeTileAction;
 import gameLogic.OccupyFreeTileFree;
+import gameLogic.Resource;
 import gameLogic.TileAction;
 
 /**
@@ -57,6 +65,11 @@ public class GameBoard extends JPanel {
 	public GameBoard(gameLogic.GameState gameState) {
 		setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
 		SystemMessage.setSystemMessage(Config.SystemMessages.waitingForPlayers);
+		
+		// Set chat window
+		JPanel chatPanel = new Chat(CardSync.client, CardSync.settings.getPlayerName());
+		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.add(chatPanel);
 
 		// The center point
 		origin = new Point(Config.GameBoard.width / 2, Config.GameBoard.height / 2);
@@ -104,12 +117,6 @@ public class GameBoard extends JPanel {
 	 * @param clickedHexaTile
 	 */
 	private void handleValidMouseAction(HexaTile clickedHexaTile) {
-		// System.out.println("Clicked a "+clickedHexaTile.getClass().getName()+" at
-		// coordinates:
-		// ("+clickedHexaTile.getPoint().getI()+":"+clickedHexaTile.getPoint().getJ()+")");
-
-		// Get all the possible tile actions
-		List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
 
 		final JPopupMenu menu = new JPopupMenu("Menu");
 
@@ -117,45 +124,64 @@ public class GameBoard extends JPanel {
 		if (!aTileIsSelected) {
 			clickedHexaTile.toggleSelected();
 			aTileIsSelected = true;
+			drawPopupMenuWithActions(menu,clickedHexaTile);
 
-			System.out.println("Clicked a " + clickedHexaTile.getClass().getName() + " at coordinates: ("
-					+ clickedHexaTile.getPoint().getI() + ":" + clickedHexaTile.getPoint().getJ() + ")");
-			System.out.print("Available actions: ");
+		} else { //We already have a selected tile
+			if (clickedHexaTile.isSelected()) { //If the clicked is the selected, remove selection
+				// If the clicked tile is already selected
+				clickedHexaTile.toggleSelected();
+				aTileIsSelected = false;
 
-			// Iterate through all the tile actions
-			for (TileAction tileAction : possibleTileActions) {
-				if (tileAction.getPoint().equals(clickedHexaTile.getPoint())) {
-					System.out.print(tileAction.toString() + " ");
-
-					JMenuItem menuItem = new JMenuItem(tileAction.toString());
-
-					menuItem.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent ae) {
-							executeAction(tileAction.getClass().getCanonicalName(), clickedHexaTile);
-						}
-					});
-
-					menu.add(menuItem);
-					int popUpX = (int) clickedHexaTile.getGraphicsPoint().getX() + Config.Hexagon.radius;
-					int popUpY = (int) clickedHexaTile.getGraphicsPoint().getY();
-					menu.show(CardSync.card_GameWindow, popUpX, popUpY);
-					
-				}
+				// clear the popup menu
+				menu.removeAll();
+				menu.setVisible(false);
 			}
-			System.out.print("\n");
-
-		} else if (clickedHexaTile.isSelected()) {
-			// If the clicked tile is already selected
-			clickedHexaTile.toggleSelected();
-			aTileIsSelected = false;
-
-			// clear the popup menu
-			menu.removeAll();
-			menu.setVisible(false);
+			else { //Find the already selected, and remove it's selection
+				for(HexaTile ht : hexaTiles) {
+					if(ht.isSelected()) ht.clearSelected();
+					
+					// clear the popup menu
+					menu.removeAll();
+					menu.setVisible(false);
+				}
+				clickedHexaTile.toggleSelected();
+				drawPopupMenuWithActions(menu,clickedHexaTile);
+			}
 		}
 
 	}
 
+	/**
+	 * Sets and draws the given popup menu
+	 * @param menu
+	 * @param clickedHexaTile
+	 */
+	private void drawPopupMenuWithActions(JPopupMenu menu, HexaTile clickedHexaTile) {
+		// Get all the possible tile actions
+		List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
+		
+		// Iterate through all the tile actions
+		for (TileAction tileAction : possibleTileActions) {
+			if (tileAction.getPoint().equals(clickedHexaTile.getPoint())) {
+
+				JMenuItem menuItem = new JMenuItem(tileAction.toString());
+
+				menuItem.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent ae) {
+						executeAction(tileAction.getClass().getCanonicalName(), clickedHexaTile);
+					}
+				});
+
+				menu.add(menuItem);
+				int popUpX = (int) clickedHexaTile.getGraphicsPoint().getX() + Config.Hexagon.radius;
+				int popUpY = (int) clickedHexaTile.getGraphicsPoint().getY();
+				menu.show(CardSync.card_GameWindow, popUpX, popUpY);
+				
+			}
+		}
+	}
+	
+	
 	/**
 	 * 
 	 * @param actionString
@@ -165,6 +191,38 @@ public class GameBoard extends JPanel {
 		
 		if(actionString.equals(OccupyFreeTileFree.class.getCanonicalName())) {
 			CardSync.controller.sendAction(new OccupyFreeTileFree(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(BuildVillageFree.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new BuildVillageFree(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(BuildVillage.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new BuildVillage(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(BuildTown.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new BuildTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyEnemyTile.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyEnemyTileL2.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyTileL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyEnemyTown.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyEnemyTownL2.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyTownL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyFreeTile.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyFreeTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
 		
 		clickedHexaTile.clearSelected();
@@ -300,6 +358,9 @@ public class GameBoard extends JPanel {
 				if (!boardDrawn && !gameState.isOver()) {
 					timer.stop();
 					boardDrawn = true;
+					
+					new GameMenubar(); //To open the market
+					
 					SystemMessage.setSystemMessage(Config.SystemMessages.boardDrawn);
 
 					rePaint();
@@ -323,11 +384,22 @@ public class GameBoard extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 
 				if (isActivePlayer()) {
-					SystemMessage.setSystemMessage(Config.SystemMessages.YourTurn.SysMsg);
-					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.SubMsg1);
-					
+					SystemMessage.setSystemMessage(Config.SystemMessages.YourTurn.sysMsg);
+					//Turn name
+					SystemMessage.addSubMessage(gameState.getTurn().toString());
+					//Remaining time
 					int remainingTime = gameState.getTurn().getRemainingTime();
-					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.RemainingTime + remainingTime);
+					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.remainingTime + remainingTime);
+					//Score
+					int score = gameState.getActivePlayer().getScore();
+					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.score + score);
+					//Resources
+					int wood = gameState.getActivePlayer().getResourceAmount(Resource.Wood);
+					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.wood + wood);
+					int stone = gameState.getActivePlayer().getResourceAmount(Resource.Stone);
+					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.stone + stone);
+					int wheat = gameState.getActivePlayer().getResourceAmount(Resource.Wheat);
+					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.wheat + wheat);
 					
 					
 				} else if (!gameState.isOver()) {
@@ -366,6 +438,9 @@ public class GameBoard extends JPanel {
 		return gameState.getActivePlayer().getID() == CardSync.controller.getLocalPlayerID();
 	}
 	
+	/**
+	 * 
+	 */
 	private void highlightAvailableTiles() {
 		
 		for(HexaTile t : hexaTiles) {
@@ -373,6 +448,10 @@ public class GameBoard extends JPanel {
 			List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
 			
 			if(isActivePlayer()) {
+				
+				//Make the highlight disappear (in case it was highlighted before)
+				t.setAvailableForAction(false);
+				
 				// Iterate through all the tile actions
 				for (TileAction tileAction : possibleTileActions) {
 					if (tileAction.getPoint().equals(t.getPoint())) {
@@ -380,6 +459,7 @@ public class GameBoard extends JPanel {
 						break; //Exit this loop as we only need to have 1 action to mark the tile available
 					}
 				}
+
 			}
 			else {
 				t.setAvailableForAction(false);
