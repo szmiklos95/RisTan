@@ -97,7 +97,7 @@ public class GameBoard extends JPanel {
 
 					if (clickedHexaTile.getHexagon().contains(me.getPoint())) {// check if mouse is clicked within shape
 
-						if (!isActivePlayer()) {
+						if (!CardSync.controller.isActivePlayer()) {
 							SystemMessage.setErrorMessage(Config.SystemMessages.notYourTurn);
 						} else {
 							handleValidMouseAction(clickedHexaTile);
@@ -383,7 +383,7 @@ public class GameBoard extends JPanel {
 		timer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (isActivePlayer()) {
+				if (CardSync.controller.isActivePlayer()) {
 					SystemMessage.setSystemMessage(Config.SystemMessages.YourTurn.sysMsg);
 					//Turn name
 					SystemMessage.addSubMessage(gameState.getTurn().toString());
@@ -421,6 +421,11 @@ public class GameBoard extends JPanel {
 	 */
 	private void fixMenuBarBug() {
 		SystemMessage.write();
+		CardSync.frame.remove(CardSync.frame.getJMenuBar());
+		new GameMenubar();
+		SystemMessage.write();
+		//CardSync.frame.getJMenuBar().revalidate();
+		//CardSync.frame.getJMenuBar().repaint();
 	}
 
 	/**
@@ -432,11 +437,6 @@ public class GameBoard extends JPanel {
 		repaint();
 	}
 
-	private boolean isActivePlayer() {
-		if (gameState.isOver())
-			return false;
-		return gameState.getActivePlayer().getID() == CardSync.controller.getLocalPlayerID();
-	}
 	
 	/**
 	 * 
@@ -447,7 +447,7 @@ public class GameBoard extends JPanel {
 			// Get all the possible tile actions
 			List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
 			
-			if(isActivePlayer()) {
+			if(CardSync.controller.isActivePlayer()) {
 				
 				//Make the highlight disappear (in case it was highlighted before)
 				t.setAvailableForAction(false);

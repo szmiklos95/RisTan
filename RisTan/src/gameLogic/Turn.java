@@ -84,7 +84,7 @@ public abstract class Turn {
 		return new ArrayList<TileAction>();
 	}
 	
-	boolean isTradeEnabled() {
+	public boolean isTradeEnabled() {
 		return tradeEnabled;
 	}
 	

@@ -131,6 +131,7 @@ public class SettingsWindow extends JPanel{
 	 */
 	private void SetupNewGame() {
 		network.SerialServer server = new SerialServer();
+		CardSync.server = server;
 		server.Connect(CardSync.settings.getPlayerCount());
 
 		// This is localhost IP address, connects the local client to the server
