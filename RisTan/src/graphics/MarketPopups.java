@@ -29,6 +29,10 @@ public class MarketPopups {
 		
 	}
 	
+	/**
+	 * 
+	 * @param container
+	 */
 	static void makeNewOffer(Container container) {
 		JPopupMenu popup = new JPopupMenu("Popup menu");
 		
@@ -70,7 +74,7 @@ public class MarketPopups {
 		
 		// Given resource amount spinner
 		gbc.gridx++;
-		JSpinner given_resource_amount = new JSpinner(new SpinnerNumberModel(0, 0, 99, 1));
+		JSpinner given_resource_amount = new JSpinner(new SpinnerNumberModel(1, 1, 99, 1));
 		popupPanel.add(given_resource_amount, gbc);
 		
 		// Desired resource type label
@@ -98,7 +102,7 @@ public class MarketPopups {
 		
 		// Desired resource amount spinner
 		gbc.gridx++;
-		JSpinner desired_resource_amount = new JSpinner(new SpinnerNumberModel(0, 0, 99, 1));
+		JSpinner desired_resource_amount = new JSpinner(new SpinnerNumberModel(1, 1, 99, 1));
 		popupPanel.add(desired_resource_amount, gbc);
 		
 		// Ok button
@@ -138,7 +142,10 @@ public class MarketPopups {
 	}
 	
 	
-	
+	/**
+	 * 
+	 * @param container
+	 */
 	static void viewOffers(Container container) {
 		JPopupMenu popup = new JPopupMenu("Popup menu");
 		
@@ -153,7 +160,6 @@ public class MarketPopups {
 		gbc.insets = Config.GUI.GridSettings.defaultInsets;
 		gbc.fill = GridBagConstraints.CENTER;
 		
-		//
 		Market market = CardSync.getGameState().getMarket();
 		List<TradeOffer> tradeOffers = market.getOffers();
 		
@@ -196,7 +202,9 @@ public class MarketPopups {
 			JButton accept = new JButton("Accept");
 			accept.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					CardSync.controller.sendAction(new AcceptTradeAction(CardSync.getGameState().getActivePlayer().getID(),offererID));
+					CardSync.controller.sendAction(new AcceptTradeAction(CardSync.getGameState().getActivePlayer().getID(),tradeOffer.getID()));
+					
+					popup.setVisible(false);
 				}
 			});
 			popupPanel.add(accept, gbc);
@@ -217,6 +225,30 @@ public class MarketPopups {
 		popup.add(popupPanel);
 		popup.show(container, 20, 20);
 	}
+	
+	/**
+	 * 
+	 * @param container
+	 */
+	static void tradeWithGame(Container container) {
+		JPopupMenu popup = new JPopupMenu("Popup menu");
+		
+		JPanel popupPanel = new JPanel();
+		
+		GridBagLayout gbl = new GridBagLayout();
+		popupPanel.setLayout(gbl);
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = Config.GUI.GridSettings.startingGridX;
+		gbc.gridy = Config.GUI.GridSettings.startingGridY;
+		gbc.insets = Config.GUI.GridSettings.defaultInsets;
+		gbc.fill = GridBagConstraints.CENTER;
+		
+		
+		popup.add(popupPanel);
+		popup.show(container, 20, 20);
+	}
+	
 	
 	/**
 	 * Returns the spinner value. Has protection against invalid user input.
