@@ -5,6 +5,11 @@ import java.util.List;
 
 import config.Config;
 
+/**
+ * A turn when the player builds a village for free.
+ * @author Andras
+ *
+ */
 public class BuildVillageTurn extends Turn {
 	public BuildVillageTurn(){
 		super(false);

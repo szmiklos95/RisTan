@@ -140,7 +140,7 @@ public abstract class Turn {
 	}
 	
 	/**
-	 * Gets the list of the possible tile actions is a game state.
+	 * Gets the list of the possible tile actions in a game state.
 	 * @param gameState the current game state.
 	 * @return the list of possible tile actions.
 	 */

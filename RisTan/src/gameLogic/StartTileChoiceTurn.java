@@ -5,6 +5,11 @@ import java.util.List;
 
 import config.Config;
 
+/**
+ * A turn when the player chooses his/her start tile.
+ * @author Andras
+ *
+ */
 public class StartTileChoiceTurn extends Turn {
 	public StartTileChoiceTurn(){
 		super(false);
