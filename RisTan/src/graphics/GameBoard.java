@@ -53,6 +53,8 @@ public class GameBoard extends JPanel {
 	private boolean tilesInitialized = false; // Necessary because the board (thus the tiles) are generated later
 
 	private boolean aTileIsSelected = false;
+	
+	private boolean marketIsOpen = false;
 
 	public GameBoard() {
 		setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
@@ -431,11 +433,28 @@ public class GameBoard extends JPanel {
 	 */
 	private void fixMenuBarBug() {
 		SystemMessage.write();
-		CardSync.frame.remove(CardSync.frame.getJMenuBar());
-		new GameMenubar();
-		SystemMessage.write();
+		toggleMarket();
+		//CardSync.frame.remove(CardSync.frame.getJMenuBar());
+		//new GameMenubar();
+		//SystemMessage.write();
 		//CardSync.frame.getJMenuBar().revalidate();
 		//CardSync.frame.getJMenuBar().repaint();
+	}
+	
+	/**
+	 * Open/Close market depending on a lot of factors.
+	 */
+	private void toggleMarket() {
+		if(CardSync.getGameState().isOver()) return;
+		
+		if(!marketIsOpen && CardSync.getGameState().getTurn().toString().equals(Config.TurnNames.normal) && CardSync.controller.isActivePlayer()) {
+			CardSync.frame.remove(CardSync.frame.getJMenuBar());
+			new GameMenubar();
+			SystemMessage.write();
+			marketIsOpen = true;
+		}
+		else if(!CardSync.controller.isActivePlayer()) marketIsOpen = false;
+		
 	}
 
 	/**
