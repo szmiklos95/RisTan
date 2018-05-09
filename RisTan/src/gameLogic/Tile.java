@@ -1,70 +1,37 @@
 package gameLogic;
 
-/**
- * A tile of the game.
- * @author Andras
- *
- */
+//A tile of the board
 public class Tile {
-	/**
-	 * The resource of the tile.
-	 */
 	private Resource resource;
-	/**
-	 * The building level of the tile.
-	 */
 	private BuildingLevel buildingLevel;
-	/**
-	 * The owner of the tile.
-	 */
 	private Player owner;
 	
-	/**
-	 * Constructor, creates a tile with the given resource. Used in the server for generation.
-	 * @param resource the resource of the tile.
-	 */
+	//creates tile with the given resource
 	Tile(Resource resource) {
 		init(resource);
 	}
 	
-	/**
-	 * Constructor, recreates a tile from a given generator string. (Custom deserializer.)
-	 * @param generator the generator string.
-	 */
+	//creates tile from the generator string
 	Tile(String generator){
 		int ordinal=Integer.parseInt(generator);
 		init(Resource.values()[ordinal]);
 	}
 	
-	/**
-	 * The common part of the constructors.
-	 * @param resource the resource of the tile.
-	 */
 	private void init(Resource resource) {
 		this.resource=resource;
 		buildingLevel=BuildingLevel.None;
 		owner=null;
 	}
 	
-	/**
-	 * Gets the owner of the tile.
-	 * @return the owner of the tile.
-	 */
 	public Player getOwner() {
 		return owner;
 	}
 	
-	/**
-	 * Gets a string from which the same tile can be generated. (Custom serializer.)
-	 * @return the generator string.
-	 */
+	//returns a string from which the same tile can be generated
 	String getGeneratorString() {
 		return ""+resource.ordinal();
 	}
 	
-	/**
-	 * The owner of the tile gets the tile resource in an amount based on the building level.
-	 */
 	void harvest() {
 		if(owner!=null) {
 			int amount=buildingLevel.getResourceNum();
@@ -72,18 +39,10 @@ public class Tile {
 		}
 	}
 	
-	/**
-	 * Gets the building level.
-	 * @return the building level.
-	 */
 	public BuildingLevel getBuildingLevel() {
 		return buildingLevel;
 	}
 	
-	/**
-	 * Sets the building level.
-	 * @param buildingLevel the nw building level.
-	 */
 	void setBuildingLevel(BuildingLevel buildingLevel) {
 		if(owner!=null) {
 			owner.addScore(-this.buildingLevel.getScore());
@@ -92,10 +51,7 @@ public class Tile {
 		this.buildingLevel=buildingLevel;
 	}
 	
-	/**
-	 * The new owner occupies the tile, the function also updates the scores.
-	 * @param newOwner the new owner of the tile.
-	 */
+	//the tile gets occupied by the given player, it also modifies the scores accordingly
 	void occupy(Player newOwner) {
 		int score=buildingLevel.getScore();
 		if(owner!=null) {
@@ -106,8 +62,8 @@ public class Tile {
 	}
 	
 	/**
-	 * Gets the resource.
-	 * @return the tile.
+	 * 
+	 * @return
 	 * 
 	 * @author Miklós
 	 */

@@ -8,7 +8,6 @@ import config.Config;
 //stores the state of the game
 public class GameState {
 	private boolean over;
-	private boolean finished;
 	private Board board;
 	private List<Player> players;
 	private PlayerOrder playerOrder;
@@ -24,7 +23,6 @@ public class GameState {
 		turnOrder=null;
 		market=new Market();
 		automaticActionsExecuted=false;
-		finished=false;
 	}
 	
 	public void executeAction(Action action)throws GameLogicException{
@@ -41,22 +39,15 @@ public class GameState {
 		return over;
 	}
 	
-	public boolean isFinished() {
-		return finished;
-	}
-	
 	public Board getBoard() {
 		return board;
 	}
 	
-	public List<Player> getPlayers(){
+	List<Player> getPlayers(){
 		return players;
 	}
 	
 	public Player getActivePlayer() {
-		if(playerOrder==null) {
-			return null;
-		}
 		return playerOrder.getActive();
 	}
 	
@@ -88,7 +79,6 @@ public class GameState {
 		playerOrder=new PlayerOrder(players);
 		turnOrder=new TurnOrder(Config.TurnOrder.turns);
 		over=false;
-		finished=false;
 		//effectively starting the game
 		activePlayerStart();
 	}
@@ -107,7 +97,6 @@ public class GameState {
 			playerOrder=new PlayerOrder(players,playerShuffleOrder);
 			turnOrder=new TurnOrder(turnOrderGenerator);
 			over=false;
-			finished=false;
 		}
 		//effectively starting the game
 		activePlayerStart();
@@ -129,12 +118,6 @@ public class GameState {
 	}
 	
 	private boolean checkForSwitchToNextPlayer() {
-		boolean can=canSwitchToNextPlayer();
-		Turn turn=getTurn();
-		return can&&(!turn.canDoAnything(this));
-	}
-	
-	boolean canSwitchToNextPlayer() {
 		if(!automaticActionsExecuted) {
 			return false;
 		}
@@ -142,7 +125,7 @@ public class GameState {
 		if(turn.getObligatoryEvents().size()>0) {
 			return false;
 		}
-		return true;
+		return !turn.canDoAnything(this);
 	}
 	
 	void activePlayerEnd() throws GameLogicException {
@@ -151,9 +134,7 @@ public class GameState {
 		if(toNextTurn) {
 			over=turnOrder.next();
 		}
-		if(over) {
-			finished=true;
-		}else{
+		if(!over) {
 			activePlayerStart();
 		}
 	}

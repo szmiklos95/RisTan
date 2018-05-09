@@ -49,13 +49,5 @@ public class ClientController extends Controller {
 		client.Send(new Message(eMsgType.Action,action));
 	}
 	
-	public boolean isActivePlayer() {
-		Player active=getGameState().getActivePlayer();
-		if(active==null) {
-			return false;
-		}
-		return active.getID()==localPlayerID;
-	}
-	
 	//TODO: GUI eseményekbõl Action-ök elõállítása (nem feltétlenül itt)
 }

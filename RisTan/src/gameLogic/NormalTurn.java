@@ -81,13 +81,6 @@ public class NormalTurn extends Turn {
 				ret.add(new OccupyEnemyTown(player.getID(),point));
 			}
 		}
-		//OccupyEnemyTownL2
-				if((time>=Config.Action.OccupyEnemyTownL2.time)&&(player.hasResource(Config.Action.OccupyEnemyTownL2.cost))) {
-					for(int i=0;i<entpoints.size();++i) {
-						Point point=entpoints.get(i);
-						ret.add(new OccupyEnemyTownL2(player.getID(),point));
-					}
-				}
 		//BuildVillage
 		if((time>=Config.Action.BuildVillage.time)&&(player.hasResource(Config.Action.BuildVillage.cost))) {
 			for(int i=0;i<pepoints.size();++i) {

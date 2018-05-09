@@ -73,7 +73,6 @@ public class AcceptTradeAction extends TradeAction {
 		int take_amount=tradeOffer.getTake_amount();
 		player.takeResource(take,take_amount);
 		offerer.giveResource(take,take_amount);
-		gameState.getMarket().removeOffer(offerID);
 	}
 	
 	@Override

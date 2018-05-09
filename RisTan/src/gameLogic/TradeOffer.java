@@ -8,11 +8,11 @@ public class TradeOffer extends ObjectWithID{
 	Resource take;
 	int take_amount;
 	
-	public TradeOffer(int offererID,Resource give,int give_amount,Resource take,int take_amount){
+	TradeOffer(int offererID,Resource give,int give_amount,Resource take,int take_amount){
 		init(offererID,give,give_amount,take,take_amount);
 	}
 	
-	public TradeOffer(int ID,int offererID,Resource give,int give_amount,Resource take,int take_amount){
+	TradeOffer(int ID,int offererID,Resource give,int give_amount,Resource take,int take_amount){
 		super(ID);
 		init(offererID,give,give_amount,take,take_amount);
 	}

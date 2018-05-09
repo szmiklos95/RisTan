@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.LayoutManager;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,13 +25,8 @@ import gameLogic.BuildTown;
 import gameLogic.BuildVillage;
 import gameLogic.BuildVillageFree;
 import gameLogic.GameState;
-import gameLogic.OccupyEnemyTile;
-import gameLogic.OccupyEnemyTileL2;
-import gameLogic.OccupyEnemyTown;
-import gameLogic.OccupyEnemyTownL2;
-import gameLogic.OccupyEnemyVillage;
-import gameLogic.OccupyEnemyVillageL2;
 import gameLogic.OccupyFreeTile;
+import gameLogic.OccupyFreeTileAction;
 import gameLogic.OccupyFreeTileFree;
 import gameLogic.Resource;
 import gameLogic.TileAction;
@@ -53,8 +49,6 @@ public class GameBoard extends JPanel {
 	private boolean tilesInitialized = false; // Necessary because the board (thus the tiles) are generated later
 
 	private boolean aTileIsSelected = false;
-	
-	private boolean marketIsOpen = false;
 
 	public GameBoard() {
 		setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
@@ -101,7 +95,7 @@ public class GameBoard extends JPanel {
 
 					if (clickedHexaTile.getHexagon().contains(me.getPoint())) {// check if mouse is clicked within shape
 
-						if (!CardSync.controller.isActivePlayer()) {
+						if (!isActivePlayer()) {
 							SystemMessage.setErrorMessage(Config.SystemMessages.notYourTurn);
 						} else {
 							handleValidMouseAction(clickedHexaTile);
@@ -201,40 +195,8 @@ public class GameBoard extends JPanel {
 			CardSync.controller.sendAction(new BuildVillageFree(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
 		
-		if(actionString.equals(BuildVillage.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new BuildVillage(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
-		}
-		
 		if(actionString.equals(BuildTown.class.getCanonicalName())) {
 			CardSync.controller.sendAction(new BuildTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
-		}
-		
-		if(actionString.equals(OccupyEnemyTile.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyEnemyTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
-		}
-		
-		if(actionString.equals(OccupyEnemyTileL2.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyEnemyTileL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
-		}
-		
-		if(actionString.equals(OccupyEnemyTown.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyEnemyTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
-		}
-		
-		if(actionString.equals(OccupyEnemyTownL2.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyEnemyTownL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
-		}
-		
-		if(actionString.equals(OccupyEnemyVillage.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyEnemyVillage(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
-		}
-		
-		if(actionString.equals(OccupyEnemyVillageL2.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyEnemyVillageL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
-		}
-		
-		if(actionString.equals(OccupyFreeTile.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyFreeTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
 		
 		clickedHexaTile.clearSelected();
@@ -370,9 +332,6 @@ public class GameBoard extends JPanel {
 				if (!boardDrawn && !gameState.isOver()) {
 					timer.stop();
 					boardDrawn = true;
-					
-					new GameMenubar(); //To open the market
-					
 					SystemMessage.setSystemMessage(Config.SystemMessages.boardDrawn);
 
 					rePaint();
@@ -395,7 +354,7 @@ public class GameBoard extends JPanel {
 		timer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (CardSync.controller.isActivePlayer()) {
+				if (isActivePlayer()) {
 					SystemMessage.setSystemMessage(Config.SystemMessages.YourTurn.sysMsg);
 					//Turn name
 					SystemMessage.addSubMessage(gameState.getTurn().toString());
@@ -433,28 +392,6 @@ public class GameBoard extends JPanel {
 	 */
 	private void fixMenuBarBug() {
 		SystemMessage.write();
-		toggleMarket();
-		//CardSync.frame.remove(CardSync.frame.getJMenuBar());
-		//new GameMenubar();
-		//SystemMessage.write();
-		//CardSync.frame.getJMenuBar().revalidate();
-		//CardSync.frame.getJMenuBar().repaint();
-	}
-	
-	/**
-	 * Open/Close market depending on a lot of factors.
-	 */
-	private void toggleMarket() {
-		if(CardSync.getGameState().isOver()) return;
-		
-		if(!marketIsOpen && CardSync.getGameState().getTurn().toString().equals(Config.TurnNames.normal) && CardSync.controller.isActivePlayer()) {
-			CardSync.frame.remove(CardSync.frame.getJMenuBar());
-			new GameMenubar();
-			SystemMessage.write();
-			marketIsOpen = true;
-		}
-		else if(!CardSync.controller.isActivePlayer()) marketIsOpen = false;
-		
 	}
 
 	/**
@@ -466,6 +403,11 @@ public class GameBoard extends JPanel {
 		repaint();
 	}
 
+	private boolean isActivePlayer() {
+		if (gameState.isOver())
+			return false;
+		return gameState.getActivePlayer().getID() == CardSync.controller.getLocalPlayerID();
+	}
 	
 	/**
 	 * 
@@ -476,11 +418,7 @@ public class GameBoard extends JPanel {
 			// Get all the possible tile actions
 			List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
 			
-			if(CardSync.controller.isActivePlayer()) {
-				
-				//Make the highlight disappear (in case it was highlighted before)
-				t.setAvailableForAction(false);
-				
+			if(isActivePlayer()) {
 				// Iterate through all the tile actions
 				for (TileAction tileAction : possibleTileActions) {
 					if (tileAction.getPoint().equals(t.getPoint())) {
@@ -488,7 +426,6 @@ public class GameBoard extends JPanel {
 						break; //Exit this loop as we only need to have 1 action to mark the tile available
 					}
 				}
-
 			}
 			else {
 				t.setAvailableForAction(false);

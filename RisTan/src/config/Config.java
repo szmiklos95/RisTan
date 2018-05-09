@@ -182,49 +182,49 @@ public abstract class Config {
 			public static final String errorMessage="Can't switch to next player because there are automatic actions or obligatory events which haven't happened yet.";
 		}
 		public static class GameLogic{
-			public static final String errorMessage="Az akció nem hajtható végre, mert érvénytelen.";
+			public static final String errorMessage="Az akciÃ³ nem hajthatÃ³ vÃ©gre, mert Ã©rvÃ©nytelen.";
 		}
 		public static class GameOver{
-			public static final String errorMessage="Az akció nem hajtható végre, mert vége a játéknak, vagy még nem kezdõdött el.";
+			public static final String errorMessage="Az akciÃ³ nem hajthatÃ³ vÃ©gre, mert vÃ©ge a jÃ¡tÃ©knak, vagy mÃ©g nem kezdÃµdÃ¶tt el.";
 		}
 		public static class InsufficientResource{
-			public static final String errorMessage="Az akció nem hajtható végre, mert nong hozzá elég nyersanyagod.";
+			public static final String errorMessage="Az akciÃ³ nem hajthatÃ³ vÃ©gre, mert nong hozzÃ¡ elÃ©g nyersanyagod.";
 		}
 		public static class InvalidTileAction{
-			public static final String errorMessage="Ez az akció nem hajtható végre ezen a mezõn.";
+			public static final String errorMessage="Ez az akciÃ³ nem hajthatÃ³ vÃ©gre ezen a mezÃµn.";
 		}
 		public static class NoSuchTradeOffer{
-			public static final String errorMessage="Az akció nem hajtható végre, mert nincs ilyen kereskedelmi ajánlat.";
+			public static final String errorMessage="Az akciÃ³ nem hajthatÃ³ vÃ©gre, mert nincs ilyen kereskedelmi ajÃ¡nlat.";
 		}
 		public static class NotEnoughTime{
-			public static final String errorMessage="Az akció nem hajtható végre, mert nincs hozzá elég idõd.";
+			public static final String errorMessage="Az akciÃ³ nem hajthatÃ³ vÃ©gre, mert nincs hozzÃ¡ elÃ©g idÃµd.";
 		}
 		public static class NoTileAtPoint{
-			public static final String errorMessage="Az akció nem hajtható végre, mert ezen a ponton nincs mezõ.";
+			public static final String errorMessage="Az akciÃ³ nem hajthatÃ³ vÃ©gre, mert ezen a ponton nincs mezÃµ.";
 		}
 		public static class PlayerOutOfTurn{
-			public static final String errorMessage="Az akció nem hajtható végre, mert nem te következel.";
+			public static final String errorMessage="Az akciÃ³ nem hajthatÃ³ vÃ©gre, mert nem te kÃ¶vetkezel.";
 		}
 		public static class TileIsNotEmpty{
-			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mert a mezõ nem üres.";
+			public static final String errorMessage="Az akciÃ³ nem hajthatÃ³ vÃ©gre ezen a mezÃµn, mert a mezÃµ nem Ã¼res.";
 		}
 		public static class TileIsNotEnemy{
-			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mert a mezõt nem birtokolja ellenséges játékos.";
+			public static final String errorMessage="Az akciÃ³ nem hajthatÃ³ vÃ©gre ezen a mezÃµn, mert a mezÃµt nem birtokolja ellensÃ©ges jÃ¡tÃ©kos.";
 		}
 		public static class TileIsNotFree{
-			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mert a mezõ nem szabad.";
+			public static final String errorMessage="Az akciÃ³ nem hajthatÃ³ vÃ©gre ezen a mezÃµn, mert a mezÃµ nem szabad.";
 		}
 		public static class TileIsNotOwn{
-			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mert a mezõ nem saját.";
+			public static final String errorMessage="Az akciÃ³ nem hajthatÃ³ vÃ©gre ezen a mezÃµn, mert a mezÃµ nem sajÃ¡t.";
 		}
 		public static class TileIsNotTown{
-			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mivel a mezõn nem áll város.";
+			public static final String errorMessage="Az akciÃ³ nem hajthatÃ³ vÃ©gre ezen a mezÃµn, mivel a mezÃµn nem Ã¡ll vÃ¡ros.";
 		}
 		public static class TileIsNotVillage{
-			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mivel a mezõn nem áll falu.";
+			public static final String errorMessage="Az akciÃ³ nem hajthatÃ³ vÃ©gre ezen a mezÃµn, mivel a mezÃµn nem Ã¡ll falu.";
 		}
 		public static class TradeIsNotAllowed{
-			public static final String errorMessage="Az akció nem hajtható végre, mert a kereskedelem nem lehetésges.";
+			public static final String errorMessage="Az akciÃ³ nem hajthatÃ³ vÃ©gre, mert a kereskedelem nem lehetÃ©sges.";
 		}
 	}
 	
@@ -272,7 +272,7 @@ public abstract class Config {
 	
 	/**
 	 * Main menu
-	 * @author Miklós
+	 * @author MiklÃ³s
 	 */
 	public static class GUI{
 		public static final int frameMinimumWidth = 300;
@@ -321,7 +321,7 @@ public abstract class Config {
 	
 	/**
 	 * Hexagon config
-	 * @author Miklós
+	 * @author MiklÃ³s
 	 */
 	public static class Hexagon{
 		//The radius of a hexagon
@@ -360,17 +360,17 @@ public abstract class Config {
 	
 	/**
 	 * GameBoard config
-	 * @author Miklós
+	 * @author MiklÃ³s
 	 */
 	public static class GameBoard{
 		public static final int width = 1200;
-		public static final int height = 800;
+		public static final int height = 700;
 		public static final Font font = new Font("Arial", Font.BOLD, 18);
 	}
 	
 	/**
 	 * The circle behind the hexagonal map
-	 * @author Miklós
+	 * @author MiklÃ³s
 	 *
 	 */
 	public static class Circle{
@@ -395,7 +395,7 @@ public abstract class Config {
 	
 	/**
 	 * The embedded chat window
-	 * @author Miklós
+	 * @author MiklÃ³s
 	 *
 	 */
 	public static class Chat{
@@ -450,7 +450,20 @@ public abstract class Config {
 			public static final int lineThickness = Rectangle.lineThickness;	
 			public static final int xOff = Rectangle.xOff;
 			public static final int yOff = -Rectangle.yOff-Rectangle.height;
+			}
 		}
-	}
+	
 
+	/* *****************************************************************************
+	 *  @@@@@@@@@@@@@@@@@@@@@@@@@@ Network configurations @@@@@@@@@@@@@@@@@@@@@@@@@@
+	 * *****************************************************************************/
+	public static class Server{
+		public static final int port = 605;
+		public static final int UdpPeriodicSendTime = 1000;
+	}
+	public static class Udp{
+		public static final int ServerPort = 4550;
+		public static final int ClientPort = 4555;
+	}
+		
 }

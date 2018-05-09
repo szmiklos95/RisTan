@@ -7,6 +7,7 @@ import java.util.Map;
  * @author Andras
  *
  */
+import config.Config;
 
 public abstract class OccupyEnemyTownAction extends OccupyEnemyTileAction {
 	private static final long serialVersionUID = 1L;

@@ -33,7 +33,7 @@ public class GameWindow extends JPanel{
 		gbc.fill = GridBagConstraints.CENTER;
 
 		// Chat
-		//gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		
 		//JPanel chatPanel = new Chat(CardSync.client, CardSync.settings.getPlayerName());
 		//this.add(chatPanel, gbc);
