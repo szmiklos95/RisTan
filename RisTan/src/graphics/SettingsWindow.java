@@ -138,7 +138,7 @@ public class SettingsWindow extends JPanel{
 		udpServer.connect();
 
 		// This is localhost IP address, connects the local client to the server
-		ConnectTo(udpServer.getServerAddress().getHostAddress());  //TODO This should be editable or...?
+		ConnectTo(udpServer.getServerAddress().getHostAddress());  //The local client connects to server
 		System.out.println("Setting up the server.");
 
 	}

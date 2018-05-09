@@ -23,7 +23,7 @@ public class UdpServer {
 	private class TxThread extends Thread {
 	    private byte[] buf = new byte[4];
 		public void run(){
-			// UDP üzenetek küldése a broadcast címre
+			// UDP message transfer to the broadcast address
 			buf = ServerAddress.getAddress();
 			while(true) {
 				try {
@@ -47,6 +47,7 @@ public class UdpServer {
 		GetServerAddress();
 		BroadcastAddress = ServerInterface.getBroadcast();
 		ServerAddress = ServerInterface.getAddress();
+		System.out.println(BroadcastAddress.getHostAddress());
 	}
 
 	private void GetServerAddress() {
@@ -88,10 +89,6 @@ public class UdpServer {
 	
 	public void disconnect() {
 		socket.close();
-	}
-	
-	public InetAddress getBroadcastAddress() {
-		return BroadcastAddress;
 	}
 	
 	public InetAddress getServerAddress() {
