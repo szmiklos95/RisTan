@@ -237,6 +237,14 @@ public class GameBoard extends JPanel {
 			CardSync.controller.sendAction(new OccupyFreeTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
 		
+		if(actionString.equals(OccupyEnemyTown.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyEnemyTownL2.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyTownL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
 		clickedHexaTile.clearSelected();
 		aTileIsSelected = false;
 	}
@@ -453,7 +461,12 @@ public class GameBoard extends JPanel {
 			SystemMessage.write();
 			marketIsOpen = true;
 		}
-		else if(!CardSync.controller.isActivePlayer()) marketIsOpen = false;
+		else if(!CardSync.controller.isActivePlayer()) {
+			CardSync.frame.remove(CardSync.frame.getJMenuBar());
+			new GameMenubar();
+			SystemMessage.write();
+			marketIsOpen = false;
+		}
 		
 	}
 
