@@ -162,6 +162,10 @@ public abstract class Turn {
 	 * @return true if and only if the active player can execute an action.
 	 */
 	boolean canDoAnything(GameState gameState) {
+		Player activePlayer=gameState.getActivePlayer();
+		if(activePlayer.getScore()<=0) { //true when the player has no own tiles
+			return false;
+		}
 		if(tradeEnabled) {
 			if(remainingTime>=Config.Action.TradeWithGameAction.time) {
 				return true;
