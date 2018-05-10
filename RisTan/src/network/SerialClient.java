@@ -3,7 +3,6 @@ package network;
 import java.io.*;
 import java.net.*;
 
-import config.Config;
 import gameLogic.Action;
 import gameLogic.ClientController;
 
@@ -58,7 +57,7 @@ public class SerialClient {
 	// Methods
 	public void Connect(String ip) {
 		try {
-			socket = new Socket(InetAddress.getByName(ip), Config.Server.port);
+			socket = new Socket(InetAddress.getByName(ip), 455);
 			System.out.println("Player" + controller.getLocalPlayerID() + ": Connecting to System.");
 			
 			out = new ObjectOutputStream(socket.getOutputStream());
