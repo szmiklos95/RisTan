@@ -130,14 +130,14 @@ public class JoinWindow extends JPanel {
 		CardSync.client.Send(new Message(eMsgType.Name, CardSync.settings.getPlayerName()));
 
 		// gameLogic.ClientController controller=client.getController();
-		CardSync.gameState = CardSync.controller.getGameState();
+		CardSync.setGameState(CardSync.controller.getGameState());
 	}
 
 	private void DrawBoard() {
-		CardSync.gameState = CardSync.controller.getGameState();
+		CardSync.setGameState(CardSync.controller.getGameState());
 
 		// Update the settings, and draw a new board.
-		CardSync.gameBoard = new GameBoard(CardSync.gameState);
+		CardSync.gameBoard = new GameBoard(CardSync.getGameState());
 		CardSync.cards.remove(CardSync.card_GameWindow);
 		CardSync.card_GameWindow.Create();
 		CardSync.cards.add(CardSync.card_GameWindow, Config.GUI.CardIDs.gameBoard);

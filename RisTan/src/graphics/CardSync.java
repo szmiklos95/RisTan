@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import gameLogic.ClientController;
 import gameLogic.GameState;
 import network.SerialClient;
+import network.SerialServer;
 
 /**
  * Synchronisation class that contains all the necessary variables for
@@ -17,7 +18,7 @@ import network.SerialClient;
  */
 class CardSync {
 	static GameBoard gameBoard;
-	static GameState gameState;
+	private static GameState gameState;
 	static JFrame frame;
 	static NewGameSettings settings;
 
@@ -28,6 +29,7 @@ class CardSync {
 	static SettingsWindow card_GameSettings;
 	static JoinWindow card_JoinWindow;
 
+	static SerialServer server = null;
 	static SerialClient client = null;
 	static ClientController controller = null;
 	
@@ -43,5 +45,15 @@ class CardSync {
 		client = new SerialClient();
 		controller = new ClientController(client);
 		
+	}
+
+	public static GameState getGameState() {
+		//Always update when getting a game state
+		setGameState(controller.getGameState());
+		return gameState;
+	}
+
+	public static void setGameState(GameState gameState) {
+		CardSync.gameState = gameState;
 	}
 }
