@@ -3,7 +3,7 @@ package gameLogic;
 import config.Config;
 
 /**
- * Describes an action of tradnig with the game for a fixed ratio. This action require some time and resources depending on the offer to perform.
+ * Describes an action of trading with the game for a fixed ratio. This action require some time and resources depending on the offer to perform.
  * @author Andras
  *
  */

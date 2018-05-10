@@ -152,7 +152,7 @@ public abstract class Turn {
 	 * Gets whether the trade is enabled or not.
 	 * @return true if and only if the trade is enabled.
 	 */
-	boolean isTradeEnabled() {
+	public boolean isTradeEnabled() {
 		return tradeEnabled;
 	}
 	

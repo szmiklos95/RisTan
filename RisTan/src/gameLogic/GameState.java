@@ -101,7 +101,7 @@ public class GameState {
 	 * Gets the players.
 	 * @return the list of players.
 	 */
-	List<Player> getPlayers(){
+	public List<Player> getPlayers(){
 		return players;
 	}
 	
