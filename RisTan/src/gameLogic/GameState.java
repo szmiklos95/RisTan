@@ -43,14 +43,11 @@ public class GameState {
 		return board;
 	}
 	
-	public List<Player> getPlayers(){
+	List<Player> getPlayers(){
 		return players;
 	}
 	
 	public Player getActivePlayer() {
-		if(playerOrder==null) {
-			return null;
-		}
 		return playerOrder.getActive();
 	}
 	

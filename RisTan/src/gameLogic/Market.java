@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //stores the trade offers
-public class Market {
+class Market {
 	private List<TradeOffer> tradeOffers;
 	
 	Market(){
@@ -25,7 +25,7 @@ public class Market {
 		return null;
 	}
 	
-	public List<TradeOffer> getOffers(){
+	List<TradeOffer> getOffers(){
 		return tradeOffers;
 	}
 	
