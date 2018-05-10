@@ -7,7 +7,17 @@ import java.util.Map;
 
 import config.Config;
 
+/**
+ * A turn in the game.
+ * @author Andras
+ *
+ */
 public abstract class Turn {
+	/**
+	 * Custom deserializer. Creates a turn from the generator string.
+	 * @param generator the generator string.
+	 * @return the turn.
+	 */
 	static Turn fromGeneratorString(String generator) {
 		String[] parts=generator.split(" ");
 		String type=parts[0];
@@ -31,11 +41,27 @@ public abstract class Turn {
 		return null;
 	}
 	
+	/**
+	 * The remaining time in a player's turn.
+	 */
 	private int remainingTime;
+	/**
+	 * The list of the actions which are to be executed at the start of the player's turn.
+	 */
 	private List<Action> automaticActions;
+	/**
+	 * The list of events which needs to happen in the player's turn.
+	 */
 	private List<Event> obligatoryEvents;
+	/**
+	 * Whether the trade is enabled or not.
+	 */
 	private boolean tradeEnabled;
 	
+	/**
+	 * Constructor.
+	 * @param tradeEnabled whether the trade is enabled in this turn or not.
+	 */
 	public Turn(boolean tradeEnabled){
 		remainingTime=0;
 		automaticActions=new ArrayList<Action>();
@@ -43,18 +69,39 @@ public abstract class Turn {
 		this.tradeEnabled=tradeEnabled;
 	}
 	
+	/**
+	 * Custom deserializer.
+	 * @return the generator string.
+	 */
 	abstract String getGeneratorString();
 	
+	/**
+	 * Resets the turn. Needs to be called at the start of the active player's turn. Resets the remaining time, the automatic actions and the obligatory events.
+	 * @param gameState the current game state.
+	 */
 	abstract void reset(GameState gameState);
 	
+	/**
+	 * Gets the remaining time.
+	 * @return the remaining time.
+	 */
 	public int getRemainingTime() {
 		return remainingTime;
 	}
 	
+	/**
+	 * Sets the remaining time.
+	 * @param time the new remaining time.
+	 */
 	void setRemainingTime(int time) {
 		remainingTime=time;
 	}
 	
+	/**
+	 * Tries to take an amount of time from the active player. If there is not enough time, throws a NotEnoughTimeException.
+	 * @param time the time to take.
+	 * @throws GameLogicException if there is not enough time, throws a NotEnoughTimeException.
+	 */
 	void takeTime(int time)throws GameLogicException{
 		if(remainingTime<time) {
 			throw new NotEnoughTimeException();
@@ -62,14 +109,26 @@ public abstract class Turn {
 		remainingTime-=time;
 	}
 	
+	/**
+	 * Gets the list of automatic actions.
+	 * @return the list of automatic actions.
+	 */
 	List<Action> getAutomaticActions(){
 		return automaticActions;
 	}
 	
+	/**
+	 * Gets the list of obligatory actions.
+	 * @return the list of obligatory actions.
+	 */
 	List<Event> getObligatoryEvents(){
 		return obligatoryEvents;
 	}
 	
+	/**
+	 * Checks an action for matching any of the obligatory events. If a match is found, the event is removed. An action can remove maximum one event.
+	 * @param action the action to be checked.
+	 */
 	void checkObligatoryEvents(Action action) {
 		for(int i=0;i<obligatoryEvents.size();++i) {
 			Event event=obligatoryEvents.get(i);
@@ -80,15 +139,33 @@ public abstract class Turn {
 		}
 	}
 	
+	/**
+	 * Gets the list of the possible tile actions in a game state.
+	 * @param gameState the current game state.
+	 * @return the list of possible tile actions.
+	 */
 	List<TileAction> getPossibleTileActions(GameState gameState){
 		return new ArrayList<TileAction>();
 	}
 	
+	/**
+	 * Gets whether the trade is enabled or not.
+	 * @return true if and only if the trade is enabled.
+	 */
 	public boolean isTradeEnabled() {
 		return tradeEnabled;
 	}
 	
+	/**
+	 * Checks whether the active player can execute any action in a given game state.
+	 * @param gameState the given game state.
+	 * @return true if and only if the active player can execute an action.
+	 */
 	boolean canDoAnything(GameState gameState) {
+		Player activePlayer=gameState.getActivePlayer();
+		if(activePlayer.getScore()<=0) { //true when the player has no own tiles
+			return false;
+		}
 		if(tradeEnabled) {
 			if(remainingTime>=Config.Action.TradeWithGameAction.time) {
 				return true;
@@ -106,7 +183,12 @@ public abstract class Turn {
 		return false;
 	}
 	
-	//checks occur here of action type or which require more tiles than the affected in the tile action (e.g. is the affected tile neighbour of an own)
+	/**
+	 * TileAction checks which require more tile knowledge than the target tile (e.g. is the target tile neighbour of an own). Also checks the type of the tile actions - allowed types vary depending on the turn type.
+	 * @param gameState the current game state.
+	 * @param action the tile action to check.
+	 * @return true if and if only the tile action can be executed..
+	 */
 	boolean isTileActionPossible(GameState gameState,TileAction action) {
 		return false;
 	}

@@ -5,6 +5,11 @@ import java.util.List;
 
 import config.Config;
 
+/**
+ * A normal game turn.
+ * @author Andras
+ *
+ */
 public class NormalTurn extends Turn {
 	private final int time;
 	

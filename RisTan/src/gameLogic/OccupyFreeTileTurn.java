@@ -5,6 +5,11 @@ import java.util.List;
 
 import config.Config;
 
+/**
+ * A turn when the player occupies a determined number of tile for free.
+ * @author Andras
+ *
+ */
 public class OccupyFreeTileTurn extends Turn {
 	private int amount;
 	

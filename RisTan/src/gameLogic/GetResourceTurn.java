@@ -5,6 +5,11 @@ import java.util.Map;
 
 import config.Config;
 
+/**
+ * A turn when the player gets a predetermined set of resources.
+ * @author Andras
+ *
+ */
 public class GetResourceTurn extends Turn {
 	private Map<Resource,Integer> resources;
 	
