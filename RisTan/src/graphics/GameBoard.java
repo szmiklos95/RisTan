@@ -25,6 +25,12 @@ import gameLogic.BuildTown;
 import gameLogic.BuildVillage;
 import gameLogic.BuildVillageFree;
 import gameLogic.GameState;
+import gameLogic.OccupyEnemyTile;
+import gameLogic.OccupyEnemyTileL2;
+import gameLogic.OccupyEnemyTown;
+import gameLogic.OccupyEnemyTownL2;
+import gameLogic.OccupyEnemyVillage;
+import gameLogic.OccupyEnemyVillageL2;
 import gameLogic.OccupyFreeTile;
 import gameLogic.OccupyFreeTileAction;
 import gameLogic.OccupyFreeTileFree;
@@ -34,7 +40,7 @@ import gameLogic.TileAction;
 /**
  * The panel where the game is played
  * 
- * @author Miklós
+ * @author MiklÃ³s
  *
  */
 public class GameBoard extends JPanel {
@@ -197,6 +203,32 @@ public class GameBoard extends JPanel {
 		
 		if(actionString.equals(BuildTown.class.getCanonicalName())) {
 			CardSync.controller.sendAction(new BuildTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyEnemyTile.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyEnemyTileL2.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyTileL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyEnemyTown.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyEnemyTownL2.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyTownL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		
+		if(actionString.equals(OccupyFreeTile.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyFreeTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		if(actionString.equals(OccupyEnemyVillage.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyVillage(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		if(actionString.equals(OccupyEnemyVillageL2.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyVillageL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
 		
 		clickedHexaTile.clearSelected();
