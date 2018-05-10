@@ -28,6 +28,7 @@ import gameLogic.OccupyEnemyTile;
 import gameLogic.OccupyEnemyTileL2;
 import gameLogic.OccupyEnemyTown;
 import gameLogic.OccupyEnemyTownL2;
+import gameLogic.OccupyEnemyVillage;
 import gameLogic.OccupyFreeTile;
 import gameLogic.OccupyFreeTileFree;
 import gameLogic.Resource;
@@ -225,6 +226,9 @@ public class GameBoard extends JPanel {
 		
 		if(actionString.equals(OccupyFreeTile.class.getCanonicalName())) {
 			CardSync.controller.sendAction(new OccupyFreeTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+		}
+		if(actionString.equals(OccupyEnemyVillage.class.getCanonicalName())) {
+			CardSync.controller.sendAction(new OccupyEnemyVillage(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
 		
 		clickedHexaTile.clearSelected();
