@@ -18,7 +18,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import config.Config;
-import network.UdpClient;
 
 //TODO comment
 public class MainMenu extends JPanel{
@@ -109,13 +108,9 @@ public class MainMenu extends JPanel{
 				CardSync.settings.setPlayerName(new String(name.getText()));
 				
 				CardSync.frame.setTitle(Config.GUI.nameTitle + name.getText());
-				
-				UdpClient udpclient = new UdpClient();
-				udpclient.connect();
 
 				// Need to update card
 				CardSync.cards.remove(CardSync.card_JoinWindow);
-				CardSync.card_JoinWindow.setUdpClient(udpclient);
 				CardSync.card_JoinWindow.Create();
 				CardSync.cards.add(CardSync.card_JoinWindow, Config.GUI.CardIDs.joinWindow);
 
