@@ -20,7 +20,6 @@ import javax.swing.SpinnerNumberModel;
 import config.Config;
 import network.Message;
 import network.SerialServer;
-import network.UdpServer;
 import network.Message.eMsgType;
 
 //TODO comment
@@ -132,13 +131,11 @@ public class SettingsWindow extends JPanel{
 	 */
 	private void SetupNewGame() {
 		network.SerialServer server = new SerialServer();
+		CardSync.server = server;
 		server.Connect(CardSync.settings.getPlayerCount());
-		
-		UdpServer udpServer = new UdpServer();
-		udpServer.connect();
 
 		// This is localhost IP address, connects the local client to the server
-		ConnectTo(udpServer.getServerAddress().getHostAddress());  //The local client connects to server
+		ConnectTo("127.0.0.1");  //TODO This should be editable or...?
 		System.out.println("Setting up the server.");
 
 	}
@@ -155,14 +152,14 @@ public class SettingsWindow extends JPanel{
 		CardSync.client.Send(new Message(eMsgType.Name, CardSync.settings.getPlayerName()));
 
 		// gameLogic.ClientController controller=client.getController();
-		CardSync.gameState = CardSync.controller.getGameState();
+		CardSync.setGameState(CardSync.controller.getGameState());
 	}
 
 	private void DrawBoard() {
-		CardSync.gameState = CardSync.controller.getGameState();
+		CardSync.setGameState(CardSync.controller.getGameState());
 
 		// Update the settings, and draw a new game window.
-		CardSync.gameBoard = new GameBoard(CardSync.gameState);
+		CardSync.gameBoard = new GameBoard(CardSync.getGameState());
 		CardSync.cards.remove(CardSync.card_GameWindow);
 		CardSync.card_GameWindow.Create();
 		CardSync.cards.add(CardSync.card_GameWindow, Config.GUI.CardIDs.gameBoard);

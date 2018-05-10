@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import config.Config;
 import gameLogic.Action;
 import gameLogic.AddPlayerAction;
 import gameLogic.Player;
@@ -108,7 +107,7 @@ public class SerialServer {
 		try {
 			if(serverSocket != null)
 				disconnect();
-			serverSocket = new ServerSocket(Config.Server.port);
+			serverSocket = new ServerSocket(455);
 
 			clientArray= new ArrayList<ReceiverThread>();
 			// Listener threads

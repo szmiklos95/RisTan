@@ -17,36 +17,21 @@ import javax.swing.JTextField;
 
 import config.Config;
 import network.Message;
-import network.UdpClient;
 import network.Message.eMsgType;
 
 //TODO comment
 public class JoinWindow extends JPanel {
 
+
 	private static final long serialVersionUID = 1L;
-	private UdpClient udpclient = null;
-	private JTextField ipField = null;
-
-	private class UpdateIpThread implements Runnable {
-		private boolean running = true;
-
-		public void run() {
-			while (running) {
-				if (udpclient.getServerAddress() != null) {
-					ipField.setText(udpclient.getServerAddress().getHostAddress());
-					running = false;
-				}
-			}
-		}
+	
+	JoinWindow(){
+		
 	}
-
-	JoinWindow() {
-
-	}
-
-	public void Create() {
-
-		this.removeAll(); // In case this function gets called multiple times
+	
+	public void Create(){
+		
+		this.removeAll(); //In case this function gets called multiple times
 
 		GridBagLayout gbl = new GridBagLayout();
 		this.setLayout(gbl);
@@ -76,8 +61,8 @@ public class JoinWindow extends JPanel {
 
 		// Input text field
 		gbc.gridx++;
-
-		ipField = new JTextField("Searching for servers..");
+		
+		JTextField ipField = new JTextField("127.0.0.1");
 		ipField.setEditable(true);
 		gbl.setConstraints(ipField, gbc);
 		ipField.addMouseListener(new MouseAdapter() {
@@ -89,6 +74,7 @@ public class JoinWindow extends JPanel {
 		});
 		;
 		this.add(ipField);
+
 
 		// Connect button
 		gbc.gridwidth = 1;
@@ -102,7 +88,7 @@ public class JoinWindow extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				
 				ConnectTo(ipField.getText());
 
 				DrawBoard();
@@ -116,38 +102,31 @@ public class JoinWindow extends JPanel {
 
 		CardSync.card_JoinWindow = this;
 	}
-
+	
 	private void ConnectTo(String IPstring) {
 		// network.SerialClient client=new SerialClient();
 		CardSync.client.Connect(IPstring);
-
-		// Update game board card because we now know the player's name for the chat
-		// window
+		
+		// Update game board card because we now know the player's name for the chat window
 		CardSync.cards.remove(CardSync.card_GameWindow);
 		CardSync.card_GameWindow.Create();
 		CardSync.cards.add(CardSync.card_GameWindow, Config.GUI.CardIDs.gameBoard);
-
+		
 		CardSync.client.Send(new Message(eMsgType.Name, CardSync.settings.getPlayerName()));
 
 		// gameLogic.ClientController controller=client.getController();
-		CardSync.gameState = CardSync.controller.getGameState();
+		CardSync.setGameState(CardSync.controller.getGameState());
 	}
 
 	private void DrawBoard() {
-		CardSync.gameState = CardSync.controller.getGameState();
+		CardSync.setGameState(CardSync.controller.getGameState());
 
 		// Update the settings, and draw a new board.
-		CardSync.gameBoard = new GameBoard(CardSync.gameState);
+		CardSync.gameBoard = new GameBoard(CardSync.getGameState());
 		CardSync.cards.remove(CardSync.card_GameWindow);
 		CardSync.card_GameWindow.Create();
 		CardSync.cards.add(CardSync.card_GameWindow, Config.GUI.CardIDs.gameBoard);
-		CardSync.frame.pack(); // Resizes the window to fit the board
-	}
-
-	public void setUdpClient(UdpClient client) {
-		udpclient = client;
-		Thread thread = new Thread(new UpdateIpThread());
-		thread.start();
+		CardSync.frame.pack(); //Resizes the window to fit the board
 	}
 
 }

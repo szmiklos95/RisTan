@@ -1,4 +1,4 @@
-package graphics;
+package network;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -8,18 +8,15 @@ import java.awt.TextField;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JPanel;
+import javax.swing.JFrame;
 
-import config.Config;
-import network.Message;
 import network.Message.eMsgType;
-import network.SerialClient;
 
-public class Chat extends JPanel{
-
+public class Chat extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private SerialClient client = null;
 	private TextArea display = null;
+	//private String name;
 	
 	private class displayUpdateThread extends Thread implements Runnable{
 		private String text = "";
@@ -30,10 +27,9 @@ public class Chat extends JPanel{
 						String newtext = new String((String)client.getMsg().GetData());
 						text = text.concat(newtext);
 						display.setText(text);
-
 						}
-					
-					sleep(Config.Chat.sleepTime);
+					//Sleep the thread for 100ms
+					sleep(100);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -42,10 +38,13 @@ public class Chat extends JPanel{
 	}
 
 	public Chat(SerialClient client,String name){
-
+		super("RisTan Beta - " + name);
+		setSize(500, 500);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		GridBagLayout gbl = new GridBagLayout();
 		this.setLayout(gbl);
 		
+		//this.name = name;
 		this.client=client;
 		
 		// Display messages
@@ -57,7 +56,7 @@ public class Chat extends JPanel{
 		GBC_display.fill = GridBagConstraints.WEST;
 		GBC_display.insets = new Insets(10,10,10,10);
 		
-		display = new TextArea(Config.Chat.textAreaRows,Config.Chat.textAreaColoumns);
+		display = new TextArea();
 		display.setEditable(false);
 		display.setText("Welcome and good luck!");
 		gbl.setConstraints(display, GBC_display);
@@ -95,7 +94,14 @@ public class Chat extends JPanel{
 			public void keyPressed(KeyEvent e) {}
 		});
 		
-		this.add(input);	
+		this.add(input);
+		
+		// send button
+		GridBagConstraints GBC_send = new GridBagConstraints();
+		GBC_send.gridx = 3;
+		GBC_send.gridy = 10;
+		GBC_send.fill = GridBagConstraints.NONE;
+		GBC_send.insets = new Insets(10,10,10,10);
 		
 		setVisible(true);
 		

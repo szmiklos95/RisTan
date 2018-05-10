@@ -65,22 +65,20 @@ public class HexaTile {
         hexagon.draw(g, x, y, Config.Hexagon.outerLineThickness, outerColor, false);
         
         //Draw player circle
+        int playerColor = getPlayerColor();
+        
         if(tile.getOwner()!=null) {
-        	int playerID = tile.getOwner().getID();
-        	int color = Config.PlayerCircle.defaultColor;
-        	switch(playerID) {
-        		case 0: color = Config.PlayerCircle.color_player0; break;
-        		case 1: color = Config.PlayerCircle.color_player1; break;
-        		case 2: color = Config.PlayerCircle.color_player2; break;
-        		case 3: color = Config.PlayerCircle.color_player3; break;
-        		default: color = Config.PlayerCircle.defaultColor; break;
-        	}
-        	drawCircle(g, graphicsPoint, Config.PlayerCircle.radius, true, true, color, Config.PlayerCircle.lineThickness);
+        	drawCircle(g, graphicsPoint, Config.PlayerCircle.radius, true, true, playerColor, Config.PlayerCircle.lineThickness);
         }
         
+        //Draw buildings
+        drawBuildings(g, playerColor);
+      
         //Draw text
         g.setColor(new Color(Config.Hexagon.textColor));
         g.drawString(text, x - w/2, y + h/2);
+        
+        
 	}
 	
 	public Hexagon getHexagon() {
@@ -120,6 +118,21 @@ public class HexaTile {
     		case Wheat: innerColor = Config.Hexagon.innerColor_wheat; break;
     		default: innerColor = Config.Hexagon.innerColor_default; break;
     	}
+    }
+    
+    private int getPlayerColor() {
+    	int color = Config.PlayerColor.color_default;
+    	if(tile.getOwner()!=null) {
+        	int playerID = tile.getOwner().getID();
+        	switch(playerID) {
+        		case 0: color = Config.PlayerColor.color_player0; break;
+        		case 1: color = Config.PlayerColor.color_player1; break;
+        		case 2: color = Config.PlayerColor.color_player2; break;
+        		case 3: color = Config.PlayerColor.color_player3; break;
+        		default: color = Config.PlayerColor.color_default; break;
+        	}
+    	}
+    	return color;
     }
 
 	public Tile getTile() {
@@ -188,6 +201,31 @@ public class HexaTile {
 		// Set values to previous when done.
 		g.setColor(tmpC);
 		g.setStroke(tmpS);
+	}
+	
+	private void drawRectangle(Graphics2D g, Point origin, int xOff, int yOff, int a, int b, int colorValue, int lineThickness) {
+		Stroke tmpS = g.getStroke();
+		Color tmpC = g.getColor();
+		
+		g.setColor(new Color(colorValue));
+		g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+
+		g.fillRect(origin.getX()+xOff, origin.getY()+yOff, a, b);
+
+		// Set values to previous when done.
+		g.setColor(tmpC);
+		g.setStroke(tmpS);
+	}
+	
+	private void drawBuildings(Graphics2D g, int color) {
+		
+		switch(tile.getBuildingLevel()) {
+			case None: break;
+			case Village: drawRectangle(g, graphicsPoint, Config.Rectangle.Square.xOff, Config.Rectangle.Square.yOff, Config.Rectangle.Square.width, Config.Rectangle.Square.height, color, Config.Rectangle.Square.lineThickness); break;
+			case Town: drawRectangle(g, graphicsPoint, Config.Rectangle.xOff, Config.Rectangle.yOff, Config.Rectangle.width, Config.Rectangle.height, color, Config.Rectangle.lineThickness); break;
+			default: break;
+		}
+        
 	}
 	
 }
