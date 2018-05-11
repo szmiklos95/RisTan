@@ -16,8 +16,12 @@ import gameLogic.Resource;
 import gameLogic.StartTileChoiceTurn;
 import gameLogic.Turn;
 
-//Configuration options for the game
-//Collection of magic constants
+/**
+ * Configuration options for the game.
+ * Collection of magic constants.
+ * @author Andras
+ *
+ */
 public abstract class Config {
 	//Actions config
 	public static class Action{

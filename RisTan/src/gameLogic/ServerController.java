@@ -3,14 +3,28 @@ package gameLogic;
 import network.Message;
 import network.SerialServer;
 
+/**
+ * A controller which handles the server side game state.
+ * @author Andras
+ *
+ */
 public class ServerController extends Controller {
+	/**
+	 * The network server for communication.
+	 */
 	private SerialServer server;
 
+	/**
+	 * Constructor.
+	 * @param server the network server.
+	 */
 	public ServerController(SerialServer server) {
 		this.server=server;
 	}
 	
-	//execute Actions from clients
+	/**
+	 * Tries to execute an action from a client. If the action is invalid, sends back an error message to the executing player. If the action is valid, after the execution sends it to all the clients for execution.
+	 */
 	@Override
 	public void executeAction(int playerID, Action action) {
 		try {
@@ -22,8 +36,10 @@ public class ServerController extends Controller {
 		}
 	}
 	
-	//init the gameState before game start
-	//returns the StartGameAction to execute at the clients
+	/**
+	 * Inits the game state. This is the start of the game.
+	 * @return a StartGameAction to execute on the clients.
+	 */
 	public Action initGame() {
 		try {
 			getGameState().initGame();
