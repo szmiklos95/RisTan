@@ -12,28 +12,71 @@ import gameLogic.Player;
 import gameLogic.ServerController;
 import network.Message.eMsgType;
 
+/**
+ * TCP/IP Server for the communication.
+ * It can handle more clients.
+ * Contains controller class what is responsible for the action process.
+ * @author Péter
+ *
+ */
 public class SerialServer {
-	// class variables
+	/**
+	 * This socket is use for define port and listen for client connect request
+	 */
 	private ServerSocket serverSocket = null;
+	/**
+	 * The number of client threads
+	 */
 	private int num_threads = 3;
+	/**
+	 * The number of already connected clients
+	 */
 	private int connectedClients = 0;
+	/**
+	 * The array what contains the threads
+	 */
 	private ArrayList<ReceiverThread> clientArray;
+	/**
+	 * This class try to execute the received actions
+	 */
 	private ServerController controller;
 	
+	/**
+	 * Constructor
+	 */
 	public SerialServer() {
 		controller=new ServerController(this);
 	}
 	
-	/* Thread is necessary for handling receiving messages 
-	 * - accept() and readObject() are blocking methods 
+	/** 
+	 * It is handling connecting clients and receiving messages
 	 * */
 	private class ReceiverThread implements Runnable {
+		/**
+		 * Socket for communicating with the corresponding client
+		 */
 		private Socket clientSocket = null;
+		/**
+		 * Input stream for receiving messages
+		 */
 		private ObjectInputStream in;
+		/**
+		 * Output stream for sending messages
+		 */
 		private ObjectOutputStream out;
+		/**
+		 * The Id of the player
+		 * It is incremented when player connected 
+		 */
 		private int playerId = -1;
+		/**
+		 * The player name
+		 */
 		private String name;
-		
+		/**
+		 * Run while the thread is exits.
+		 * After a client is connected, waiting for receiving messages
+		 */
 		public void run() {
 			try {
 				clientSocket = serverSocket.accept(); // blocking the running
@@ -65,25 +108,27 @@ public class SerialServer {
 					switch(msg.GetType()) { 
 					case Name:
 						name = (String)data;
-						//gameState játékoslista frissítések
+						//gameState playerlist update
 						Player player=new Player(name,playerId);
 						List<Player> oldPlayers=controller.getPlayers();
-						for(Player p:oldPlayers) {//a most csatlakozóhoz az eddigiek hozzáadása
+						for(Player p:oldPlayers) {//Add previous players to the new one
 							Send(new Message(eMsgType.Action,new AddPlayerAction(p)),playerId);
 						}
-						//mindegyikhez a most csatlakozó hozzáadása
+						//Add the new player for the previous ones
 						controller.executeAction(playerId, new AddPlayerAction(player));
 						
-						//ha mindenki csatlakozott, a játék elndítása
+						//when every player connected, start the game
 						if(connectedClients==num_threads) {
 							Action action=controller.initGame();
 							SendtoAll(new Message(eMsgType.Action,action));
 						}
 						break;
 					case Text:
+						// Send the chat messages for every client included the sender one
 						SendtoAll(new Message(eMsgType.Text,name + ": " + (String)data + "\n"));
 						break;
 					case Action:
+						//The controller try to execute the action
 						controller.executeAction(playerId,(Action)data);
 						break;
 					default:
@@ -100,7 +145,10 @@ public class SerialServer {
 			}
 		}
 	}
-	
+	/**
+	 * Bind the server to port and creating the threads
+	 * @param num_players - Number of players
+	 */
 	public void Connect(int num_players) {
 		//creates a thread for all the clients
 		num_threads=num_players;		
@@ -120,7 +168,11 @@ public class SerialServer {
 			System.err.println("System: Connection error");
 		}
 	}
-	
+	/**
+	 * Send message to the destination client
+	 * @param msg  - the message
+	 * @param dest - the ID of the destination client
+	 */
 	public void Send(Message msg, int dest) {
 		if(getThread(dest) == null) {
 			System.out.println("Ez a szál még nincs csatlakozva");
@@ -135,14 +187,19 @@ public class SerialServer {
 			System.err.println("System: Send error.");
 		}	
 	}
-	
+	/**
+	 * Send the message for all connected clients.
+	 * @param msg
+	 */
 	public void SendtoAll(Message msg) {
 		for(int i=0; i<connectedClients; ++i) {
 			Send(msg,i);
 		}
 	}
 	
-	
+	/**
+	 * Disconnect the server.
+	 */
 	void disconnect() {
 		try {
 			for(int i = 0; i < num_threads; ++i) {
@@ -161,7 +218,7 @@ public class SerialServer {
 		}
 	}
 	/**
-	 * This method is find thread what's assigned to PlayerId
+	 * This method finds thread what's assigned to PlayerId
 	 * @param id
 	 * @return
 	 */

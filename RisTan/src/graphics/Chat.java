@@ -14,15 +14,34 @@ import config.Config;
 import network.Message;
 import network.Message.eMsgType;
 import network.SerialClient;
-
+/**
+ * This is a chat window
+ * @author Péter
+ *
+ */
 public class Chat extends JPanel{
-
 	private static final long serialVersionUID = 1L;
+	/**
+	 * SerialClient uses for sending text messages
+	 */
 	private SerialClient client = null;
+	/**
+	 * It shows the text messages
+	 */
 	private TextArea display = null;
-	
+	/**
+	 * Thread is needed for polling whether messages received and update the display area
+	 * @author Péter
+	 *
+	 */
 	private class displayUpdateThread extends Thread implements Runnable{
+		/**
+		 * The content of Textarea
+		 */
 		private String text = "";
+		/**
+		 * Waiting for receiving text messages
+		 */
 		public void run(){
 			while(true) {
 				try {
@@ -40,7 +59,11 @@ public class Chat extends JPanel{
 			}
 		}
 	}
-
+	/**
+	 * Constructor
+	 * @param client
+	 * @param name
+	 */
 	public Chat(SerialClient client,String name){
 
 		GridBagLayout gbl = new GridBagLayout();
@@ -78,6 +101,9 @@ public class Chat extends JPanel{
 		
 		input.addKeyListener(new KeyListener() {
 			
+			/**
+			 * When enter key pressed the typed text will be sent
+			 */
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char id = e.getKeyChar();
