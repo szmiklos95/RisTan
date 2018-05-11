@@ -5,21 +5,42 @@ import java.net.*;
 
 import gameLogic.Action;
 import gameLogic.ClientController;
-
+/**
+ * TCP/IP client for the communication.
+ * @author Péter
+ *
+ */
 public class SerialClient {
-    /* Class variables */
+    /**
+     * Client socket connecting to server and transfer data
+     */
 	private Socket socket = null;
-	// The data transfer is done through the Stream
+	/**
+	 * Input stream for receiving messages
+	 */
 	private ObjectInputStream in;
+	/**
+	 * Output strean for sending messages
+	 */
 	private ObjectOutputStream out;
+	/**
+	 * Execute the action
+	 */
 	private ClientController controller;
-	
+	/**
+	 * Indicates that is text received in chat
+	 */
 	private boolean isTextReceived = false;
+	/**
+	 * Message 
+	 */
 	private Message msg = null;
 	
-	/* Thread is necessary for handling receiving messages 
-	 * readObject() is a blocking method
-	 * */
+	/**
+	 * This handles the receiving messages
+	 * @author Péter
+	 *
+	 */
 	private class ReceiverThread implements Runnable{
 		public void run(){
 			try {
@@ -49,12 +70,18 @@ public class SerialClient {
 			}
 		}
 	
-	// Constructor
+	/**
+	 * Constructor
+	 */
 	public SerialClient(){
 		controller=new ClientController(this);
 	}
 	
-	// Methods
+	/**
+	 * Connect client for a port number and ip address
+	 * and create the thread for receiving messages
+	 * @param ip
+	 */
 	public void Connect(String ip) {
 		try {
 			socket = new Socket(InetAddress.getByName(ip), 455);
@@ -74,7 +101,10 @@ public class SerialClient {
 			System.err.println("Player" + controller.getLocalPlayerID() + ": Connection failed to Server");
 		}
 	}
-	
+	/**
+	 * Send messages to the server
+	 * @param msg
+	 */
 	public void Send(Message msg) {
 		try {
 			out.writeObject(msg);
@@ -84,7 +114,9 @@ public class SerialClient {
 			System.err.println("Player" + controller.getLocalPlayerID() + ": The msg wasn't sent.");
 		} 
 	}
-	
+	/**
+	 * Disconnect the client
+	 */
 	void disconnect() {
 		try {
 			if (out != null)
@@ -98,24 +130,39 @@ public class SerialClient {
 		}
 	
 	}
-	
+	/**
+	 * Get player Id
+	 * @return
+	 */
 	public int GetId() {
 		return this.controller.getLocalPlayerID();
 	}
-	
+	/**
+	 * 
+	 * @return - the flag what indicates whether received text message
+	 */
 	public boolean isRecText() {
 		return isTextReceived;
 	}
-	
+	/**
+	 * Get message and reset the TextReceived flag
+	 * @return
+	 */
 	public Message getMsg() {
 		isTextReceived = false;
 		return msg;
 	}
-	
+	/**
+	 * Get player name
+	 * @return
+	 */
 	public String getName() {
 		return controller.getLocalPlayerName();
 	}
-	
+	/**
+	 * Get controller object
+	 * @return
+	 */
 	public ClientController getController() {
 		return controller;
 	}
