@@ -453,20 +453,24 @@ public class GameBoard extends JPanel {
 	 * Open/Close market depending on a lot of factors.
 	 */
 	private void toggleMarket() {
-		if(CardSync.getGameState().isOver()) return;
 		
-		if(!marketIsOpen && CardSync.getGameState().getTurn().toString().equals(Config.TurnNames.normal) && CardSync.controller.isActivePlayer()) {
-			CardSync.frame.remove(CardSync.frame.getJMenuBar());
-			new GameMenubar();
-			SystemMessage.write();
-			marketIsOpen = true;
+
+		if(!CardSync.getGameState().isOver()) { //If the turn isn't over
+			if(!marketIsOpen && CardSync.controller.isActivePlayer()) {
+				CardSync.frame.remove(CardSync.frame.getJMenuBar());
+				new GameMenubar();
+				SystemMessage.write();
+				marketIsOpen = true;
+			}
+			else if(!CardSync.controller.isActivePlayer()) {
+				CardSync.frame.remove(CardSync.frame.getJMenuBar());
+				new GameMenubar();
+				SystemMessage.write();
+				marketIsOpen = false;
+			}
 		}
-		else if(!CardSync.controller.isActivePlayer()) {
-			CardSync.frame.remove(CardSync.frame.getJMenuBar());
-			new GameMenubar();
-			SystemMessage.write();
-			marketIsOpen = false;
-		}
+		
+
 		
 	}
 
