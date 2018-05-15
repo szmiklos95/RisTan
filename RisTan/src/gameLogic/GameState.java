@@ -256,6 +256,19 @@ public class GameState {
 	 */
 	void activePlayerEnd() throws GameLogicException {
 		System.out.println("Player turn ends: "+getActivePlayer().getID());
+		//checking whether there is only one player in the game
+		if(!turnOrder.isFirstTurn()) {
+			int num_players_in=0;
+			for(Player p:players) {
+				if(p.getScore()>0) {
+					num_players_in++;
+				}
+			}
+			if(num_players_in<=1) {
+				finished=true;
+			}
+		}
+		//player switching
 		boolean toNextTurn=playerOrder.next();
 		if(toNextTurn) {
 			over=turnOrder.next();

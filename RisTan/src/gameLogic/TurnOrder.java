@@ -67,6 +67,14 @@ public class TurnOrder {
 	}
 	
 	/**
+	 * Gets whether it is the first turn or not.
+	 * @return true in the first turn.
+	 */
+	boolean isFirstTurn() {
+		return activeNum==0;
+	}
+	
+	/**
 	 * Switches to the next turn.
 	 * @return true if the game has ended.
 	 */
