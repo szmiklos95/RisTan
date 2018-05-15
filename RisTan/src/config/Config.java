@@ -456,5 +456,11 @@ public abstract class Config {
 			public static final int yOff = -Rectangle.yOff-Rectangle.height;
 		}
 	}
+	
+	public static class GameOverPopup{
+		public static final int width = 200;
+		public static final int height = 200;
+		
+	}
 
 }
