@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -32,8 +35,10 @@ import gameLogic.OccupyEnemyVillage;
 import gameLogic.OccupyEnemyVillageL2;
 import gameLogic.OccupyFreeTile;
 import gameLogic.OccupyFreeTileFree;
+import gameLogic.OfferTradeAction;
 import gameLogic.Resource;
 import gameLogic.TileAction;
+import gameLogic.TradeOffer;
 
 /**
  * The panel where the game is played
@@ -164,25 +169,41 @@ public class GameBoard extends JPanel {
 		// Get all the possible tile actions
 		List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
 		
+		JPanel popupPanel = new JPanel();
+		GridBagLayout gbl = new GridBagLayout();
+		popupPanel.setLayout(gbl);
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = Config.GUI.GridSettings.startingGridX;
+		gbc.gridy = Config.GUI.GridSettings.startingGridY;
+		gbc.insets = Config.GUI.GridSettings.defaultInsets;
+		gbc.fill = GridBagConstraints.CENTER;
+		
 		// Iterate through all the tile actions
 		for (TileAction tileAction : possibleTileActions) {
 			if (tileAction.getPoint().equals(clickedHexaTile.getPoint())) {
-
-				JMenuItem menuItem = new JMenuItem(tileAction.toString());
-
-				menuItem.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent ae) {
+				
+				// Actions as buttons
+				gbc.gridx = 0;
+				gbc.gridy++;
+				
+				JButton actionButton = new JButton(tileAction.toString());
+				actionButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
 						executeAction(tileAction.getClass().getCanonicalName(), clickedHexaTile);
+						menu.setVisible(false);
 					}
 				});
-
-				menu.add(menuItem);
-				int popUpX = (int) clickedHexaTile.getGraphicsPoint().getX() + Config.Hexagon.radius;
-				int popUpY = (int) clickedHexaTile.getGraphicsPoint().getY();
-				menu.show(CardSync.card_GameWindow, popUpX, popUpY);
+				popupPanel.add(actionButton, gbc);
 				
 			}
 		}
+		
+		menu.add(popupPanel);
+		int popUpX = (int) clickedHexaTile.getGraphicsPoint().getX();
+		int popUpY = (int) clickedHexaTile.getGraphicsPoint().getY();
+		menu.show(CardSync.card_GameWindow, popUpX, popUpY);
+		
 	}
 	
 	
