@@ -183,52 +183,52 @@ public abstract class Config {
 	//GameLogicExceptions config
 	public static class Exception{
 		public static class CantSwitchToNextPlayer{
-			public static final String errorMessage="Can't switch to next player because there are automatic actions or obligatory events which haven't happened yet.";
+			public static final String errorMessage="Can't switch to next player because there are automatic actions or obligatory events which haven't happened yet.\r\n";
 		}
 		public static class GameLogic{
-			public static final String errorMessage="Az akció nem hajtható végre, mert érvénytelen.";
+			public static final String errorMessage="Cannot execute the action because it is invalid.\r\n";
 		}
 		public static class GameOver{
-			public static final String errorMessage="Az akció nem hajtható végre, mert vége a játéknak, vagy még nem kezdõdött el.";
+			public static final String errorMessage="Cannot execute the action mert vége a játéknak, vagy még nem kezdõdött el.\r\n";
 		}
 		public static class InsufficientResource{
-			public static final String errorMessage="Az akció nem hajtható végre, mert nong hozzá elég nyersanyagod.";
+			public static final String errorMessage="Cannot execute the action because you have insufficient resources.\r\n";
 		}
 		public static class InvalidTileAction{
-			public static final String errorMessage="Ez az akció nem hajtható végre ezen a mezõn.";
+			public static final String errorMessage="Cannot execute this action on this tile in this turn.\r\n";
 		}
 		public static class NoSuchTradeOffer{
-			public static final String errorMessage="Az akció nem hajtható végre, mert nincs ilyen kereskedelmi ajánlat.";
+			public static final String errorMessage="Cannot execute the action because no such trade offer exists.\r\n";
 		}
 		public static class NotEnoughTime{
-			public static final String errorMessage="Az akció nem hajtható végre, mert nincs hozzá elég idõd.";
+			public static final String errorMessage="Cannot execute the action because you do not have enough time.\r\n";
 		}
 		public static class NoTileAtPoint{
-			public static final String errorMessage="Az akció nem hajtható végre, mert ezen a ponton nincs mezõ.";
+			public static final String errorMessage="Cannot execute the action there is no tile at this point.\r\n";
 		}
 		public static class PlayerOutOfTurn{
-			public static final String errorMessage="Az akció nem hajtható végre, mert nem te következel.";
+			public static final String errorMessage="Cannot execute the action because an other player is active.\r\n";
 		}
 		public static class TileIsNotEmpty{
-			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mert a mezõ nem üres.";
+			public static final String errorMessage="Cannot execute the action on this tile because the tile is empty.\r\n";
 		}
 		public static class TileIsNotEnemy{
-			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mert a mezõt nem birtokolja ellenséges játékos.";
+			public static final String errorMessage="Cannot execute the action on this tile becaouse the tile is not occupied by an other player.\r\n";
 		}
 		public static class TileIsNotFree{
-			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mert a mezõ nem szabad.";
+			public static final String errorMessage="Cannot execute the action on this tile because the tile is not free.\r\n";
 		}
 		public static class TileIsNotOwn{
-			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mert a mezõ nem saját.";
+			public static final String errorMessage="Cannot execute the action on this tile because the tile is not own.\r\n";
 		}
 		public static class TileIsNotTown{
-			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mivel a mezõn nem áll város.";
+			public static final String errorMessage="Cannot execute the action on this tile because the tile is not a town.\r\n";
 		}
 		public static class TileIsNotVillage{
-			public static final String errorMessage="Az akció nem hajtható végre ezen a mezõn, mivel a mezõn nem áll falu.";
+			public static final String errorMessage="Cannot execute the action on this tile because the tile is not a village.\r\n";
 		}
 		public static class TradeIsNotAllowed{
-			public static final String errorMessage="Az akció nem hajtható végre, mert a kereskedelem nem lehetésges.";
+			public static final String errorMessage="Cannot execute the action because the trading is disabled.\r\n";
 		}
 	}
 	
