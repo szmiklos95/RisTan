@@ -429,6 +429,7 @@ public class GameBoard extends JPanel {
 				gameState = CardSync.controller.getGameState();
 				highlightAvailableTiles();
 				rePaint();
+				gameOverHandler();
 			}
 		});
 		timer.start();
@@ -512,6 +513,23 @@ public class GameBoard extends JPanel {
 			}
 
 			
+		}
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private boolean isFinished() {
+		return gameState.isFinished();
+	}
+	
+	/**
+	 * 
+	 */
+	private void gameOverHandler() {
+		if(isFinished()) {
+			new GameOverPopup(CardSync.frame);
 		}
 	}
 	
