@@ -3,16 +3,35 @@ package gameLogic;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Stores the order of the turns.
+ * @author Andras
+ *
+ */
 public class TurnOrder {
+	/**
+	 * The list of the turns.
+	 */
 	private List<Turn> turns;
+	/**
+	 * The index of the current turn.
+	 */
 	private int activeNum;
 	
+	/**
+	 * Constructor.
+	 * @param turns the list of turns to be included.
+	 */
 	TurnOrder(List<Turn> turns){
 		this.turns=new ArrayList<Turn>();
 		this.turns.addAll(turns);
 		activeNum=0;
 	}
 	
+	/**
+	 * Custom deserializer constructor.
+	 * @param generator the generator string.
+	 */
 	TurnOrder(String generator){
 		turns=new ArrayList<Turn>();
 		String[] turnGenerators=generator.split("#");
@@ -22,6 +41,10 @@ public class TurnOrder {
 		activeNum=0;
 	}
 	
+	/**
+	 * Custom serializer.
+	 * @return the generator string.
+	 */
 	String getGeneratorString() {
 		StringBuilder builder=new StringBuilder();
 		if(turns.size()>=1) {
@@ -35,10 +58,18 @@ public class TurnOrder {
 		return builder.toString();
 	}
 	
+	/**
+	 * Gets the active turn.
+	 * @return the active turn.
+	 */
 	Turn getActive() {
 		return turns.get(activeNum);
 	}
 	
+	/**
+	 * Switches to the next turn.
+	 * @return true if the game has ended.
+	 */
 	boolean next() {
 		activeNum++;
 		if(activeNum==turns.size()) {
