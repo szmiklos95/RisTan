@@ -186,11 +186,11 @@ public class GameState {
 	}
 	
 	/**
-	 * 
-	 * @param boardGenerator
-	 * @param playerShuffleOrder
-	 * @param turnOrderGenerator
-	 * @throws GameLogicException
+	 * Starts the game with the data of a StartGameAction.
+	 * @param boardGenerator the board generator string.
+	 * @param playerShuffleOrder the player order generator string.
+	 * @param turnOrderGenerator the turn order generator string.
+	 * @throws GameLogicException if an automatic action of the first player is invalid.
 	 */
 	void startGame(String boardGenerator,String playerShuffleOrder,String turnOrderGenerator) throws GameLogicException{
 		if(over) {//true on clients, needs to generate game state according to server
@@ -206,6 +206,10 @@ public class GameState {
 		activePlayerStart();
 	}
 	
+	/**
+	 * Starts the turn of the active player. It also executes the automatic actions. It the player can't do anything else, switches to the next.
+	 * @throws GameLogicException if an automatic action is invalid.
+	 */
 	void activePlayerStart()throws GameLogicException{
 		System.out.println("Player turn begins: "+getActivePlayer().getID());
 		getTurn().reset(this);
@@ -221,12 +225,20 @@ public class GameState {
 		}
 	}
 	
+	/**
+	 * Checks whether it is needed to switch to the next player.
+	 * @return true when the active player can't do anything and has executed all the automatic actions and all the obligatory events happened.
+	 */
 	private boolean checkForSwitchToNextPlayer() {
 		boolean can=canSwitchToNextPlayer();
 		Turn turn=getTurn();
 		return can&&(!turn.canDoAnything(this));
 	}
 	
+	/**
+	 * Checks whether it is possible to switch to the next player.
+	 * @return true when the active player has executed all the automatic actions and all the obligatory events happened.
+	 */
 	boolean canSwitchToNextPlayer() {
 		if(!automaticActionsExecuted) {
 			return false;
@@ -238,6 +250,10 @@ public class GameState {
 		return true;
 	}
 	
+	/**
+	 * End of the turn of the active player. It also switches to the next player and starts his/her turn. It also switches turn when necessary. Furthermore, detects the end of the game.
+	 * @throws GameLogicException if an automatic action of the next player is invalid.
+	 */
 	void activePlayerEnd() throws GameLogicException {
 		System.out.println("Player turn ends: "+getActivePlayer().getID());
 		boolean toNextTurn=playerOrder.next();
