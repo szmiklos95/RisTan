@@ -227,9 +227,12 @@ public class GameState {
 	
 	/**
 	 * Checks whether it is needed to switch to the next player.
-	 * @return true when the active player can't do anything and has executed all the automatic actions and all the obligatory events happened.
+	 * @return true when the active player can't do anything and has executed all the automatic actions and all the obligatory events happened OR when the player has no tiles.
 	 */
 	private boolean checkForSwitchToNextPlayer() {
+		if(!turnOrder.isFirstTurn()&&(getActivePlayer().getScore()<=0)) {//true when the player has no tiles
+			return true;
+		}
 		boolean can=canSwitchToNextPlayer();
 		Turn turn=getTurn();
 		return can&&(!turn.canDoAnything(this));
@@ -245,7 +248,9 @@ public class GameState {
 		}
 		Turn turn=getTurn();
 		if(turn.getObligatoryEvents().size()>0) {
-			return false;
+			if(turn.canDoAnything(this)) {
+				return false;
+			}
 		}
 		return true;
 	}
@@ -256,6 +261,20 @@ public class GameState {
 	 */
 	void activePlayerEnd() throws GameLogicException {
 		System.out.println("Player turn ends: "+getActivePlayer().getID());
+		//checking whether there is only one player in the game
+		if(!turnOrder.isFirstTurn()) {
+			int num_players_in=0;
+			for(Player p:players) {
+				if(p.getScore()>0) {
+					num_players_in++;
+				}
+			}
+			if(num_players_in<=1) {
+				finished=true;
+				over=true;
+			}
+		}
+		//player switching
 		boolean toNextTurn=playerOrder.next();
 		if(toNextTurn) {
 			over=turnOrder.next();
