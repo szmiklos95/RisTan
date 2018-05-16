@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.Timer;
@@ -35,46 +34,82 @@ import gameLogic.OccupyEnemyVillage;
 import gameLogic.OccupyEnemyVillageL2;
 import gameLogic.OccupyFreeTile;
 import gameLogic.OccupyFreeTileFree;
-import gameLogic.OfferTradeAction;
 import gameLogic.Resource;
 import gameLogic.TileAction;
-import gameLogic.TradeOffer;
+import network.Chat;
 
 /**
- * The panel where the game is played
+ * The panel where the game is played. This JPanel is not CardLayout based,
+ * rather a dynamic window that uses java graphics. Every change in game state
+ * initiates a repaint on the board. There is also a periodic update with timer.
  * 
  * @author Miklós
  *
  */
 public class GameBoard extends JPanel {
 
+	/**
+	 * Default UID.
+	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Holds every important status of the current game.
+	 */
 	private GameState gameState;
+
+	/**
+	 * True if the game board has been drawn on the current client's window. False
+	 * until every player joins the game.
+	 */
 	private boolean boardDrawn = false;
 
+	/**
+	 * A list for every hexa tile (hexagon graphics + tile logics) on the board.
+	 */
 	private ArrayList<HexaTile> hexaTiles;
-	private Point origin;
-	private boolean tilesInitialized = false; // Necessary because the board (thus the tiles) are generated later
 
+	/**
+	 * The center of the game board.
+	 */
+	private Point origin;
+
+	/**
+	 * True if the tiles has been initialised. Necessary because the board (thus the
+	 * tiles) are generated later.
+	 */
+	private boolean tilesInitialized = false;
+
+	/**
+	 * True if there is atleast 1 tile selected on the board.
+	 */
 	private boolean aTileIsSelected = false;
-	
+
+	/**
+	 * True if we can use market actions and the market GUI is shown. False if
+	 * market has no menu items thus the user cannot use market actions.
+	 */
 	private boolean marketIsOpen = false;
 
+	/**
+	 * Default constructor. Sets the board size and the default system message.
+	 */
 	public GameBoard() {
 		setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
 		SystemMessage.setSystemMessage(Config.SystemMessages.defaultMsg);
 	}
 
 	/**
-	 * Constructor that sets the game state and the panel size
+	 * Constructor that sets up all the components: - sets panel size - sets the
+	 * game state - sets the chat window - handles mouse events - starts timers
 	 * 
 	 * @param gameState
+	 *            the starting game state of the board
 	 */
 	public GameBoard(gameLogic.GameState gameState) {
 		setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
 		SystemMessage.setSystemMessage(Config.SystemMessages.waitingForPlayers);
-		
+
 		// Set chat window
 		JPanel chatPanel = new Chat(CardSync.client, CardSync.settings.getPlayerName());
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -95,7 +130,7 @@ public class GameBoard extends JPanel {
 	}
 
 	/**
-	 * A wrapper function for mouse events
+	 * A wrapper function for mouse events.
 	 */
 	private void handleMouseEvents() {
 		addMouseListener(new MouseAdapter() {
@@ -121,9 +156,10 @@ public class GameBoard extends JPanel {
 	}
 
 	/**
-	 * Wrapper for handling mouse actions that are valid
+	 * Wrapper for handling mouse actions that are valid.
 	 * 
 	 * @param clickedHexaTile
+	 *            the currently clicked tile
 	 */
 	private void handleValidMouseAction(HexaTile clickedHexaTile) {
 
@@ -133,10 +169,10 @@ public class GameBoard extends JPanel {
 		if (!aTileIsSelected) {
 			clickedHexaTile.toggleSelected();
 			aTileIsSelected = true;
-			drawPopupMenuWithActions(menu,clickedHexaTile);
+			drawPopupMenuWithActions(menu, clickedHexaTile);
 
-		} else { //We already have a selected tile
-			if (clickedHexaTile.isSelected()) { //If the clicked is the selected, remove selection
+		} else { // We already have a selected tile
+			if (clickedHexaTile.isSelected()) { // If the clicked is the selected, remove selection
 				// If the clicked tile is already selected
 				clickedHexaTile.toggleSelected();
 				aTileIsSelected = false;
@@ -144,49 +180,53 @@ public class GameBoard extends JPanel {
 				// clear the popup menu
 				menu.removeAll();
 				menu.setVisible(false);
-			}
-			else { //Find the already selected, and remove it's selection
-				for(HexaTile ht : hexaTiles) {
-					if(ht.isSelected()) ht.clearSelected();
-					
+			} else { // Find the already selected, and remove it's selection
+				for (HexaTile ht : hexaTiles) {
+					if (ht.isSelected())
+						ht.clearSelected();
+
 					// clear the popup menu
 					menu.removeAll();
 					menu.setVisible(false);
 				}
 				clickedHexaTile.toggleSelected();
-				drawPopupMenuWithActions(menu,clickedHexaTile);
+				drawPopupMenuWithActions(menu, clickedHexaTile);
 			}
 		}
 
 	}
 
 	/**
-	 * Sets and draws the given popup menu
+	 * Sets and draws the given popup menu.
+	 * 
 	 * @param menu
+	 *            the popup menu container where we will draw the buttons if there
+	 *            are actions
 	 * @param clickedHexaTile
+	 *            the tile we currently interact with
 	 */
 	private void drawPopupMenuWithActions(JPopupMenu menu, HexaTile clickedHexaTile) {
 		// Get all the possible tile actions
 		List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
-		
+
 		JPanel popupPanel = new JPanel();
 		GridBagLayout gbl = new GridBagLayout();
 		popupPanel.setLayout(gbl);
-		
+
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = Config.GUI.GridSettings.startingGridX;
 		gbc.gridy = Config.GUI.GridSettings.startingGridY;
 		gbc.insets = Config.GUI.GridSettings.defaultInsets;
 		gbc.fill = GridBagConstraints.CENTER;
-		
+
 		// Iterate through all the tile actions
 		for (TileAction tileAction : possibleTileActions) {
 			if (tileAction.getPoint().equals(clickedHexaTile.getPoint())) {
-				
+
 				// Actions as buttons
 				gbc.gridx = 0;
 				gbc.gridy++;
-				
+
 				JButton actionButton = new JButton(tileAction.toString());
 				actionButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -195,77 +235,92 @@ public class GameBoard extends JPanel {
 					}
 				});
 				popupPanel.add(actionButton, gbc);
-				
+
 			}
 		}
-		
+
 		menu.add(popupPanel);
 		int popUpX = (int) clickedHexaTile.getGraphicsPoint().getX();
 		int popUpY = (int) clickedHexaTile.getGraphicsPoint().getY();
 		menu.show(CardSync.card_GameWindow, popUpX, popUpY);
-		
+
 	}
-	
-	
+
 	/**
+	 * Executes the appropriate game logic action.
 	 * 
 	 * @param actionString
+	 *            the string name of the action used as identifier
 	 * @param clickedHexaTile
+	 *            the currently clicked tile
 	 */
 	private void executeAction(String actionString, HexaTile clickedHexaTile) {
-		
-		if(actionString.equals(OccupyFreeTileFree.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyFreeTileFree(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+
+		if (actionString.equals(OccupyFreeTileFree.class.getCanonicalName())) {
+			CardSync.controller.sendAction(
+					new OccupyFreeTileFree(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
-		
-		if(actionString.equals(BuildVillageFree.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new BuildVillageFree(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+
+		if (actionString.equals(BuildVillageFree.class.getCanonicalName())) {
+			CardSync.controller
+					.sendAction(new BuildVillageFree(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
-		
-		if(actionString.equals(BuildVillage.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new BuildVillage(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+
+		if (actionString.equals(BuildVillage.class.getCanonicalName())) {
+			CardSync.controller
+					.sendAction(new BuildVillage(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
-		
-		if(actionString.equals(BuildTown.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new BuildTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+
+		if (actionString.equals(BuildTown.class.getCanonicalName())) {
+			CardSync.controller
+					.sendAction(new BuildTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
-		
-		if(actionString.equals(OccupyEnemyTile.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyEnemyTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+
+		if (actionString.equals(OccupyEnemyTile.class.getCanonicalName())) {
+			CardSync.controller
+					.sendAction(new OccupyEnemyTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
-		
-		if(actionString.equals(OccupyEnemyTileL2.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyEnemyTileL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+
+		if (actionString.equals(OccupyEnemyTileL2.class.getCanonicalName())) {
+			CardSync.controller
+					.sendAction(new OccupyEnemyTileL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
-		
-		if(actionString.equals(OccupyEnemyTown.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyEnemyTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+
+		if (actionString.equals(OccupyEnemyTown.class.getCanonicalName())) {
+			CardSync.controller
+					.sendAction(new OccupyEnemyTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
-		
-		if(actionString.equals(OccupyEnemyTownL2.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyEnemyTownL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+
+		if (actionString.equals(OccupyEnemyTownL2.class.getCanonicalName())) {
+			CardSync.controller
+					.sendAction(new OccupyEnemyTownL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
-		
-		if(actionString.equals(OccupyEnemyVillage.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyEnemyVillage(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+
+		if (actionString.equals(OccupyEnemyVillage.class.getCanonicalName())) {
+			CardSync.controller.sendAction(
+					new OccupyEnemyVillage(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
-		
-		if(actionString.equals(OccupyEnemyVillageL2.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyEnemyVillageL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+
+		if (actionString.equals(OccupyEnemyVillageL2.class.getCanonicalName())) {
+			CardSync.controller.sendAction(
+					new OccupyEnemyVillageL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
-		
-		if(actionString.equals(OccupyFreeTile.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyFreeTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+
+		if (actionString.equals(OccupyFreeTile.class.getCanonicalName())) {
+			CardSync.controller
+					.sendAction(new OccupyFreeTile(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
-		
-		if(actionString.equals(OccupyEnemyTown.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyEnemyTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+
+		if (actionString.equals(OccupyEnemyTown.class.getCanonicalName())) {
+			CardSync.controller
+					.sendAction(new OccupyEnemyTown(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
-		
-		if(actionString.equals(OccupyEnemyTownL2.class.getCanonicalName())) {
-			CardSync.controller.sendAction(new OccupyEnemyTownL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
+
+		if (actionString.equals(OccupyEnemyTownL2.class.getCanonicalName())) {
+			CardSync.controller
+					.sendAction(new OccupyEnemyTownL2(gameState.getActivePlayer().getID(), clickedHexaTile.getPoint()));
 		}
-		
+
 		clickedHexaTile.clearSelected();
 		aTileIsSelected = false;
 	}
@@ -275,18 +330,16 @@ public class GameBoard extends JPanel {
 	 * created at the start of the game which is later than the GameBoard
 	 * instantiation.
 	 * 
-	 * @return Board from gameState
+	 * @return board from gameState
 	 */
 	private gameLogic.Board getBoard() {
 		return gameState.getBoard();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 * 
-	 * The main drawing function.
+	 *      The main drawing function.
 	 */
 	@Override
 	public void paintComponent(Graphics g) {
@@ -308,16 +361,18 @@ public class GameBoard extends JPanel {
 				initTiles(origin, points);
 				tilesInitialized = true;
 			}
-			drawTiles(g2d, origin);
+			drawTiles(g2d);
 		}
 	}
 
 	/**
+	 * Initialises the hexa tiles. Sets their coordinates and their game logic tile
+	 * field.
 	 * 
 	 * @param origin
-	 * @param radius
-	 * @param padding
+	 *            the center of the board
 	 * @param points
+	 *            the list of the points that will be initialised
 	 */
 	private void initTiles(Point origin, List<gameLogic.Point> points) {
 		int pointNum = points.size();
@@ -329,11 +384,12 @@ public class GameBoard extends JPanel {
 	}
 
 	/**
+	 * Draws each hexa tile.
 	 * 
 	 * @param g
-	 * @param origin
+	 *            graphics container for drawing
 	 */
-	private void drawTiles(Graphics g, Point origin) {
+	private void drawTiles(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		for (HexaTile t : hexaTiles) {
 			t.draw(g2d);
@@ -344,16 +400,19 @@ public class GameBoard extends JPanel {
 	 * Draws a circle with the given parameters.
 	 * 
 	 * @param g
-	 *            Graphics object
+	 *            graphics container object
 	 * @param origin
-	 *            The center of the circle
+	 *            the center of the circle
 	 * @param radius
-	 *            The radius of the circle
+	 *            the radius of the circle
 	 * @param centered
-	 *            Should be true
+	 *            should be true
 	 * @param filled
+	 *            filled or empty circle
 	 * @param colorValue
+	 *            the color of the circle
 	 * @param lineThickness
+	 *            the line thickness
 	 */
 	private void drawCircle(Graphics2D g, Point origin, int radius, boolean centered, boolean filled, int colorValue,
 			int lineThickness) {
@@ -380,8 +439,8 @@ public class GameBoard extends JPanel {
 
 	/**
 	 * A timer that is only active before the game starts. When every player joined
-	 * draw the board if it hasn't been drawn yet. (Otherwise only the client that
-	 * joined last gets a board.)
+	 * draw the board if it hasn't been drawn yet. (Without this only the client
+	 * that joined last gets a board.)
 	 */
 	private void gameStartRepaintTimer() {
 
@@ -399,9 +458,9 @@ public class GameBoard extends JPanel {
 				if (!boardDrawn && !gameState.isOver()) {
 					timer.stop();
 					boardDrawn = true;
-					
-					new GameMenubar(); //To open the market
-					
+
+					new GameMenubar(); // To open the market
+
 					SystemMessage.setSystemMessage(Config.SystemMessages.boardDrawn);
 
 					rePaint();
@@ -418,6 +477,11 @@ public class GameBoard extends JPanel {
 
 	}
 
+	/**
+	 * Starts a timer that periodically (set in Config) does important jobs: - sets
+	 * the system message - gets the current game state - highlights the available
+	 * tiles - checks if whether the game is finished - repaints the board
+	 */
 	private void periodicUpdate() {
 		int delay = Config.Timer.periodicUpdateInterval; // milliseconds
 		final Timer timer = new Timer(delay, null);
@@ -426,23 +490,22 @@ public class GameBoard extends JPanel {
 
 				if (CardSync.controller.isActivePlayer()) {
 					SystemMessage.setSystemMessage(Config.SystemMessages.YourTurn.sysMsg);
-					//Turn name
+					// Turn name
 					SystemMessage.addSubMessage(gameState.getTurn().toString());
-					//Remaining time
+					// Remaining time
 					int remainingTime = gameState.getTurn().getRemainingTime();
 					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.remainingTime + remainingTime);
-					//Score
+					// Score
 					int score = gameState.getActivePlayer().getScore();
 					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.score + score);
-					//Resources
+					// Resources
 					int wood = gameState.getActivePlayer().getResourceAmount(Resource.Wood);
 					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.wood + wood);
 					int stone = gameState.getActivePlayer().getResourceAmount(Resource.Stone);
 					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.stone + stone);
 					int wheat = gameState.getActivePlayer().getResourceAmount(Resource.Wheat);
 					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.wheat + wheat);
-					
-					
+
 				} else if (!gameState.isOver()) {
 					SystemMessage.setSystemMessage("It is " + gameState.getActivePlayer().getName() + "'s turn.");
 				}
@@ -464,40 +527,31 @@ public class GameBoard extends JPanel {
 	private void fixMenuBarBug() {
 		SystemMessage.write();
 		toggleMarket();
-		//CardSync.frame.remove(CardSync.frame.getJMenuBar());
-		//new GameMenubar();
-		//SystemMessage.write();
-		//CardSync.frame.getJMenuBar().revalidate();
-		//CardSync.frame.getJMenuBar().repaint();
 	}
-	
+
 	/**
-	 * Open/Close market depending on a lot of factors.
+	 * Open/Close market depending on a multiple factors.
 	 */
 	private void toggleMarket() {
-		
 
-		if(!CardSync.getGameState().isOver()) { //If the turn isn't over
-			if(!marketIsOpen && CardSync.controller.isActivePlayer()) {
+		if (!CardSync.getGameState().isOver()) { // If the turn isn't over
+			if (!marketIsOpen && CardSync.controller.isActivePlayer()) {
 				CardSync.frame.remove(CardSync.frame.getJMenuBar());
 				new GameMenubar();
 				SystemMessage.write();
 				marketIsOpen = true;
-			}
-			else if(!CardSync.controller.isActivePlayer()) {
+			} else if (!CardSync.controller.isActivePlayer()) {
 				CardSync.frame.remove(CardSync.frame.getJMenuBar());
 				new GameMenubar();
 				SystemMessage.write();
 				marketIsOpen = false;
 			}
 		}
-		
 
-		
 	}
 
 	/**
-	 * Call this everytime something has changed to redraw the game board
+	 * Call this every time something has changed to redraw the game board
 	 */
 	private void rePaint() {
 		fixMenuBarBug();
@@ -505,53 +559,52 @@ public class GameBoard extends JPanel {
 		repaint();
 	}
 
-	
 	/**
-	 * 
+	 * Iterates through every hexa tile and checks whether the current player can
+	 * make any actions on it. If yes then highlight that tile.
 	 */
 	private void highlightAvailableTiles() {
-		
-		for(HexaTile t : hexaTiles) {
+
+		for (HexaTile t : hexaTiles) {
 			// Get all the possible tile actions
 			List<TileAction> possibleTileActions = gameState.getPossibleTileActions();
-			
-			if(CardSync.controller.isActivePlayer()) {
-				
-				//Make the highlight disappear (in case it was highlighted before)
+
+			if (CardSync.controller.isActivePlayer()) {
+
+				// Make the highlight disappear (in case it was highlighted before)
 				t.setAvailableForAction(false);
-				
+
 				// Iterate through all the tile actions
 				for (TileAction tileAction : possibleTileActions) {
 					if (tileAction.getPoint().equals(t.getPoint())) {
 						t.setAvailableForAction(true);
-						break; //Exit this loop as we only need to have 1 action to mark the tile available
+						break; // Exit this loop as we only need to have 1 action to mark the tile available
 					}
 				}
 
-			}
-			else {
+			} else {
 				t.setAvailableForAction(false);
 			}
 
-			
 		}
 	}
-	
+
 	/**
+	 * Checks whether the game has finished.
 	 * 
-	 * @return
+	 * @return true if the game has finished, false otherwise
 	 */
 	private boolean isFinished() {
 		return gameState.isFinished();
 	}
-	
+
 	/**
-	 * 
+	 * Handles the game over event by drawing a popup window.
 	 */
 	private void gameOverHandler() {
-		if(isFinished()) {
+		if (isFinished()) {
 			new GameOverPopup(CardSync.frame);
 		}
 	}
-	
+
 }

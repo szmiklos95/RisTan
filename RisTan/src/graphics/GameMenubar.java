@@ -11,19 +11,26 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
-
 import config.Config;
 import gameLogic.SwitchToNextPlayerAction;
 
+/**
+ * The menu bar that is always visible on the window. The availability of it's
+ * menu points change with the current state of the game.
+ * 
+ * @author Miklós
+ *
+ */
 public class GameMenubar {
 
+	/**
+	 * The menu bar itself.
+	 */
 	JMenuBar bar = null;
 
-	// Set menubar for frame
-	// TODO: Move to a new method
-	// TODO: Confirmation if game started and player wants to return to main menu
+	/**
+	 * Constructor. Sets up the menu bar on the JFrame.
+	 */
 	public GameMenubar() {
 
 		// If we already had a menubar disable it in case this function gets called
@@ -56,7 +63,6 @@ public class GameMenubar {
 		// Market
 		JMenu market = new JMenu("Market");
 
-		// TODO check for || !CardSync.getGameState().getTurn().isTradeEnabled()
 		if (CardSync.getGameState().isOver()) {
 			JLabel over = new JLabel(" The market is closed :( ");
 			market.add(over);
@@ -96,32 +102,26 @@ public class GameMenubar {
 		bar.add(market);
 
 		// End Turn button
-		JMenu endTurn = new JMenu("End Turn");
+		JMenu endTurnMenu = new JMenu("End Turn");
+		JMenuItem endTurnButton = new JMenuItem("End Turn");
 
-		endTurn.addMenuListener(new MenuListener() {
-			public void menuSelected(MenuEvent arg0) {
-				CardSync.controller.sendAction(new SwitchToNextPlayerAction(CardSync.getGameState().getActivePlayer().getID()));
+		endTurnButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CardSync.controller
+						.sendAction(new SwitchToNextPlayerAction(CardSync.getGameState().getActivePlayer().getID()));
 			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
 		});
-		
-		if(CardSync.getGameState().isOver()) endTurn.setEnabled(false);
-		else if(!CardSync.controller.isActivePlayer()) endTurn.setEnabled(false);
-		else if(!CardSync.getGameState().getTurn().toString().equals(Config.TurnNames.normal)) endTurn.setEnabled(false);
-		
-		bar.add(endTurn);
+
+		endTurnMenu.add(endTurnButton);
+
+		if (CardSync.getGameState().isOver())
+			endTurnMenu.setEnabled(false);
+		else if (!CardSync.controller.isActivePlayer())
+			endTurnMenu.setEnabled(false);
+		else if (!CardSync.getGameState().getTurn().toString().equals(Config.TurnNames.normal))
+			endTurnMenu.setEnabled(false);
+
+		bar.add(endTurnMenu);
 
 		// Conventional menubar ends here
 		bar.add(Box.createHorizontalGlue());
@@ -135,13 +135,15 @@ public class GameMenubar {
 	}
 
 	/**
-	 * Adds a JMenuItem to a JMenu
+	 * Adds a JMenuItem to a JMenu.
 	 * 
 	 * @param text
+	 *            the string to display
 	 * @param actionCommand
 	 *            A string stored for firing an action with the action listener.
 	 *            Leave null if not using switchCardAction.
 	 * @param container
+	 *            the object that will contain this menu item
 	 * @param f
 	 *            Action listener function
 	 */
@@ -159,14 +161,14 @@ public class GameMenubar {
 
 	// *********** Interface functions ***********//
 	/**
-	 * Interfaces and Actions for button press
+	 * Common action interface.
 	 */
 	private interface Function {
 		void doAction(ActionEvent e);
 	}
 
 	/**
-	 * Do this when the exit button is pressed
+	 * Do this when the exit button is pressed.
 	 */
 	private final Function exitAction = new Function() {
 		public void doAction(ActionEvent e) {
@@ -176,7 +178,7 @@ public class GameMenubar {
 	};
 
 	/**
-	 * Used for switching between cards (JPanels) on the JFrame
+	 * Used for switching between cards (JPanels) on the JFrame.
 	 */
 	private final Function switchCardAction = new Function() {
 		public void doAction(ActionEvent e) {
@@ -185,6 +187,5 @@ public class GameMenubar {
 			System.out.print("Switching to " + e.getActionCommand() + " panel.\n");
 		}
 	};
-
 
 }
