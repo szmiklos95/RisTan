@@ -86,4 +86,20 @@ public class TurnOrder {
 		}
 		return false;
 	}
+	
+	/**
+	 * @author Miklós
+	 * @return the active turn number
+	 */
+	public int getActiveNum() {
+		return activeNum;
+	}
+	
+	/**
+	 * Returns how many turns are left from the game.
+	 * @return remaining turn
+	 */
+	public int getRemainingTurn() {
+		return turns.size()-activeNum-1;
+	}
 }

@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import config.Config;
 import gameLogic.Player;
 import gameLogic.Resource;
+import gameLogic.TurnOrder;
 
 /**
  * A window that displays important informations during a game.
@@ -47,6 +48,18 @@ public class GameInformationWindow extends JPanel {
 		label = new JLabel("----- Information panel -----");
 		gbl.setConstraints(label, gbc);
 		infoPanel.add(label, gbc);
+		
+		// Information panel message
+		gbc.gridy++;
+		TurnOrder turnOrder = CardSync.getGameState().getTurnOrder();
+		int remainingTurn = 0;
+		if(turnOrder!=null) {
+			remainingTurn = turnOrder.getRemainingTurn();
+		}
+		label = new JLabel("Remaining turns: "+remainingTurn);
+		gbl.setConstraints(label, gbc);
+		infoPanel.add(label, gbc);
+
 
 		// Information panel message
 		gbc.gridy++;
