@@ -1,4 +1,4 @@
-package graphics;
+package network;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,9 +11,7 @@ import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 
 import config.Config;
-import network.Message;
 import network.Message.eMsgType;
-import network.SerialClient;
 /**
  * This is a chat window
  * @author Péter

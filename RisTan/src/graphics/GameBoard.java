@@ -39,6 +39,7 @@ import gameLogic.OfferTradeAction;
 import gameLogic.Resource;
 import gameLogic.TileAction;
 import gameLogic.TradeOffer;
+import network.Chat;
 
 /**
  * The panel where the game is played

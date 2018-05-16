@@ -63,7 +63,7 @@ public class GUI extends JFrame {
 	}
 
 	/**
-	 * Create the GUI and show it. For thread safety, this method should be invoked
+	 * Create the GUI and shows it. For thread safety, this method should be invoked
 	 * from the event-dispatching thread.
 	 */
 	public void createAndShowGUI() {
