@@ -285,4 +285,12 @@ public class GameState {
 			activePlayerStart();
 		}
 	}
+	
+	/**
+	 * @author Miklós
+	 * @return the turn order
+	 */
+	public TurnOrder getTurnOrder() {
+		return turnOrder;
+	}
 }
