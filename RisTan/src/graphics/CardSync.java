@@ -11,8 +11,8 @@ import network.SerialServer;
 
 /**
  * Synchronisation class that contains all the necessary variables for
- * the JPanel cards to interact between each other
- * Package level visible
+ * the JPanel cards to interact between each other.
+ * Package level visible.
  * @author Miklós
  *
  */
@@ -96,7 +96,7 @@ class CardSync {
 
 	/**
 	 * Gets the current game state from the client controller.
-	 * @return The current game state
+	 * @return the current game state
 	 */
 	public static GameState getGameState() {
 		//Always update when getting a game state
@@ -106,7 +106,7 @@ class CardSync {
 
 	/**
 	 * Sets the game state only locally in this class. The game state cannot be modified from here.
-	 * @param gameState The new game state
+	 * @param gameState the new game state
 	 */
 	public static void setGameState(GameState gameState) {
 		CardSync.gameState = gameState;

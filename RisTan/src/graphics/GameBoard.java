@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.Timer;
@@ -35,42 +34,80 @@ import gameLogic.OccupyEnemyVillage;
 import gameLogic.OccupyEnemyVillageL2;
 import gameLogic.OccupyFreeTile;
 import gameLogic.OccupyFreeTileFree;
-import gameLogic.OfferTradeAction;
 import gameLogic.Resource;
 import gameLogic.TileAction;
-import gameLogic.TradeOffer;
 import network.Chat;
 
 /**
- * The panel where the game is played
+ * The panel where the game is played.
+ * This JPanel is not CardLayout based, rather a dynamic window that uses java graphics.
+ * Every change in game state initiates a repaint on the board. There is also a periodic update with timer.
  * 
  * @author Miklós
  *
  */
 public class GameBoard extends JPanel {
 
+	/**
+	 * Default UID.
+	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Holds every important status of the current game.
+	 */
 	private GameState gameState;
+	
+	/**
+	 * True if the game board has been drawn on the current client's window.
+	 * False until every player joins the game.
+	 */
 	private boolean boardDrawn = false;
 
+	/**
+	 * A list for every hexa tile (hexagon graphics + tile logics) on the board.
+	 */
 	private ArrayList<HexaTile> hexaTiles;
+	
+	/**
+	 * The center of the game board.
+	 */
 	private Point origin;
-	private boolean tilesInitialized = false; // Necessary because the board (thus the tiles) are generated later
+	
+	/**
+	 * True if the tiles has been initialised.
+	 * Necessary because the board (thus the tiles) are generated later.
+	 */
+	private boolean tilesInitialized = false;
 
+	/**
+	 * True if there is atleast 1 tile selected on the board.
+	 */
 	private boolean aTileIsSelected = false;
 	
+	/**
+	 * True if we can use market actions and the market GUI is shown.
+	 * False if market has no menu items thus the user cannot use market actions.
+	 */
 	private boolean marketIsOpen = false;
 
+	/**
+	 * Default constructor. Sets the board size and the default system message.
+	 */
 	public GameBoard() {
 		setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
 		SystemMessage.setSystemMessage(Config.SystemMessages.defaultMsg);
 	}
 
 	/**
-	 * Constructor that sets the game state and the panel size
+	 * Constructor that sets up all the components:
+	 * - sets panel size
+	 * - sets the game state
+	 * - sets the chat window
+	 * - handles mouse events
+	 * - starts timers
 	 * 
-	 * @param gameState
+	 * @param gameState the starting game state of the board
 	 */
 	public GameBoard(gameLogic.GameState gameState) {
 		setPreferredSize(new Dimension(Config.GameBoard.width, Config.GameBoard.height));
@@ -96,7 +133,7 @@ public class GameBoard extends JPanel {
 	}
 
 	/**
-	 * A wrapper function for mouse events
+	 * A wrapper function for mouse events.
 	 */
 	private void handleMouseEvents() {
 		addMouseListener(new MouseAdapter() {
@@ -122,9 +159,9 @@ public class GameBoard extends JPanel {
 	}
 
 	/**
-	 * Wrapper for handling mouse actions that are valid
+	 * Wrapper for handling mouse actions that are valid.
 	 * 
-	 * @param clickedHexaTile
+	 * @param clickedHexaTile the currently clicked tile
 	 */
 	private void handleValidMouseAction(HexaTile clickedHexaTile) {
 
@@ -162,9 +199,9 @@ public class GameBoard extends JPanel {
 	}
 
 	/**
-	 * Sets and draws the given popup menu
-	 * @param menu
-	 * @param clickedHexaTile
+	 * Sets and draws the given popup menu.
+	 * @param menu the popup menu container where we will draw the buttons if there are actions
+	 * @param clickedHexaTile the tile we currently interact with
 	 */
 	private void drawPopupMenuWithActions(JPopupMenu menu, HexaTile clickedHexaTile) {
 		// Get all the possible tile actions
@@ -209,9 +246,9 @@ public class GameBoard extends JPanel {
 	
 	
 	/**
-	 * 
-	 * @param actionString
-	 * @param clickedHexaTile
+	 * Executes the appropriate game logic action.
+	 * @param actionString the string name of the action used as identifier
+	 * @param clickedHexaTile the currently clicked tile
 	 */
 	private void executeAction(String actionString, HexaTile clickedHexaTile) {
 		
@@ -276,15 +313,13 @@ public class GameBoard extends JPanel {
 	 * created at the start of the game which is later than the GameBoard
 	 * instantiation.
 	 * 
-	 * @return Board from gameState
+	 * @return board from gameState
 	 */
 	private gameLogic.Board getBoard() {
 		return gameState.getBoard();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 * 
 	 * The main drawing function.
@@ -309,16 +344,14 @@ public class GameBoard extends JPanel {
 				initTiles(origin, points);
 				tilesInitialized = true;
 			}
-			drawTiles(g2d, origin);
+			drawTiles(g2d);
 		}
 	}
 
 	/**
-	 * 
-	 * @param origin
-	 * @param radius
-	 * @param padding
-	 * @param points
+	 * Initialises the hexa tiles. Sets their coordinates and their game logic tile field.
+	 * @param origin the center of the board
+	 * @param points the list of the points that will be initialised
 	 */
 	private void initTiles(Point origin, List<gameLogic.Point> points) {
 		int pointNum = points.size();
@@ -330,11 +363,10 @@ public class GameBoard extends JPanel {
 	}
 
 	/**
-	 * 
-	 * @param g
-	 * @param origin
+	 * Draws each hexa tile.
+	 * @param g graphics container for drawing
 	 */
-	private void drawTiles(Graphics g, Point origin) {
+	private void drawTiles(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		for (HexaTile t : hexaTiles) {
 			t.draw(g2d);
@@ -344,17 +376,13 @@ public class GameBoard extends JPanel {
 	/**
 	 * Draws a circle with the given parameters.
 	 * 
-	 * @param g
-	 *            Graphics object
-	 * @param origin
-	 *            The center of the circle
-	 * @param radius
-	 *            The radius of the circle
-	 * @param centered
-	 *            Should be true
-	 * @param filled
-	 * @param colorValue
-	 * @param lineThickness
+	 * @param g graphics container object
+	 * @param origin the center of the circle
+	 * @param radius the radius of the circle
+	 * @param centered should be true
+	 * @param filled filled or empty circle
+	 * @param colorValue the color of the circle
+	 * @param lineThickness the line thickness
 	 */
 	private void drawCircle(Graphics2D g, Point origin, int radius, boolean centered, boolean filled, int colorValue,
 			int lineThickness) {
@@ -381,7 +409,7 @@ public class GameBoard extends JPanel {
 
 	/**
 	 * A timer that is only active before the game starts. When every player joined
-	 * draw the board if it hasn't been drawn yet. (Otherwise only the client that
+	 * draw the board if it hasn't been drawn yet. (Without this only the client that
 	 * joined last gets a board.)
 	 */
 	private void gameStartRepaintTimer() {
@@ -419,6 +447,14 @@ public class GameBoard extends JPanel {
 
 	}
 
+	/**
+	 * Starts a timer that periodically (set in Config) does important jobs:
+	 * - sets the system message
+	 * - gets the current game state
+	 * - highlights the available tiles
+	 * - checks if whether the game is finished
+	 * - repaints the board
+	 */
 	private void periodicUpdate() {
 		int delay = Config.Timer.periodicUpdateInterval; // milliseconds
 		final Timer timer = new Timer(delay, null);
@@ -465,15 +501,10 @@ public class GameBoard extends JPanel {
 	private void fixMenuBarBug() {
 		SystemMessage.write();
 		toggleMarket();
-		//CardSync.frame.remove(CardSync.frame.getJMenuBar());
-		//new GameMenubar();
-		//SystemMessage.write();
-		//CardSync.frame.getJMenuBar().revalidate();
-		//CardSync.frame.getJMenuBar().repaint();
 	}
 	
 	/**
-	 * Open/Close market depending on a lot of factors.
+	 * Open/Close market depending on a multiple factors.
 	 */
 	private void toggleMarket() {
 		
@@ -498,7 +529,7 @@ public class GameBoard extends JPanel {
 	}
 
 	/**
-	 * Call this everytime something has changed to redraw the game board
+	 * Call this every time something has changed to redraw the game board
 	 */
 	private void rePaint() {
 		fixMenuBarBug();
@@ -508,7 +539,8 @@ public class GameBoard extends JPanel {
 
 	
 	/**
-	 * 
+	 * Iterates through every hexa tile and checks whether the current player can make any actions on it.
+	 * If yes then highlight that tile.
 	 */
 	private void highlightAvailableTiles() {
 		
@@ -539,15 +571,15 @@ public class GameBoard extends JPanel {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Checks whether the game has finished.
+	 * @return true if the game has finished, false otherwise
 	 */
 	private boolean isFinished() {
 		return gameState.isFinished();
 	}
 	
 	/**
-	 * 
+	 * Handles the game over event by drawing a popup window.
 	 */
 	private void gameOverHandler() {
 		if(isFinished()) {

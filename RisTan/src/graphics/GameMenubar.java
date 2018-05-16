@@ -11,9 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
-
 import config.Config;
 import gameLogic.SwitchToNextPlayerAction;
 
@@ -22,8 +19,6 @@ public class GameMenubar {
 	JMenuBar bar = null;
 
 	// Set menubar for frame
-	// TODO: Move to a new method
-	// TODO: Confirmation if game started and player wants to return to main menu
 	public GameMenubar() {
 
 		// If we already had a menubar disable it in case this function gets called
@@ -56,7 +51,6 @@ public class GameMenubar {
 		// Market
 		JMenu market = new JMenu("Market");
 
-		// TODO check for || !CardSync.getGameState().getTurn().isTradeEnabled()
 		if (CardSync.getGameState().isOver()) {
 			JLabel over = new JLabel(" The market is closed :( ");
 			market.add(over);
@@ -96,32 +90,22 @@ public class GameMenubar {
 		bar.add(market);
 
 		// End Turn button
-		JMenu endTurn = new JMenu("End Turn");
-
-		endTurn.addMenuListener(new MenuListener() {
-			public void menuSelected(MenuEvent arg0) {
+		JMenu endTurnMenu = new JMenu("End Turn");
+		JMenuItem endTurnButton = new JMenuItem("End Turn");
+		
+		endTurnButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				CardSync.controller.sendAction(new SwitchToNextPlayerAction(CardSync.getGameState().getActivePlayer().getID()));
 			}
-
-			@Override
-			public void menuCanceled(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
 		});
 		
-		if(CardSync.getGameState().isOver()) endTurn.setEnabled(false);
-		else if(!CardSync.controller.isActivePlayer()) endTurn.setEnabled(false);
-		else if(!CardSync.getGameState().getTurn().toString().equals(Config.TurnNames.normal)) endTurn.setEnabled(false);
+		endTurnMenu.add(endTurnButton);
 		
-		bar.add(endTurn);
+		if(CardSync.getGameState().isOver()) endTurnMenu.setEnabled(false);
+		else if(!CardSync.controller.isActivePlayer()) endTurnMenu.setEnabled(false);
+		else if(!CardSync.getGameState().getTurn().toString().equals(Config.TurnNames.normal)) endTurnMenu.setEnabled(false);
+		
+		bar.add(endTurnMenu);
 
 		// Conventional menubar ends here
 		bar.add(Box.createHorizontalGlue());
