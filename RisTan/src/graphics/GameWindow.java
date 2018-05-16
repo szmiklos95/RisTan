@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import config.Config;
 
 /**
- * A wrapper class for the game board. Uses the CardLayout.
+ * A wrapper class for the game board. One of the cards in the CardLayuot.
  * 
  * @author Miklós
  *

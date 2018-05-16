@@ -19,19 +19,26 @@ import config.Config;
 import network.Message;
 import network.Message.eMsgType;
 
-//TODO comment
+/**
+ * The join window for the clients that joins an already existing game server.
+ * One of the cards in the CardLayout.
+ * 
+ * @author Miklós
+ *
+ */
 public class JoinWindow extends JPanel {
 
-
+	/**
+	 * Default UID
+	 */
 	private static final long serialVersionUID = 1L;
-	
-	JoinWindow(){
-		
-	}
-	
-	public void Create(){
-		
-		this.removeAll(); //In case this function gets called multiple times
+
+	/**
+	 * Creates this card.
+	 */
+	public void Create() {
+
+		this.removeAll(); // In case this function gets called multiple times
 
 		GridBagLayout gbl = new GridBagLayout();
 		this.setLayout(gbl);
@@ -61,7 +68,7 @@ public class JoinWindow extends JPanel {
 
 		// Input text field
 		gbc.gridx++;
-		
+
 		JTextField ipField = new JTextField("127.0.0.1");
 		ipField.setEditable(true);
 		gbl.setConstraints(ipField, gbc);
@@ -75,7 +82,6 @@ public class JoinWindow extends JPanel {
 		;
 		this.add(ipField);
 
-
 		// Connect button
 		gbc.gridwidth = 1;
 		gbc.gridy += 5;
@@ -88,7 +94,7 @@ public class JoinWindow extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				ConnectTo(ipField.getText());
 
 				DrawBoard();
@@ -102,22 +108,33 @@ public class JoinWindow extends JPanel {
 
 		CardSync.card_JoinWindow = this;
 	}
-	
+
+	/**
+	 * Connects to the given IP address.
+	 * 
+	 * @param IPstring
+	 *            the IP address to connect to
+	 */
 	private void ConnectTo(String IPstring) {
 		// network.SerialClient client=new SerialClient();
 		CardSync.client.Connect(IPstring);
-		
-		// Update game board card because we now know the player's name for the chat window
+
+		// Update game board card because we now know the player's name for the chat
+		// window
 		CardSync.cards.remove(CardSync.card_GameWindow);
 		CardSync.card_GameWindow.Create();
 		CardSync.cards.add(CardSync.card_GameWindow, Config.GUI.CardIDs.gameBoard);
-		
+
 		CardSync.client.Send(new Message(eMsgType.Name, CardSync.settings.getPlayerName()));
 
 		// gameLogic.ClientController controller=client.getController();
 		CardSync.setGameState(CardSync.controller.getGameState());
 	}
 
+	/**
+	 * Upon successful connection the GameWindow card should be created and
+	 * activated.
+	 */
 	private void DrawBoard() {
 		CardSync.setGameState(CardSync.controller.getGameState());
 
@@ -126,7 +143,7 @@ public class JoinWindow extends JPanel {
 		CardSync.cards.remove(CardSync.card_GameWindow);
 		CardSync.card_GameWindow.Create();
 		CardSync.cards.add(CardSync.card_GameWindow, Config.GUI.CardIDs.gameBoard);
-		CardSync.frame.pack(); //Resizes the window to fit the board
+		CardSync.frame.pack(); // Resizes the window to fit the board
 	}
 
 }
