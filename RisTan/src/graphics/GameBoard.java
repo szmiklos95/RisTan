@@ -514,6 +514,7 @@ public class GameBoard extends JPanel {
 				highlightAvailableTiles();
 				rePaint();
 				gameOverHandler();
+				CardSync.infoWindow.updateInfoPanel();
 			}
 		});
 		timer.start();
