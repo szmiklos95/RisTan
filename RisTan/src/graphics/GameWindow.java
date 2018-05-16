@@ -43,6 +43,12 @@ public class GameWindow extends JPanel {
 		// JPanel chatPanel = new Chat(CardSync.client,
 		// CardSync.settings.getPlayerName());
 		// this.add(chatPanel, gbc);
+		
+		// Information panel
+		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
+		CardSync.infoWindow = new GameInformationWindow();
+		CardSync.infoWindow.Create();
+		this.add(CardSync.infoWindow.getPanel(),gbc);
 
 		// Game Board
 		gbc.anchor = GridBagConstraints.CENTER;

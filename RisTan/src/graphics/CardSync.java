@@ -51,6 +51,11 @@ class CardSync {
 	 * board.
 	 */
 	static GameWindow card_GameWindow;
+	
+	/**
+	 * The information window used during the game.
+	 */
+	static GameInformationWindow infoWindow;
 
 	/**
 	 * JPanel that functions as a card. The settings window when starting a new game
