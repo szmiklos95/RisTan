@@ -70,4 +70,13 @@ public abstract class InGameAction extends Action{
 		super.execute(gameState);
 		gameState.getTurn().takeTime(time);
 	}
+	
+	/**
+	 * Return the time required for the action
+	 * @author Miklós
+	 * @return the time required for the action
+	 */
+	public int getRequiredTime() {
+		return time;
+	}
 }

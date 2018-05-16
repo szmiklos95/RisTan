@@ -80,4 +80,13 @@ public abstract class TileAction extends InGameAction {
 		super.execute(gameState);
 		gameState.getActivePlayer().takeResource(cost);
 	}
+	
+	/**
+	 * Get the cost of the this action.
+	 * @author Miklós
+	 * @return cost map
+	 */
+	public Map<Resource,Integer> getCost(){
+		return cost;
+	}
 }

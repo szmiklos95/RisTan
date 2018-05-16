@@ -15,6 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -227,7 +228,38 @@ public class GameBoard extends JPanel {
 				gbc.gridx = 0;
 				gbc.gridy++;
 
-				JButton actionButton = new JButton(tileAction.toString());
+				Map<Resource,Integer> cost = tileAction.getCost();
+				int wood = 0;
+				int stone = 0;
+				int wheat = 0;
+				
+				if(!cost.isEmpty()) {
+					try{
+						wood = cost.get(Resource.Wood);
+					}
+					catch(Exception e){
+						wood = 0;
+					}
+					
+					try{
+						stone = cost.get(Resource.Stone);
+					}
+					catch(Exception e){
+						stone = 0;
+					}
+					
+					try{
+						wheat = cost.get(Resource.Wheat);
+					}
+					catch(Exception e){
+						wheat = 0;
+					}
+				}
+				
+				int requiredTime = tileAction.getRequiredTime();
+				String buttonString = tileAction.toString()+" (T:"+requiredTime+" Wo:"+wood+" S:"+stone+" Wh:"+wheat+")";
+				
+				JButton actionButton = new JButton(buttonString);
 				actionButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						executeAction(tileAction.getClass().getCanonicalName(), clickedHexaTile);
