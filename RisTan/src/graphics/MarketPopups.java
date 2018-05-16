@@ -122,7 +122,7 @@ public class MarketPopups {
 		gbc.gridx = 0;
 		gbc.gridy++;
 
-		JButton ok = new JButton("Ok");
+		JButton ok = new JButton("Ok"+" (Time: "+Config.Action.OfferTradeAction.time+")");
 		ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int offererID = CardSync.getGameState().getActivePlayer().getID();
@@ -214,7 +214,7 @@ public class MarketPopups {
 			popupPanel.add(menuItem, gbc);
 
 			gbc.gridx++;
-			JButton accept = new JButton("Accept");
+			JButton accept = new JButton("Accept"+" (Time: "+Config.Action.AcceptTradeAction.time+")");
 			accept.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					CardSync.controller.sendAction(new AcceptTradeAction(
@@ -349,7 +349,7 @@ public class MarketPopups {
 		gbc.gridx = 0;
 		gbc.gridy = 4;
 
-		JButton ok = new JButton("Ok");
+		JButton ok = new JButton("Ok"+" (Time: "+Config.Action.TradeWithGameAction.time+")");
 		ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int offererID = CardSync.getGameState().getActivePlayer().getID();
