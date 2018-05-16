@@ -2,104 +2,216 @@ package graphics;
 
 import java.awt.*;
 
-
+/**
+ * A hexagon graphics object class.
+ * 
+ * @author Miklós
+ *
+ */
 public class Hexagon extends Polygon {
 
-    private static final long serialVersionUID = 1L;
+	/**
+	 * Default UID.
+	 */
+	private static final long serialVersionUID = 1L;
 
-    public static final int SIDES = 6;
+	/**
+	 * Final. The number of sides (points).
+	 */
+	public static final int SIDES = 6;
 
-    private Point[] points = new Point[SIDES];
-    private Point center = new Point(0, 0);
-    private int radius;
-    private int rotation = 90;
+	/**
+	 * A point for each side.
+	 */
+	private Point[] points = new Point[SIDES];
 
-    public Hexagon(Point center, int radius) {
-        npoints = SIDES;
-        xpoints = new int[SIDES];
-        ypoints = new int[SIDES];
+	/**
+	 * The center point of the hexagon.
+	 */
+	private Point center = new Point(0, 0);
 
-        this.center = center;
-        this.radius = radius;
+	/**
+	 * The radius of the hexagon.
+	 */
+	private int radius;
 
-        updatePoints();
-    }
-    
-    public Hexagon(int x, int y, int radius) {
-    	this(new Point(x, y), radius);
-    }
+	/**
+	 * The rotation (orientation) of the hexagon.
+	 */
+	private int rotation = 90;
 
-    public int getRadius() {
-        return radius;
-    }
+	/**
+	 * Constructor. Sets up the center, radius and the points of the hexagon.
+	 * 
+	 * @param center
+	 *            the new center of the hexagon
+	 * @param radius
+	 *            the new radius of the hexagon
+	 */
+	public Hexagon(Point center, int radius) {
+		npoints = SIDES;
+		xpoints = new int[SIDES];
+		ypoints = new int[SIDES];
 
-    public void setRadius(int radius) {
-        this.radius = radius;
+		this.center = center;
+		this.radius = radius;
 
-        updatePoints();
-    }
+		updatePoints();
+	}
 
-    public int getRotation() {
-        return rotation;
-    }
+	/**
+	 * Constructor. The center point can be given using x and y coordinates.
+	 * 
+	 * @param x
+	 *            the x coordinate of the center point
+	 * @param y
+	 *            the y coordinate of the center point
+	 * @param radius
+	 *            the radius of the hexagon
+	 */
+	public Hexagon(int x, int y, int radius) {
+		this(new Point(x, y), radius);
+	}
 
-    public void setRotation(int rotation) {
-        this.rotation = rotation;
+	/**
+	 * 
+	 * @return radius of the hexagon
+	 */
+	public int getRadius() {
+		return radius;
+	}
 
-        updatePoints();
-    }
+	/**
+	 * Sets the radius.
+	 * 
+	 * @param radius
+	 *            radius of the hexagon
+	 */
+	public void setRadius(int radius) {
+		this.radius = radius;
 
-    public void setCenter(Point center) {
-        this.center = center;
+		updatePoints();
+	}
 
-        updatePoints();
-    }
+	/**
+	 * 
+	 * @return rotation of the hexagon
+	 */
+	public int getRotation() {
+		return rotation;
+	}
 
-    public void setCenter(int x, int y) {
-        setCenter(new Point(x, y));
-    }
-    
-    public Point getCenter() {
-    	return center;
-    }
+	/**
+	 * Sets the rotation of the hexagon.
+	 * 
+	 * @param rotation
+	 *            rotation of the hexagon
+	 */
+	public void setRotation(int rotation) {
+		this.rotation = rotation;
 
-    private double findAngle(double fraction) {
-        return fraction * Math.PI * 2 + Math.toRadians((rotation + 180) % 360);
-    }
+		updatePoints();
+	}
 
-    private Point findPoint(double angle) {
-        int x = (int) (center.getX() + Math.cos(angle) * radius);
-        int y = (int) (center.getY() + Math.sin(angle) * radius);
+	/**
+	 * Sets the center of the hexagon.
+	 * 
+	 * @param center
+	 *            the center point of the hexagon
+	 */
+	public void setCenter(Point center) {
+		this.center = center;
 
-        return new Point(x, y);
-    }
+		updatePoints();
+	}
 
-    protected void updatePoints() {
-        for (int p = 0; p < SIDES; p++) {
-            double angle = findAngle((double) p / SIDES);
-            Point point = findPoint(angle);
-            xpoints[p] = point.getX();
-            ypoints[p] = point.getY();
-            points[p] = point;
-        }
-    }
+	/**
+	 * Sets the center of the hexagon with Descartes coordinates.
+	 * 
+	 * @param x
+	 *            the x coordinate of the center point
+	 * @param y
+	 *            the y coordinate of the center point
+	 */
+	public void setCenter(int x, int y) {
+		setCenter(new Point(x, y));
+	}
 
-    public void draw(Graphics2D g, int x, int y, int lineThickness, int colorValue, boolean filled) {
-        // Store before changing.
-        Stroke tmpS = g.getStroke();
-        Color tmpC = g.getColor();
+	/**
+	 * 
+	 * @return the center point of the hexagon
+	 */
+	public Point getCenter() {
+		return center;
+	}
 
-        g.setColor(new Color(colorValue));
-        g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
+	/**
+	 * Calculates the angle based on the current point of a side.
+	 * 
+	 * @param fraction
+	 *            the current point divided by the number of sides
+	 * @return angle
+	 */
+	private double findAngle(double fraction) {
+		return fraction * Math.PI * 2 + Math.toRadians((rotation + 180) % 360);
+	}
 
-        if (filled)
-            g.fillPolygon(xpoints, ypoints, npoints);
-        else
-            g.drawPolygon(xpoints, ypoints, npoints);
+	/**
+	 * Returns a hexagon point on the given angle.
+	 * 
+	 * @param angle
+	 *            the angle of the point
+	 * @return a point of the hexagon
+	 */
+	private Point findPoint(double angle) {
+		int x = (int) (center.getX() + Math.cos(angle) * radius);
+		int y = (int) (center.getY() + Math.sin(angle) * radius);
 
-        // Set values to previous when done.
-        g.setColor(tmpC);
-        g.setStroke(tmpS);
-    }
-    
+		return new Point(x, y);
+	}
+
+	/**
+	 * Updates the points. Call this if any of the hexagon's parameters have
+	 * changed.
+	 */
+	protected void updatePoints() {
+		for (int p = 0; p < SIDES; p++) {
+			double angle = findAngle((double) p / SIDES);
+			Point point = findPoint(angle);
+			xpoints[p] = point.getX();
+			ypoints[p] = point.getY();
+			points[p] = point;
+		}
+	}
+
+	/**
+	 * Draws the hexagon with the given parameters on the given graphics object.
+	 * 
+	 * @param g
+	 *            the graphics object where the hexagon is realised
+	 * @param lineThickness
+	 *            the thickness of the hexagon line
+	 * @param colorValue
+	 *            the color of the hexagon
+	 * @param filled
+	 *            set true if the hexaon should be filled
+	 */
+	public void draw(Graphics2D g, int lineThickness, int colorValue, boolean filled) {
+		// Store before changing.
+		Stroke tmpS = g.getStroke();
+		Color tmpC = g.getColor();
+
+		g.setColor(new Color(colorValue));
+		g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
+
+		if (filled)
+			g.fillPolygon(xpoints, ypoints, npoints);
+		else
+			g.drawPolygon(xpoints, ypoints, npoints);
+
+		// Set values to previous when done.
+		g.setColor(tmpC);
+		g.setStroke(tmpS);
+	}
+
 }

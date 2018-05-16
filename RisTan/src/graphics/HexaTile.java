@@ -60,9 +60,9 @@ public class HexaTile {
 		int y = graphicsPoint.getY();
         
 		//Draw inner hexagon
-        hexagon.draw(g, x, y, Config.Hexagon.innerLineThickness, innerColor, true);
+        hexagon.draw(g, Config.Hexagon.innerLineThickness, innerColor, true);
         //Draw outer hexagon
-        hexagon.draw(g, x, y, Config.Hexagon.outerLineThickness, outerColor, false);
+        hexagon.draw(g, Config.Hexagon.outerLineThickness, outerColor, false);
         
         //Draw player circle
         int playerColor = getPlayerColor();

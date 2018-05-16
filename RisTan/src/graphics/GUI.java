@@ -11,47 +11,53 @@ import config.Config;
 import network.SerialClient;
 
 /**
- * The main GUI frame with card layout
+ * The main GUI frame with card layout.
  * 
  * @author Miklós
  *
  */
 public class GUI extends JFrame {
 
+	/**
+	 * Default UID.
+	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Constructor. Sets the fields in CardSync and creates a menu bar.
+	 */
 	public GUI() {
 		CardSync.Instantiate();
-		
+
 		CardSync.frame = new JFrame(Config.GUI.title);
-		CardSync.frame.setMinimumSize(new Dimension(Config.GUI.frameMinimumWidth,Config.GUI.frameMinimumHeight));
+		CardSync.frame.setMinimumSize(new Dimension(Config.GUI.frameMinimumWidth, Config.GUI.frameMinimumHeight));
 		CardSync.settings = new NewGameSettings();
 		CardSync.gameBoard = new GameBoard();
 		CardSync.client = new SerialClient();
 		CardSync.controller = CardSync.client.getController();
-		
-		new GameMenubar(); //Constructor call automatically creates a menu bar
+
+		new GameMenubar(); // Constructor call automatically creates a menu bar
 	}
 
 	/**
 	 * This function implements the card layout.
 	 * 
 	 * @param pane
-	 *            The container for the objects, cards
+	 *            the container for the objects, cards
 	 */
 	public void addComponentsToPane(Container pane) {
-		
+
 		// Create the panel that contains the "cards".
 		CardSync.cards = new JPanel(new CardLayout());
 
 		// Create the "cards".
 
 		CardSync.card_MainMenu.Create();
-		CardSync.card_GameWindow = new GameWindow(); // Add an empty panel, otherwise the frame will be resized at the beginning to fit the board
+		CardSync.card_GameWindow = new GameWindow(); // Add an empty panel, otherwise the frame will be resized at the
+														// beginning to fit the board
 		CardSync.card_GameSettings.Create();
 		CardSync.card_JoinWindow.Create();
 
-		
 		// The param is the card itself, the second is the command with which we can
 		// call this card
 		CardSync.cards.add(CardSync.card_MainMenu, Config.GUI.CardIDs.mainMenu);
@@ -82,7 +88,7 @@ public class GUI extends JFrame {
 	 * Refreshes the game state.
 	 * 
 	 * @param gameState
-	 *            The current game state
+	 *            the current game state
 	 */
 	public void refreshGameState(gameLogic.GameState gameState) {
 		CardSync.setGameState(gameState);
