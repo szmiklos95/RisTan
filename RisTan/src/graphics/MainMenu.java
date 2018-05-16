@@ -19,19 +19,25 @@ import javax.swing.JPanel;
 
 import config.Config;
 
-//TODO comment
-public class MainMenu extends JPanel{
-	
+/**
+ * The main menu, the first window to appear to the user. One of the cards in
+ * the CardLayuot.
+ * 
+ * @author Miklós
+ *
+ */
+public class MainMenu extends JPanel {
 
+	/**
+	 * Default UID
+	 */
 	private static final long serialVersionUID = 1L;
-	
-	
-	public MainMenu() {
-		
-	}
-	
+
+	/**
+	 * Creates this card.
+	 */
 	public void Create() {
-		this.removeAll(); //In case this function gets called multiple times
+		this.removeAll(); // In case this function gets called multiple times
 
 		GridBagLayout gbl = new GridBagLayout();
 		this.setLayout(gbl);
@@ -76,9 +82,9 @@ public class MainMenu extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				CardSync.settings.setPlayerName(new String(name.getText()));
-				
+
 				CardSync.frame.setTitle(Config.GUI.nameTitle + name.getText());
 
 				// Need to update card
@@ -104,9 +110,9 @@ public class MainMenu extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				CardSync.settings.setPlayerName(new String(name.getText()));
-				
+
 				CardSync.frame.setTitle(Config.GUI.nameTitle + name.getText());
 
 				// Need to update card
@@ -126,14 +132,11 @@ public class MainMenu extends JPanel{
 		gbc.gridheight += 10;
 
 		setButtonGrid(Config.GUI.ButtonTexts.exit, null, this, exitAction, gbc);
-		
+
 		CardSync.card_MainMenu = this;
 
 	}
-	
-	
-	
-	
+
 	/**
 	 * Creates a new button within the given container with GridBagLayout.
 	 * 
@@ -162,8 +165,7 @@ public class MainMenu extends JPanel{
 		});
 		container.add(button, gbc);
 	}
-	
-	
+
 	// *********** Interface functions ***********//
 	/**
 	 * Interfaces and Actions for button press

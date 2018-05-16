@@ -22,19 +22,27 @@ import network.Message;
 import network.SerialServer;
 import network.Message.eMsgType;
 
-//TODO comment
-public class SettingsWindow extends JPanel{
-	
+/**
+ * The settings window where the server initiator can set up the parameters of
+ * the game. One of the cards in the CardLayuot.
+ * 
+ * @author Miklós
+ *
+ */
+public class SettingsWindow extends JPanel {
+
+	/**
+	 * Default UID
+	 */
 	private static final long serialVersionUID = 1L;
 
-	public SettingsWindow() {
-		
-	}
-	
-	public void Create(){
-		
-		this.removeAll(); //In case this function gets called multiple times
-		
+	/**
+	 * Creates this card.
+	 */
+	public void Create() {
+
+		this.removeAll(); // In case this function gets called multiple times
+
 		GridBagLayout gbl = new GridBagLayout();
 		this.setLayout(gbl);
 
@@ -104,18 +112,17 @@ public class SettingsWindow extends JPanel{
 		// Exit button
 		gbc.gridy += 4;
 		setButtonGrid(Config.GUI.ButtonTexts.exit, null, this, exitAction, gbc);
-		
+
 		CardSync.card_GameSettings = this;
 
 	}
 
-	
-	
 	/**
 	 * Returns the spinner value. Has protection against invalid user input.
 	 * 
 	 * @param spinner
-	 * @return
+	 *            the spinner from which we want to get the value
+	 * @return the value of the spinner
 	 */
 	private int getSpinnerValue(JSpinner spinner) {
 		try {
@@ -125,7 +132,7 @@ public class SettingsWindow extends JPanel{
 		}
 		return (Integer) spinner.getValue();
 	}
-	
+
 	/**
 	 * Starts a new server and joins to it. This function runs at the host player.
 	 */
@@ -135,26 +142,36 @@ public class SettingsWindow extends JPanel{
 		server.Connect(CardSync.settings.getPlayerCount());
 
 		// This is localhost IP address, connects the local client to the server
-		ConnectTo("127.0.0.1");  //TODO This should be editable or...?
+		ConnectTo("127.0.0.1"); // TODO This should be editable or...?
 		System.out.println("Setting up the server.");
 
 	}
 
+	/**
+	 * Connects to the given IP address.
+	 * 
+	 * @param IPstring
+	 *            the IP address to connect to
+	 */
 	private void ConnectTo(String IPstring) {
 		// network.SerialClient client=new SerialClient();
 		CardSync.client.Connect(IPstring);
-		
-		// Update game window card because we now know the player's name for the chat window
+
+		// Update game window card because we now know the player's name for the chat
+		// window
 		CardSync.cards.remove(CardSync.card_GameWindow);
 		CardSync.card_GameWindow.Create();
 		CardSync.cards.add(CardSync.card_GameWindow, Config.GUI.CardIDs.gameBoard);
-		
+
 		CardSync.client.Send(new Message(eMsgType.Name, CardSync.settings.getPlayerName()));
 
 		// gameLogic.ClientController controller=client.getController();
 		CardSync.setGameState(CardSync.controller.getGameState());
 	}
 
+	/**
+	 * If all the players joined to the game the board should be drawn.
+	 */
 	private void DrawBoard() {
 		CardSync.setGameState(CardSync.controller.getGameState());
 
@@ -163,9 +180,9 @@ public class SettingsWindow extends JPanel{
 		CardSync.cards.remove(CardSync.card_GameWindow);
 		CardSync.card_GameWindow.Create();
 		CardSync.cards.add(CardSync.card_GameWindow, Config.GUI.CardIDs.gameBoard);
-		CardSync.frame.pack(); //Resizes the window to fit the board
+		CardSync.frame.pack(); // Resizes the window to fit the board
 	}
-	
+
 	// *********** Interface functions ***********//
 	/**
 	 * Interfaces and Actions for button press
@@ -194,7 +211,7 @@ public class SettingsWindow extends JPanel{
 			System.out.print("Switching to " + e.getActionCommand() + " panel.\n");
 		}
 	};
-	
+
 	/**
 	 * Creates a new button within the given container with GridBagLayout.
 	 * 
@@ -223,5 +240,5 @@ public class SettingsWindow extends JPanel{
 		});
 		container.add(button, gbc);
 	}
-	
+
 }
