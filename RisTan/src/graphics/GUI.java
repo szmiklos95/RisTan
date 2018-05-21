@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -74,7 +76,22 @@ public class GUI extends JFrame {
 	 */
 	public void createAndShowGUI() {
 
-		CardSync.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		CardSync.frame.addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent e){
+            	
+            	System.out.println("Closing the window.");
+
+                    if(CardSync.server != null) CardSync.server.disconnect();
+                    if(CardSync.client != null) CardSync.client.disconnect();
+                    
+                    try{
+                    	System.exit(0);
+                    }
+                    catch(Exception err) {
+                    	System.out.println(err);
+                    }
+            }
+        });
 
 		// Set up the content pane.
 		addComponentsToPane(CardSync.frame.getContentPane());

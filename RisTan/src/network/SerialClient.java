@@ -118,7 +118,7 @@ public class SerialClient {
 	/**
 	 * Disconnect the client
 	 */
-	void disconnect() {
+	public void disconnect() {
 		try {
 			if (out != null)
 				out.close();

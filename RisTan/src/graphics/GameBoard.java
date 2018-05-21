@@ -523,7 +523,9 @@ public class GameBoard extends JPanel {
 				if (CardSync.controller.isActivePlayer()) {
 					SystemMessage.setSystemMessage(Config.SystemMessages.YourTurn.sysMsg);
 					// Turn name
-					SystemMessage.addSubMessage(gameState.getTurn().toString());
+					String turnString = "0";
+					if(gameState.getTurn()!=null) turnString = gameState.getTurn().toString();
+					SystemMessage.addSubMessage(turnString);
 					// Remaining time
 					int remainingTime = gameState.getTurn().getRemainingTime();
 					SystemMessage.addSubMessage(Config.SystemMessages.YourTurn.remainingTime + remainingTime);
