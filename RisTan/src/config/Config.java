@@ -971,7 +971,7 @@ public abstract class Config {
 		/**
 		 * The radius of a hexagon
 		 */
-		public static final int radius = 50;
+		public static final int radius = GameBoard.height/16;
 
 		/**
 		 * The distance between hexa tiles
@@ -1061,12 +1061,12 @@ public abstract class Config {
 		/**
 		 * Game board default height
 		 */
-		public static final int height = 800;
+		public static final int height = 600;
 
 		/**
 		 * Game board default font
 		 */
-		public static final Font font = new Font("Arial", Font.BOLD, 18);
+		public static final Font font = new Font("Arial", Font.BOLD, GameBoard.height/45);
 	}
 
 	/**
@@ -1080,7 +1080,7 @@ public abstract class Config {
 		/**
 		 * Circle radius
 		 */
-		public static final int radius = 380;
+		public static final int radius = GameBoard.height/2;
 
 		/**
 		 * Circle color
@@ -1304,12 +1304,12 @@ public abstract class Config {
 		/**
 		 * rectangle width
 		 */
-		public static final int width = 10;
+		public static final int width = GameBoard.width/120;
 
 		/**
 		 * rectangle height
 		 */
-		public static final int height = 30;
+		public static final int height = GameBoard.height/27;
 
 		/**
 		 * rectangle line thickness
