@@ -80,7 +80,7 @@ public class HexaTile {
 	public HexaTile(graphics.Point origin, gameLogic.Point point, Tile tile) {
 		this.setPoint(point);
 		this.setTile(tile);
-		this.resource = tile.getResource();
+		if(tile!=null) this.resource = tile.getResource();
 
 		int radius = Config.Hexagon.radius;
 		int padding = Config.Hexagon.padding;

@@ -201,7 +201,7 @@ public class SerialServer {
 	/**
 	 * Disconnect the server.
 	 */
-	void disconnect() {
+	public void disconnect() {
 		try {
 			for(int i = 0; i < num_threads; ++i) {
 			if (clientArray.get(i).out != null)

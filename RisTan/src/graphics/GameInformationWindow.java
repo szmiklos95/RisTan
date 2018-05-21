@@ -115,7 +115,8 @@ public class GameInformationWindow extends JPanel {
 		
 		// Remaining time
 		if(CardSync.controller.isActivePlayer()) {
-			int remainingTime = CardSync.getGameState().getTurn().getRemainingTime();
+			int remainingTime = 0;
+			if(CardSync.getGameState().getTurn() != null) remainingTime = CardSync.getGameState().getTurn().getRemainingTime();
 			gbc.gridy++;
 			label = new JLabel(Config.SystemMessages.YourTurn.remainingTime + remainingTime);
 			gbl.setConstraints(label, gbc);
