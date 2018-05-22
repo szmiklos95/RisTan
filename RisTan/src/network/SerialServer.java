@@ -94,7 +94,6 @@ public class SerialServer {
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
 				System.err.println("System: Player disconnected!");
-				ex.printStackTrace(System.err);
 			} finally {
 				disconnect();
 			}

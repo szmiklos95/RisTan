@@ -44,7 +44,6 @@ public class SerialClient {
 				} catch (Exception ex) {
 					System.out.println(ex.getMessage());
 					System.err.println("Player" + controller.getLocalPlayerID() + ": System disconnected!");
-					ex.printStackTrace(System.err);
 				}
 			}
 		}
